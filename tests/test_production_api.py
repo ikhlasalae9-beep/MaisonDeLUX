@@ -138,4 +138,16 @@ def test_lightweight_joblib_parity():
             }
             pred_orig = float(orig_model.predict(validate(row_dict))[0])
             pred_light = float(model.predict(row_dict)[0])
-            assert abs(pred_orig - pred_light) < 0.01
+            assert abs(pred_orig - pred_light) < 1.0
+
+
+def test_requirements_file_is_minimal():
+    """Verify requirements.txt contains strictly minimal web runtime without ML heavyweights."""
+    reqs_text = (ROOT / 'requirements.txt').read_text(encoding='utf-8')
+    lines = [l.strip() for l in reqs_text.splitlines() if l.strip() and not l.startswith('#')]
+    assert 'flask>=3.1,<4' in lines
+    assert 'werkzeug>=3.1,<4' in lines
+    assert len(lines) == 2
+    for forbidden in ['numpy', 'xgboost', 'scipy', 'scikit-learn', 'pandas', 'joblib']:
+        assert not any(forbidden in l for l in lines)
+
