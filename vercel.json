@@ -1,0 +1,17 @@
+﻿{
+  "functions": {
+    "api/**/*.py": {
+      "includeFiles": [
+        "models/**",
+        "ml/src/**",
+        "backend/**"
+      ]
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    }
+  ]
+}

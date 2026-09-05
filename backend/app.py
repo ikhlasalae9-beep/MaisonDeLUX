@@ -54,6 +54,7 @@ def http_error(error):
 
 
 @app.post('/api/estimate')
+@app.post('/estimate')
 def estimate():
     try:
         frame = validate(request.get_json())
@@ -70,16 +71,20 @@ def estimate():
 
 
 @app.get('/api/villes')
+@app.get('/villes')
 def cities():
     return jsonify(villes=sorted(locations))
 
 
 @app.get('/api/metrics')
+@app.get('/metrics')
 def metrics():
     return jsonify(**metadata, currency='MAD', model_version='v1')
 
 
 @app.get('/')
+@app.get('/api')
+@app.get('/api/')
 def health():
     return jsonify(status='ok', model_version='v1')
 

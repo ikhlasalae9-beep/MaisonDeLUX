@@ -1,6 +1,5 @@
 import { PredictPayload, PredictResponse, CitiesResponse } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 /**
  * Client for the MaisonDeLUX ML valuation backend.
@@ -54,7 +53,7 @@ export async function predictProperty(
  */
 export async function fetchModelMetadata(): Promise<{ model_version?: string; currency?: string } | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/metrics`, {
+    const res = await fetch('/api/metrics', {
       method: 'GET',
       next: { revalidate: 3600 },
     });
@@ -74,7 +73,7 @@ export async function fetchModelMetadata(): Promise<{ model_version?: string; cu
  */
 export async function fetchApiCities(): Promise<string[] | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/villes`, {
+    const res = await fetch('/api/villes', {
       method: 'GET',
       next: { revalidate: 3600 },
     });
