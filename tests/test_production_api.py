@@ -98,3 +98,44 @@ def test_known_sanity_prediction(client):
     assert data['model_version'] == 'v1'
     # Expected: approx 1,288,988 MAD
     assert abs(data['estimated_price_mad'] - 1288988) <= 1000
+
+def test_lightweight_joblib_parity():
+    """Verify that LightweightModel exactly reproduces the original joblib pipeline."""
+    import joblib
+    import pandas as pd
+    import ml.src.inference  # noqa: F401
+    from backend.app import model, validate
+
+    orig_model = joblib.load(ROOT / 'models/maisondelux_price_model_v1.joblib')
+
+    # 1. Sanity case parity
+    sanity_dict = {
+        'city': 'Casablanca', 'region': 'Casablanca-Settat', 'neighborhood': 'Maârif',
+        'property_type': 'appartement', 'surface_m2': 90, 'bedrooms': 2, 'bathrooms': 1,
+        'parking': 'unknown', 'balcony': 'unknown', 'sea_view': 'unknown', 'furnished_status': 'unknown'
+    }
+    pred_orig_sanity = float(orig_model.predict(validate(sanity_dict))[0])
+    pred_light_sanity = float(model.predict(sanity_dict)[0])
+    assert abs(pred_orig_sanity - pred_light_sanity) < 0.01
+
+    # 2. 100+ dataset rows parity
+    csv_path = ROOT / 'data/processed/maisondelux_model_ready_v1.csv'
+    if csv_path.is_file():
+        df_sample = pd.read_csv(csv_path).sample(100, random_state=42)
+        for _, row in df_sample.iterrows():
+            row_dict = {
+                'city': str(row['city']),
+                'region': str(row['region']),
+                'neighborhood': str(row['neighborhood_clean']) if pd.notna(row['neighborhood_clean']) else None,
+                'property_type': str(row['property_type_repaired']),
+                'surface_m2': float(row['surface_m2']),
+                'bedrooms': float(row['bedrooms']) if pd.notna(row['bedrooms']) else None,
+                'bathrooms': float(row['bathrooms']) if pd.notna(row['bathrooms']) else None,
+                'parking': str(row['parking']) if pd.notna(row['parking']) else 'unknown',
+                'balcony': str(row['balcony']) if pd.notna(row['balcony']) else 'unknown',
+                'sea_view': str(row['sea_view']) if pd.notna(row['sea_view']) else 'unknown',
+                'furnished_status': str(row['furnished_status']) if pd.notna(row['furnished_status']) else 'unknown',
+            }
+            pred_orig = float(orig_model.predict(validate(row_dict))[0])
+            pred_light = float(model.predict(row_dict)[0])
+            assert abs(pred_orig - pred_light) < 0.01

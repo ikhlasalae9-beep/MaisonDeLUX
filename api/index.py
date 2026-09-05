@@ -7,8 +7,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# Pre-load custom unpickler dependency for joblib model
-import ml.src.inference  # noqa: F401
+try:
+    import ml.src.inference  # noqa: F401
+except ImportError:
+    pass
 
 from backend.app import app
 
