@@ -93,7 +93,7 @@ export function EstimatorShell({ locale, dict }: EstimatorShellProps) {
     setError(undefined);
     setPrediction(null);
 
-    const res = await predictProperty({
+    const analyticsPayload = {
       city: formData.ville,
       region: (locations as Record<string, string>)[formData.ville],
       neighborhood: neighborhoodForApi(formData.ville, formData.quartier),
@@ -105,7 +105,8 @@ export function EstimatorShell({ locale, dict }: EstimatorShellProps) {
       balcony: formData.balcony,
       sea_view: formData.sea_view,
       furnished_status: formData.furnished_status,
-    });
+    };
+    const res = await predictProperty(analyticsPayload);
 
     setIsSubmitting(false);
 
@@ -116,6 +117,13 @@ export function EstimatorShell({ locale, dict }: EstimatorShellProps) {
       setError(res.error);
     } else if (res.data) {
       setPrediction(res.data);
+      // Best-effort anonymous analytics. Its failure never affects the successful prediction.
+      void fetch('/api/analytics/events', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...analyticsPayload, estimated_price_mad: res.data.estimated_price_mad,
+          model_version: res.data.model_version || 'v1', locale,
+          event_key: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : undefined }),
+      }).catch((loggingError) => console.error('Analytics logging failed:', loggingError));
     }
   };
 

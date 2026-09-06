@@ -73,3 +73,4 @@ node_modules/
 
 !data/processed/maisondelux_model_ready_v1.csv
 *.tsbuildinfo
+.env.local
