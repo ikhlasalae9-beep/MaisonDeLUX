@@ -28,7 +28,12 @@ export function getDatabasePool() {
   const value = databaseUrl();
   if (!value) return null;
   if (!pool || activeUrl !== value) {
-    pool = new Pool({ connectionString: value, max: 2, idleTimeoutMillis: 10_000, connectionTimeoutMillis: 8_000,
+    const parsed = new URL(value);
+    parsed.searchParams.delete('sslmode');
+    parsed.searchParams.delete('sslcert');
+    parsed.searchParams.delete('sslkey');
+    parsed.searchParams.delete('sslrootcert');
+    pool = new Pool({ connectionString: parsed.toString(), max: 2, idleTimeoutMillis: 10_000, connectionTimeoutMillis: 8_000,
       allowExitOnIdle: true, ssl: { rejectUnauthorized: false } });
     activeUrl = value;
   }
