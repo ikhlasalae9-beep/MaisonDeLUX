@@ -7,27 +7,32 @@ let poolUrl: string | null = null;
 let initialized = false;
 let initialization: Promise<boolean> | null = null;
 
-export type DatabaseErrorCode = 'DB_NOT_CONFIGURED' | 'DB_CONNECTION_FAILED' | 'DB_SCHEMA_INIT_FAILED' | 'DB_SCHEMA_MISSING' | 'DB_QUERY_FAILED';
+export type DatabaseErrorCode = 'DB_NOT_CONFIGURED' | 'DB_CONNECTION_FAILED' | 'DB_PERMISSION_DENIED' | 'DB_SCHEMA_MISSING' | 'DB_QUERY_FAILED';
+type DatabaseEnvSource = typeof DATABASE_ENV_KEYS[number];
 
-export function resolveDatabaseUrl() {
-  for (const key of DATABASE_ENV_KEYS) {
-    const value = process.env[key]?.trim();
+function resolveDatabaseConfig(): { url: string; source: DatabaseEnvSource } | null {
+  for (const source of DATABASE_ENV_KEYS) {
+    const value = process.env[source]?.trim();
     if (!value) continue;
     try {
       const url = new URL(value);
-      if ((url.protocol === 'postgres:' || url.protocol === 'postgresql:') && url.hostname) return value;
+      if ((url.protocol === 'postgres:' || url.protocol === 'postgresql:') && url.hostname) return { url: value, source };
     } catch { /* Try the next integration variable. */ }
   }
   return null;
 }
 
+export function resolveDatabaseUrl() {
+  return resolveDatabaseConfig()?.url || null;
+}
+
 export function databaseConfigured() { return resolveDatabaseUrl() !== null; }
 
 export function databaseMetadata() {
-  const value = resolveDatabaseUrl();
-  if (!value) return { provider: 'unconfigured', hostPresent: false, poolerDetected: false, port: null, databaseConfigured: false };
-  const url = new URL(value);
-  return { provider: url.hostname.endsWith('.supabase.com') ? 'supabase' : 'postgresql', hostPresent: Boolean(url.hostname),
+  const config = resolveDatabaseConfig();
+  if (!config) return { provider: 'unconfigured', source: null, hostPresent: false, poolerDetected: false, port: null, databaseConfigured: false };
+  const url = new URL(config.url);
+  return { provider: url.hostname.endsWith('.supabase.com') ? 'supabase' : 'postgresql', source: config.source, hostPresent: Boolean(url.hostname),
     poolerDetected: url.hostname.includes('.pooler.supabase.com'), port: url.port ? Number(url.port) : 5432,
     databaseConfigured: Boolean(url.pathname && url.pathname !== '/') };
 }
@@ -60,22 +65,11 @@ export function logDatabaseError(code: DatabaseErrorCode, error?: unknown, conte
 
 export function classifyDatabaseError(error: unknown): DatabaseErrorCode {
   const code = postgresCode(error);
+  if (code === '42501') return 'DB_PERMISSION_DENIED';
   if (code === '42P01' || code === '3F000') return 'DB_SCHEMA_MISSING';
   if (code?.startsWith('08') || ['28P01', '3D000', 'ENOTFOUND', 'ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT'].includes(code || '')) return 'DB_CONNECTION_FAILED';
   return 'DB_QUERY_FAILED';
 }
-
-const schemaStatements = [
-  `CREATE TABLE IF NOT EXISTS ${TABLE} (
-    id BIGSERIAL PRIMARY KEY, event_key TEXT UNIQUE, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    region TEXT NOT NULL, city TEXT NOT NULL, neighborhood TEXT, property_type TEXT NOT NULL,
-    surface_m2 NUMERIC NOT NULL, bedrooms INTEGER, bathrooms INTEGER, parking TEXT, balcony TEXT,
-    sea_view TEXT, furnished_status TEXT, estimated_price_mad NUMERIC NOT NULL, model_version TEXT, locale TEXT
-  )`,
-  `CREATE INDEX IF NOT EXISTS estimation_events_created_at_idx ON ${TABLE}(created_at)`,
-  `CREATE INDEX IF NOT EXISTS estimation_events_region_idx ON ${TABLE}(region)`,
-  `CREATE INDEX IF NOT EXISTS estimation_events_city_idx ON ${TABLE}(city)`,
-];
 
 export async function ensureAnalyticsSchema() {
   const db = getPool();
@@ -84,12 +78,20 @@ export async function ensureAnalyticsSchema() {
   if (initialization) return initialization;
   initialization = (async () => {
     try {
-      for (const statement of schemaStatements) await db.query(statement);
+      const result = await db.query<{ schema_ready: boolean }>(`SELECT EXISTS (
+        SELECT 1 FROM information_schema.tables
+        WHERE table_schema = 'public' AND table_name = 'estimation_events'
+      ) AS schema_ready`);
+      if (result.rows[0]?.schema_ready !== true) {
+        const error = new Error('Required analytics schema is missing');
+        Object.assign(error, { code: '42P01' });
+        throw error;
+      }
       initialized = true;
       return true;
     } catch (error) {
       initialized = false;
-      logDatabaseError(postgresCode(error)?.startsWith('08') ? 'DB_CONNECTION_FAILED' : 'DB_SCHEMA_INIT_FAILED', error, 'ensureAnalyticsSchema');
+      logDatabaseError(classifyDatabaseError(error), error, 'ensureAnalyticsSchema');
       throw error;
     } finally { initialization = null; }
   })();
@@ -107,18 +109,30 @@ export async function query<T extends QueryResultRow = QueryResultRow>(text: str
 export async function databaseHealth() {
   const metadata = databaseMetadata();
   if (!databaseConfigured()) return { configured: false, connected: false, provider: metadata.provider, schemaReady: false,
+    source: metadata.source, poolerDetected: metadata.poolerDetected, port: metadata.port,
     table: TABLE, errorCode: 'DB_NOT_CONFIGURED' };
+  const db = getPool()!;
   try {
-    await ensureAnalyticsSchema();
-    const result = await query<{ schema_ready: boolean; row_count: number }>(
-      `SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'estimation_events') AS schema_ready,
-        (SELECT COUNT(*)::int FROM ${TABLE}) AS row_count`);
-    return { configured: true, connected: true, provider: metadata.provider, schemaReady: result.rows[0]?.schema_ready === true,
-      table: TABLE, rowCount: Number(result.rows[0]?.row_count || 0) };
+    await db.query('SELECT 1');
+    const identity = await db.query<{ database: string; current_role: string; schema_ready: boolean }>(`SELECT
+      current_database() AS database,
+      current_user AS current_role,
+      EXISTS (SELECT 1 FROM information_schema.tables
+        WHERE table_schema = 'public' AND table_name = 'estimation_events') AS schema_ready`);
+    const details = identity.rows[0];
+    if (details?.schema_ready !== true) return { configured: true, connected: true, provider: metadata.provider,
+      source: metadata.source, poolerDetected: metadata.poolerDetected, port: metadata.port, database: details?.database,
+      currentRole: details?.current_role, schemaReady: false, table: TABLE, errorCode: 'DB_SCHEMA_MISSING' };
+    const count = await db.query<{ row_count: number }>(`SELECT COUNT(*)::int AS row_count FROM ${TABLE}`);
+    initialized = true;
+    return { configured: true, connected: true, provider: metadata.provider, source: metadata.source,
+      poolerDetected: metadata.poolerDetected, port: metadata.port, database: details.database,
+      currentRole: details.current_role, schemaReady: true, table: TABLE, rowCount: Number(count.rows[0]?.row_count || 0) };
   } catch (error) {
     const errorCode = classifyDatabaseError(error);
     logDatabaseError(errorCode, error, 'databaseHealth');
     return { configured: true, connected: errorCode !== 'DB_CONNECTION_FAILED', provider: metadata.provider,
+      source: metadata.source, poolerDetected: metadata.poolerDetected, port: metadata.port,
       schemaReady: false, table: TABLE, errorCode };
   }
 }

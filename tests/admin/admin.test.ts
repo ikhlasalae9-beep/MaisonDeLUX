@@ -3,7 +3,7 @@ import test from 'node:test';
 import { NextRequest } from 'next/server';
 import { createSessionToken, validateCredentials, verifySessionToken } from '../../lib/admin/auth';
 import { logEstimation, periodDays } from '../../lib/admin/analytics';
-import { databaseMetadata, resolveDatabaseUrl } from '../../lib/admin/db';
+import { classifyDatabaseError, databaseMetadata, resolveDatabaseUrl } from '../../lib/admin/db';
 import { middleware } from '../../middleware';
 import { GET as report } from '../../app/api/admin/report/route';
 import { POST as login } from '../../app/api/admin/login/route';
@@ -66,8 +66,15 @@ test('database URL resolution uses safe server-side fallback order', () => {
   assert.equal(resolveDatabaseUrl(), process.env.POSTGRES_URL);
   process.env.DATABASE_URL = 'postgresql://user:secret@primary.pooler.supabase.com:6543/postgres';
   assert.equal(resolveDatabaseUrl(), process.env.DATABASE_URL);
-  assert.deepEqual(databaseMetadata(), { provider: 'supabase', hostPresent: true, poolerDetected: true,
+  assert.deepEqual(databaseMetadata(), { provider: 'supabase', source: 'DATABASE_URL', hostPresent: true, poolerDetected: true,
     port: 6543, databaseConfigured: true });
+});
+
+test('database errors distinguish permissions, schema, authentication, and queries', () => {
+  assert.equal(classifyDatabaseError(Object.assign(new Error('denied'), { code: '42501' })), 'DB_PERMISSION_DENIED');
+  assert.equal(classifyDatabaseError(Object.assign(new Error('missing'), { code: '42P01' })), 'DB_SCHEMA_MISSING');
+  assert.equal(classifyDatabaseError(Object.assign(new Error('auth'), { code: '28P01' })), 'DB_CONNECTION_FAILED');
+  assert.equal(classifyDatabaseError(Object.assign(new Error('other'), { code: '22000' })), 'DB_QUERY_FAILED');
 });
 
 test('analytics rejects an event missing a required database field', async () => {
@@ -83,8 +90,8 @@ test('db-health rejects unauthorized requests and returns safe diagnostics when 
   const authorized = await dbHealth(new NextRequest('http://localhost/api/admin/db-health',
     { headers: { cookie: `maisondelux_admin=${token}` } }));
   assert.equal(authorized.status, 503);
-  assert.deepEqual(await authorized.json(), { configured: false, connected: false, provider: 'unconfigured',
-    schemaReady: false, table: 'public.estimation_events', errorCode: 'DB_NOT_CONFIGURED' });
+  assert.deepEqual(await authorized.json(), { configured: false, connected: false, provider: 'unconfigured', source: null,
+    poolerDetected: false, port: null, schemaReady: false, table: 'public.estimation_events', errorCode: 'DB_NOT_CONFIGURED' });
 });
 
 test('report is a valid PDF when analytics storage is not configured', async () => {
