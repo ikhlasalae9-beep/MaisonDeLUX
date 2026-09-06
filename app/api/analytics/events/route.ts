@@ -4,9 +4,10 @@ import { classifyDatabaseError, databaseConfigured, logDatabaseError } from '@/l
 export async function POST(request: NextRequest) {
   try {
     const event = await request.json();
-    if (!event.city || !event.region || !event.property_type || !Number.isFinite(event.surface_m2) || !Number.isFinite(event.estimated_price_mad)) {
+    if (!event.event_key || !event.city || !event.region || !event.property_type || !Number.isFinite(event.surface_m2) || !Number.isFinite(event.estimated_price_mad)) {
       console.warn('ANALYTICS_INVALID_EVENT', { city: Boolean(event.city), region: Boolean(event.region),
-        propertyType: Boolean(event.property_type), surface: Number.isFinite(event.surface_m2), price: Number.isFinite(event.estimated_price_mad) });
+        eventKey: Boolean(event.event_key), propertyType: Boolean(event.property_type),
+        surface: Number.isFinite(event.surface_m2), price: Number.isFinite(event.estimated_price_mad) });
       return NextResponse.json({ error: 'Événement invalide' }, { status: 400 });
     }
     const stored = await logEstimation(event);

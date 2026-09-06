@@ -1,51 +1,38 @@
-import { Pool, QueryResultRow } from 'pg';
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
-const DATABASE_ENV_KEYS = ['DATABASE_URL', 'POSTGRES_URL', 'POSTGRES_PRISMA_URL'] as const;
 const TABLE = 'public.estimation_events';
-let pool: Pool | null = null;
-let poolUrl: string | null = null;
-let initialized = false;
-let initialization: Promise<boolean> | null = null;
+type Queryable = { query: <T extends QueryResultRow = QueryResultRow>(text: string, values?: unknown[]) => Promise<QueryResult<T>> };
+let pool: Queryable | null = null;
+let poolConnectionString: string | null = null;
 
 export type DatabaseErrorCode = 'DB_NOT_CONFIGURED' | 'DB_CONNECTION_FAILED' | 'DB_PERMISSION_DENIED' | 'DB_SCHEMA_MISSING' | 'DB_QUERY_FAILED';
-type DatabaseEnvSource = typeof DATABASE_ENV_KEYS[number];
 
-function resolveDatabaseConfig(): { url: string; source: DatabaseEnvSource } | null {
-  for (const source of DATABASE_ENV_KEYS) {
-    const value = process.env[source]?.trim();
-    if (!value) continue;
-    try {
-      const url = new URL(value);
-      if ((url.protocol === 'postgres:' || url.protocol === 'postgresql:') && url.hostname) return { url: value, source };
-    } catch { /* Try the next integration variable. */ }
-  }
-  return null;
+function connectionString() {
+  const value = process.env.POSTGRES_URL?.trim();
+  if (!value) return null;
+  try {
+    const parsed = new URL(value);
+    return (parsed.protocol === 'postgres:' || parsed.protocol === 'postgresql:') && parsed.hostname ? value : null;
+  } catch { return null; }
 }
 
-export function resolveDatabaseUrl() {
-  return resolveDatabaseConfig()?.url || null;
-}
-
-export function databaseConfigured() { return resolveDatabaseUrl() !== null; }
+export function databaseConfigured() { return connectionString() !== null; }
 
 export function databaseMetadata() {
-  const config = resolveDatabaseConfig();
-  if (!config) return { provider: 'unconfigured', source: null, hostPresent: false, poolerDetected: false, port: null, databaseConfigured: false };
-  const url = new URL(config.url);
-  return { provider: url.hostname.endsWith('.supabase.com') ? 'supabase' : 'postgresql', source: config.source, hostPresent: Boolean(url.hostname),
-    poolerDetected: url.hostname.includes('.pooler.supabase.com'), port: url.port ? Number(url.port) : 5432,
-    databaseConfigured: Boolean(url.pathname && url.pathname !== '/') };
+  const value = connectionString();
+  if (!value) return { provider: 'unconfigured', source: null, poolerDetected: false, port: null };
+  const url = new URL(value);
+  return { provider: url.hostname.endsWith('.supabase.com') ? 'supabase' : 'postgresql', source: 'POSTGRES_URL',
+    poolerDetected: url.hostname.includes('.pooler.supabase.com'), port: url.port ? Number(url.port) : 5432 };
 }
 
-function getPool() {
-  const connectionString = resolveDatabaseUrl();
-  if (!connectionString) return null;
-  if (!pool || poolUrl !== connectionString) {
-    pool = new Pool({ connectionString, max: 2, idleTimeoutMillis: 10_000, connectionTimeoutMillis: 8_000, allowExitOnIdle: true,
-      ssl: process.env.NODE_ENV === 'production' || new URL(connectionString).hostname.endsWith('.supabase.com')
-        ? { rejectUnauthorized: false } : undefined });
-    poolUrl = connectionString;
-    initialized = false;
+export function getDatabasePool() {
+  const value = connectionString();
+  if (!value) return null;
+  if (!pool || poolConnectionString !== value) {
+    pool = new Pool({ connectionString: value, max: 2, idleTimeoutMillis: 10_000, connectionTimeoutMillis: 8_000,
+      allowExitOnIdle: true, ssl: { rejectUnauthorized: false } });
+    poolConnectionString = value;
   }
   return pool;
 }
@@ -56,11 +43,7 @@ function postgresCode(error: unknown) {
 
 function safeMessage(error: unknown) {
   const message = error instanceof Error ? error.message : 'Unknown database error';
-  return message.replace(/postgres(?:ql)?:\/\/[^\s]+/gi, '[REDACTED_DATABASE_URL]').slice(0, 240);
-}
-
-export function logDatabaseError(code: DatabaseErrorCode, error?: unknown, context?: string) {
-  console.error(code, { context, postgresCode: postgresCode(error), message: error ? safeMessage(error) : undefined, ...databaseMetadata() });
+  return message.replace(/postgres(?:ql)?:\/\/[^\s]+/gi, '[REDACTED_POSTGRES_URL]').slice(0, 240);
 }
 
 export function classifyDatabaseError(error: unknown): DatabaseErrorCode {
@@ -71,68 +54,49 @@ export function classifyDatabaseError(error: unknown): DatabaseErrorCode {
   return 'DB_QUERY_FAILED';
 }
 
-export async function ensureAnalyticsSchema() {
-  const db = getPool();
-  if (!db) return false;
-  if (initialized) return true;
-  if (initialization) return initialization;
-  initialization = (async () => {
-    try {
-      const result = await db.query<{ schema_ready: boolean }>(`SELECT EXISTS (
-        SELECT 1 FROM information_schema.tables
-        WHERE table_schema = 'public' AND table_name = 'estimation_events'
-      ) AS schema_ready`);
-      if (result.rows[0]?.schema_ready !== true) {
-        const error = new Error('Required analytics schema is missing');
-        Object.assign(error, { code: '42P01' });
-        throw error;
-      }
-      initialized = true;
-      return true;
-    } catch (error) {
-      initialized = false;
-      logDatabaseError(classifyDatabaseError(error), error, 'ensureAnalyticsSchema');
-      throw error;
-    } finally { initialization = null; }
-  })();
-  return initialization;
+export function logDatabaseError(code: DatabaseErrorCode, error?: unknown, context?: string) {
+  console.error(code, { context, postgresCode: postgresCode(error), message: error ? safeMessage(error) : undefined, ...databaseMetadata() });
 }
 
 export async function query<T extends QueryResultRow = QueryResultRow>(text: string, values: unknown[] = []) {
-  const db = getPool();
+  const db = getDatabasePool();
   if (!db) throw new Error('DATABASE_NOT_CONFIGURED');
-  await ensureAnalyticsSchema();
   try { return await db.query<T>(text, values); }
   catch (error) { logDatabaseError(classifyDatabaseError(error), error, 'analyticsQuery'); throw error; }
 }
 
 export async function databaseHealth() {
   const metadata = databaseMetadata();
-  if (!databaseConfigured()) return { configured: false, connected: false, provider: metadata.provider, schemaReady: false,
-    source: metadata.source, poolerDetected: metadata.poolerDetected, port: metadata.port,
-    table: TABLE, errorCode: 'DB_NOT_CONFIGURED' };
-  const db = getPool()!;
+  const base = { configured: databaseConfigured(), provider: metadata.provider, source: metadata.source,
+    poolerDetected: metadata.poolerDetected, port: metadata.port, table: TABLE };
+  const db = getDatabasePool();
+  if (!db) return { ...base, connected: false, schemaReady: false, errorCode: 'DB_NOT_CONFIGURED' as const };
+  try { await db.query('SELECT 1'); }
+  catch (error) {
+    logDatabaseError('DB_CONNECTION_FAILED', error, 'databaseHealth.connect');
+    return { ...base, connected: false, schemaReady: false, errorCode: 'DB_CONNECTION_FAILED' as const };
+  }
+  let tableName: string | null;
   try {
-    await db.query('SELECT 1');
-    const identity = await db.query<{ database: string; current_role_name: string; schema_ready: boolean }>(`SELECT
-      current_database() AS database,
-      current_user AS current_role_name,
-      EXISTS (SELECT 1 FROM information_schema.tables
-        WHERE table_schema = 'public' AND table_name = 'estimation_events') AS schema_ready`);
-    const details = identity.rows[0];
-    if (details?.schema_ready !== true) return { configured: true, connected: true, provider: metadata.provider,
-      source: metadata.source, poolerDetected: metadata.poolerDetected, port: metadata.port, database: details?.database,
-      currentRole: details?.current_role_name, schemaReady: false, table: TABLE, errorCode: 'DB_SCHEMA_MISSING' };
-    const count = await db.query<{ row_count: number }>(`SELECT COUNT(*)::int AS row_count FROM ${TABLE}`);
-    initialized = true;
-    return { configured: true, connected: true, provider: metadata.provider, source: metadata.source,
-      poolerDetected: metadata.poolerDetected, port: metadata.port, database: details.database,
-      currentRole: details.current_role_name, schemaReady: true, table: TABLE, rowCount: Number(count.rows[0]?.row_count || 0) };
+    const table = await db.query<{ table_name: string | null }>("SELECT to_regclass('public.estimation_events') AS table_name");
+    tableName = table.rows[0]?.table_name || null;
   } catch (error) {
     const errorCode = classifyDatabaseError(error);
-    logDatabaseError(errorCode, error, 'databaseHealth');
-    return { configured: true, connected: errorCode !== 'DB_CONNECTION_FAILED', provider: metadata.provider,
-      source: metadata.source, poolerDetected: metadata.poolerDetected, port: metadata.port,
-      schemaReady: false, table: TABLE, errorCode };
+    logDatabaseError(errorCode, error, 'databaseHealth.tableCheck');
+    return { ...base, connected: true, schemaReady: false, errorCode };
   }
+  if (!tableName) return { ...base, connected: true, schemaReady: false, errorCode: 'DB_SCHEMA_MISSING' as const };
+  try {
+    const count = await db.query<{ row_count: number }>(`SELECT COUNT(*)::int AS row_count FROM ${TABLE}`);
+    return { ...base, connected: true, schemaReady: true, rowCount: Number(count.rows[0]?.row_count || 0) };
+  } catch (error) {
+    logDatabaseError('DB_QUERY_FAILED', error, 'databaseHealth.rowCount');
+    return { ...base, connected: true, schemaReady: true, errorCode: 'DB_QUERY_FAILED' as const };
+  }
+}
+
+/** Test-only hook for deterministic database integration tests. */
+export function setDatabasePoolForTests(testPool: Queryable | null) {
+  pool = testPool;
+  poolConnectionString = testPool ? connectionString() : null;
 }
