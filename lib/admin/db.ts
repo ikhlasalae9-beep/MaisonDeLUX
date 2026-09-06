@@ -114,20 +114,20 @@ export async function databaseHealth() {
   const db = getPool()!;
   try {
     await db.query('SELECT 1');
-    const identity = await db.query<{ database: string; current_role: string; schema_ready: boolean }>(`SELECT
+    const identity = await db.query<{ database: string; current_role_name: string; schema_ready: boolean }>(`SELECT
       current_database() AS database,
-      current_user AS current_role,
+      current_user AS current_role_name,
       EXISTS (SELECT 1 FROM information_schema.tables
         WHERE table_schema = 'public' AND table_name = 'estimation_events') AS schema_ready`);
     const details = identity.rows[0];
     if (details?.schema_ready !== true) return { configured: true, connected: true, provider: metadata.provider,
       source: metadata.source, poolerDetected: metadata.poolerDetected, port: metadata.port, database: details?.database,
-      currentRole: details?.current_role, schemaReady: false, table: TABLE, errorCode: 'DB_SCHEMA_MISSING' };
+      currentRole: details?.current_role_name, schemaReady: false, table: TABLE, errorCode: 'DB_SCHEMA_MISSING' };
     const count = await db.query<{ row_count: number }>(`SELECT COUNT(*)::int AS row_count FROM ${TABLE}`);
     initialized = true;
     return { configured: true, connected: true, provider: metadata.provider, source: metadata.source,
       poolerDetected: metadata.poolerDetected, port: metadata.port, database: details.database,
-      currentRole: details.current_role, schemaReady: true, table: TABLE, rowCount: Number(count.rows[0]?.row_count || 0) };
+      currentRole: details.current_role_name, schemaReady: true, table: TABLE, rowCount: Number(count.rows[0]?.row_count || 0) };
   } catch (error) {
     const errorCode = classifyDatabaseError(error);
     logDatabaseError(errorCode, error, 'databaseHealth');
