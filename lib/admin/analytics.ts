@@ -1,71 +1,119 @@
-import { databaseConfigured, logDatabaseError, query } from './db';
+import { ANALYTICS_TABLE, getSupabaseServerClient, logSupabaseError, supabaseConfigured } from './supabase-server';
 
 export type Period = 'today' | '7d' | '30d' | '90d' | 'all';
 export const periodDays: Record<Period, number | null> = { today: 1, '7d': 7, '30d': 30, '90d': 90, all: null };
 
-function filters(period: Period, region?: string, city?: string) {
-  const clauses: string[] = [];
-  const values: unknown[] = [];
+type EstimationEvent = {
+  id?: number; event_key?: string; created_at: string; region: string; city: string; neighborhood?: string | null;
+  property_type: string; surface_m2: number | string; bedrooms?: number | null; bathrooms?: number | null;
+  parking?: string | null; balcony?: string | null; sea_view?: string | null; furnished_status?: string | null;
+  estimated_price_mad: number | string; model_version?: string | null; locale?: string | null;
+};
+
+const numeric = (value: number | string | null | undefined) => value == null ? 0 : Number(value);
+const average = (values: number[]) => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+const median = (values: number[]) => {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+};
+
+function applyFilters<T>(request: T, period: Period, region?: string, city?: string) {
+  let filtered: any = request;
   const days = periodDays[period];
-  if (days) { values.push(days); clauses.push(`created_at >= NOW() - ($${values.length}::text || ' days')::interval`); }
-  if (region) { values.push(region); clauses.push(`region = $${values.length}`); }
-  if (city) { values.push(city); clauses.push(`city = $${values.length}`); }
-  return { where: clauses.length ? `WHERE ${clauses.join(' AND ')}` : '', values };
+  if (days) filtered = filtered.gte('created_at', new Date(Date.now() - days * 86_400_000).toISOString());
+  if (region) filtered = filtered.eq('region', region);
+  if (city) filtered = filtered.eq('city', city);
+  return filtered;
 }
 
 export async function logEstimation(event: Record<string, unknown>) {
-  if (!databaseConfigured()) { logDatabaseError('DB_NOT_CONFIGURED', undefined, 'logEstimation'); return false; }
-  await query(`INSERT INTO public.estimation_events
-    (event_key,region,city,neighborhood,property_type,surface_m2,bedrooms,bathrooms,parking,balcony,sea_view,furnished_status,estimated_price_mad,model_version,locale)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) ON CONFLICT (event_key) DO NOTHING`,
-    [event.event_key, event.region, event.city, event.neighborhood || null, event.property_type,
-      event.surface_m2, event.bedrooms ?? null, event.bathrooms ?? null, event.parking || null,
-      event.balcony || null, event.sea_view || null, event.furnished_status || null,
-      event.estimated_price_mad, event.model_version || null, event.locale || null]);
+  const supabase = getSupabaseServerClient();
+  if (!supabase) return false;
+  const payload = {
+    event_key: event.event_key, region: event.region, city: event.city, neighborhood: event.neighborhood || null,
+    property_type: event.property_type, surface_m2: event.surface_m2, bedrooms: event.bedrooms ?? null,
+    bathrooms: event.bathrooms ?? null, parking: event.parking || null, balcony: event.balcony || null,
+    sea_view: event.sea_view || null, furnished_status: event.furnished_status || null,
+    estimated_price_mad: event.estimated_price_mad, model_version: event.model_version || null, locale: event.locale || null,
+  };
+  const { error } = await supabase.from(ANALYTICS_TABLE).upsert(payload, { onConflict: 'event_key', ignoreDuplicates: true });
+  if (error) { logSupabaseError('logEstimation', error); throw new Error('SUPABASE_API_FAILED'); }
   return true;
 }
 
 export async function getOverview(period: Period, region?: string, city?: string) {
-  if (!databaseConfigured()) return { configured: false };
-  const f = filters(period, region, city);
-  const [kpis, activity, regions, cities, prices, scatter, ppm, profiles, options] = await Promise.all([
-    query(`SELECT COUNT(*)::int total, COUNT(*) FILTER (WHERE created_at >= CURRENT_DATE)::int today,
-      COUNT(*) FILTER (WHERE created_at >= NOW()-INTERVAL '7 days')::int seven,
-      COUNT(*) FILTER (WHERE created_at >= NOW()-INTERVAL '30 days')::int thirty,
-      AVG(estimated_price_mad)::float avg_price, percentile_cont(.5) WITHIN GROUP (ORDER BY estimated_price_mad)::float median_price,
-      AVG(surface_m2)::float avg_surface, COUNT(DISTINCT city)::int cities ${`FROM public.estimation_events ${f.where}`}`, f.values),
-    query(`SELECT DATE(created_at) day, COUNT(*)::int count FROM public.estimation_events ${f.where} GROUP BY 1 ORDER BY 1`, f.values),
-    query(`SELECT region name, COUNT(*)::int count FROM public.estimation_events ${f.where} GROUP BY 1 ORDER BY 2 DESC LIMIT 12`, f.values),
-    query(`SELECT city name, COUNT(*)::int count FROM public.estimation_events ${f.where} GROUP BY 1 ORDER BY 2 DESC LIMIT 10`, f.values),
-    query(`SELECT CASE WHEN estimated_price_mad<500000 THEN '< 500k' WHEN estimated_price_mad<1000000 THEN '500k–1M'
-      WHEN estimated_price_mad<1500000 THEN '1M–1,5M' WHEN estimated_price_mad<2000000 THEN '1,5M–2M'
-      WHEN estimated_price_mad<3000000 THEN '2M–3M' ELSE '3M+' END bucket, COUNT(*)::int count
-      FROM public.estimation_events ${f.where} GROUP BY 1`, f.values),
-    query(`SELECT surface_m2::float surface, estimated_price_mad::float price, city FROM public.estimation_events ${f.where} ORDER BY random() LIMIT 500`, f.values),
-    query(`SELECT city name, AVG(estimated_price_mad/NULLIF(surface_m2,0))::float value, COUNT(*)::int count
-      FROM public.estimation_events ${f.where} GROUP BY 1 HAVING COUNT(*)>=3 ORDER BY 2 DESC LIMIT 10`, f.values),
-    query(`SELECT AVG(bedrooms)::float bedrooms, AVG(bathrooms)::float bathrooms,
-      AVG((parking='yes')::int)::float parking, AVG((balcony='yes')::int)::float balcony,
-      AVG((sea_view='yes')::int)::float sea_view, AVG((furnished_status='furnished')::int)::float furnished
-      FROM public.estimation_events ${f.where}`, f.values),
-    query(`SELECT ARRAY_AGG(DISTINCT region) FILTER (WHERE region IS NOT NULL) regions,
-      ARRAY_AGG(DISTINCT city) FILTER (WHERE city IS NOT NULL) cities FROM public.estimation_events`),
+  const supabase = getSupabaseServerClient();
+  if (!supabaseConfigured() || !supabase) return { configured: false };
+  const fields = 'created_at,region,city,property_type,surface_m2,bedrooms,bathrooms,parking,balcony,sea_view,furnished_status,estimated_price_mad';
+  const [filteredResult, optionsResult] = await Promise.all([
+    applyFilters(supabase.from(ANALYTICS_TABLE).select(fields), period, region, city),
+    supabase.from(ANALYTICS_TABLE).select('region,city'),
   ]);
-  const total = Number(kpis.rows[0]?.total || 0);
-  return { configured: true, kpis: kpis.rows[0], activity: activity.rows, regions: regions.rows,
-    cities: cities.rows.map((row: any) => ({ ...row, percentage: total ? row.count / total * 100 : 0 })),
-    prices: prices.rows, scatter: scatter.rows, ppm: ppm.rows, profile: profiles.rows[0], options: options.rows[0] };
+  if (filteredResult.error) { logSupabaseError('getOverview.filtered', filteredResult.error); throw new Error('SUPABASE_API_FAILED'); }
+  if (optionsResult.error) { logSupabaseError('getOverview.options', optionsResult.error); throw new Error('SUPABASE_API_FAILED'); }
+  const rows = (filteredResult.data || []) as EstimationEvent[];
+  const now = Date.now();
+  const since = (days: number) => now - days * 86_400_000;
+  const pricesList = rows.map((row) => numeric(row.estimated_price_mad));
+  const surfaces = rows.map((row) => numeric(row.surface_m2));
+  const counts = (key: 'region' | 'city') => Array.from(rows.reduce((map, row) => map.set(row[key], (map.get(row[key]) || 0) + 1), new Map<string, number>()))
+    .map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+  const activityMap = rows.reduce((map, row) => {
+    const day = new Date(row.created_at).toISOString().slice(0, 10);
+    return map.set(day, (map.get(day) || 0) + 1);
+  }, new Map<string, number>());
+  const activity = Array.from(activityMap).map(([day, count]) => ({ day, count })).sort((a, b) => a.day.localeCompare(b.day));
+  const buckets = [
+    { bucket: '< 500k', match: (price: number) => price < 500_000 },
+    { bucket: '500k–1M', match: (price: number) => price >= 500_000 && price < 1_000_000 },
+    { bucket: '1M–1,5M', match: (price: number) => price >= 1_000_000 && price < 1_500_000 },
+    { bucket: '1,5M–2M', match: (price: number) => price >= 1_500_000 && price < 2_000_000 },
+    { bucket: '2M–3M', match: (price: number) => price >= 2_000_000 && price < 3_000_000 },
+    { bucket: '3M+', match: (price: number) => price >= 3_000_000 },
+  ];
+  const priceDistribution = buckets.map(({ bucket, match }) => ({ bucket, count: pricesList.filter(match).length })).filter((item) => item.count);
+  const cityPrices = rows.reduce((map, row) => {
+    const surface = numeric(row.surface_m2);
+    if (surface > 0) map.set(row.city, [...(map.get(row.city) || []), numeric(row.estimated_price_mad) / surface]);
+    return map;
+  }, new Map<string, number[]>());
+  const ppm = Array.from(cityPrices).filter(([, values]) => values.length >= 3)
+    .map(([name, values]) => ({ name, value: average(values), count: values.length }))
+    .sort((a, b) => Number(b.value) - Number(a.value)).slice(0, 10);
+  const optionalAverage = (key: 'bedrooms' | 'bathrooms') => average(rows.flatMap((row) => row[key] == null ? [] : [Number(row[key])]));
+  const ratio = (predicate: (row: EstimationEvent) => boolean) => rows.length ? rows.filter(predicate).length / rows.length : null;
+  const regions = counts('region').slice(0, 12);
+  const cities = counts('city').slice(0, 10).map((row) => ({ ...row, percentage: rows.length ? row.count / rows.length * 100 : 0 }));
+  const optionRows = (optionsResult.data || []) as Pick<EstimationEvent, 'region' | 'city'>[];
+  return {
+    configured: true,
+    kpis: { total: rows.length, today: rows.filter((row) => +new Date(row.created_at) >= since(1)).length,
+      seven: rows.filter((row) => +new Date(row.created_at) >= since(7)).length,
+      thirty: rows.filter((row) => +new Date(row.created_at) >= since(30)).length,
+      avg_price: average(pricesList), median_price: median(pricesList), avg_surface: average(surfaces),
+      cities: new Set(rows.map((row) => row.city)).size },
+    activity, regions, cities, prices: priceDistribution,
+    scatter: rows.slice(0, 500).map((row) => ({ surface: numeric(row.surface_m2), price: numeric(row.estimated_price_mad), city: row.city })),
+    ppm,
+    profile: { bedrooms: optionalAverage('bedrooms'), bathrooms: optionalAverage('bathrooms'),
+      parking: ratio((row) => row.parking === 'yes'), balcony: ratio((row) => row.balcony === 'yes'),
+      sea_view: ratio((row) => row.sea_view === 'yes'), furnished: ratio((row) => row.furnished_status === 'furnished') },
+    options: { regions: Array.from(new Set(optionRows.map((row) => row.region))), cities: Array.from(new Set(optionRows.map((row) => row.city))) },
+  };
 }
 
 export async function getEstimations(period: Period, page = 1, search = '', region?: string, city?: string) {
-  if (!databaseConfigured()) return { configured: false, rows: [], total: 0 };
-  const f = filters(period, region, city);
-  const values = [...f.values];
-  let where = f.where;
-  if (search) { values.push(`%${search}%`); where += `${where ? ' AND' : 'WHERE'} (city ILIKE $${values.length} OR neighborhood ILIKE $${values.length})`; }
-  const count = await query(`SELECT COUNT(*)::int total FROM public.estimation_events ${where}`, values);
-  values.push(20, (Math.max(1, page) - 1) * 20);
-  const rows = await query(`SELECT id,created_at,region,city,neighborhood,surface_m2::float,bedrooms,
-    estimated_price_mad::float,model_version FROM public.estimation_events ${where} ORDER BY created_at DESC LIMIT $${values.length - 1} OFFSET $${values.length}`, values);
-  return { configured: true, rows: rows.rows, total: count.rows[0]?.total || 0 };
+  const supabase = getSupabaseServerClient();
+  if (!supabaseConfigured() || !supabase) return { configured: false, rows: [], total: 0 };
+  const offset = (Math.max(1, page) - 1) * 20;
+  let request: any = applyFilters(supabase.from(ANALYTICS_TABLE)
+    .select('id,created_at,region,city,neighborhood,surface_m2,bedrooms,estimated_price_mad,model_version', { count: 'exact' }), period, region, city);
+  const safeSearch = search.trim().replace(/[,()%]/g, '');
+  if (safeSearch) request = request.or(`city.ilike.%${safeSearch}%,neighborhood.ilike.%${safeSearch}%`);
+  const { data, count, error } = await request.order('created_at', { ascending: false }).range(offset, offset + 19);
+  if (error) { logSupabaseError('getEstimations', error); throw new Error('SUPABASE_API_FAILED'); }
+  return { configured: true, rows: (data || []).map((row: any) => ({ ...row, surface_m2: numeric(row.surface_m2),
+    estimated_price_mad: numeric(row.estimated_price_mad) })), total: count || 0 };
 }

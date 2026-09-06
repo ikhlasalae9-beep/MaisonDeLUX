@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ADMIN_COOKIE, verifySessionToken } from '@/lib/admin/auth';
-import { databaseHealth } from '@/lib/admin/db';
+import { databaseHealth } from '@/lib/admin/supabase-server';
 
 export const dynamic = 'force-dynamic';
 

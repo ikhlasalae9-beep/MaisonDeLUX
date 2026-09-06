@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logEstimation } from '@/lib/admin/analytics';
-import { classifyDatabaseError, databaseConfigured, logDatabaseError } from '@/lib/admin/db';
 export async function POST(request: NextRequest) {
   try {
     const event = await request.json();
@@ -12,8 +11,7 @@ export async function POST(request: NextRequest) {
     }
     const stored = await logEstimation(event);
     return NextResponse.json({ ok: true, stored }, { status: 202 });
-  } catch (error) {
-    logDatabaseError(databaseConfigured() ? classifyDatabaseError(error) : 'DB_NOT_CONFIGURED', error, 'analyticsEventInsert');
+  } catch {
     return NextResponse.json({ ok: false }, { status: 202 });
   }
 }
