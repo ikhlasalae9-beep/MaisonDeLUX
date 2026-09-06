@@ -4,7 +4,7 @@ import React from 'react';
 import { CheckCircle, AlertTriangle, RefreshCw, ArrowLeft, ArrowRight, ShieldCheck } from 'lucide-react';
 import { PredictResponse } from '@/lib/api/types';
 import { EstimatorFormData } from '@/types/estimator';
-import { formatCurrency, formatNumber } from '@/lib/utils';
+import { formatCurrency, formatPricePerSquareMeter } from '@/lib/utils';
 import { Button } from '@/components/common/Button';
 import { isRTL } from '@/lib/i18n/config';
 
@@ -137,7 +137,7 @@ export function Step5Result({
               <div>
                 <span className="text-slate-400 block">{d.pricePerM2Label}</span>
                 <span className="text-sm font-bold text-slate-800 dark:text-slate-200 font-mono">
-                  {formatCurrency(prediction.prix_par_m2, locale)} / m²
+                  {formatPricePerSquareMeter(prediction.prix_par_m2, locale)}
                 </span>
               </div>
             )}

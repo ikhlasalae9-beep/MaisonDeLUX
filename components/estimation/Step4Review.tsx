@@ -5,7 +5,7 @@ import locations from '@/models/locations_v1.json';
 import { ESTIMATOR_FIELDS } from '@/config/estimator.config';
 import { ClipboardCheck, Edit3 } from 'lucide-react';
 import { EstimatorFormData } from '@/types/estimator';
-import { formatNumber } from '@/lib/utils';
+import { formatArea, formatInteger } from '@/lib/utils';
 
 interface Step4ReviewProps {
   formData: EstimatorFormData;
@@ -38,10 +38,10 @@ export function Step4Review({ formData, goToStep, locale, dict }: Step4ReviewPro
       title: d.step3,
       stepNumber: 3,
       items: [
-        { label: d.surfaceField, value: `${formatNumber(formData.surface, locale)} m²` },
-        { label: d.bedroomsField, value: formData.chambres ? formatNumber(formData.chambres, locale) : d.notSpecified },
+        { label: d.surfaceField, value: formatArea(formData.surface, locale) },
+        { label: d.bedroomsField, value: formData.chambres ? formatInteger(formData.chambres, locale) : d.notSpecified },
         ...ESTIMATOR_FIELDS.filter(f => ['parking', 'balcony', 'sea_view', 'furnished_status'].includes(f.id)).map(f => ({ label: locale === 'ar' ? f.labelAr : f.labelFr, value: f.options?.find(o => o.value === formData[f.id])?.[locale === 'ar' ? 'labelAr' : 'labelFr'] })),
-        { label: d.bathroomsField, value: formData.salles_bain ? formatNumber(formData.salles_bain, locale) : d.notSpecified },
+        { label: d.bathroomsField, value: formData.salles_bain ? formatInteger(formData.salles_bain, locale) : d.notSpecified },
       ],
     },
   ];

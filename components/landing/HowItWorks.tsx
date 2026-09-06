@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layers, Cpu, TrendingUp, ShieldCheck, Building2, BarChart3, CheckCircle2 } from 'lucide-react';
 import { isRTL } from '@/lib/i18n/config';
+import { formatArea, formatCurrency, formatPercentage } from '@/lib/utils';
 
 interface HowItWorksProps {
   locale: string;
@@ -64,7 +65,7 @@ export function HowItWorks({ locale, dict }: HowItWorksProps) {
             </div>
             <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/5">
               <span className="text-[10px] text-slate-400 block mb-0.5 uppercase tracking-wider">Surface brute</span>
-              <span className="font-bold text-slate-900 dark:text-white">95 m² habitables</span>
+              <span className="font-bold text-slate-900 dark:text-white">{formatArea(95, locale)} habitables</span>
             </div>
             <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/5">
               <span className="text-[10px] text-slate-400 block mb-0.5 uppercase tracking-wider">Distribution</span>
@@ -104,7 +105,7 @@ export function HowItWorks({ locale, dict }: HowItWorksProps) {
                 <span className="text-slate-600 dark:text-slate-300 font-medium">
                   {locale === 'ar' ? 'تنقية البيانات من القيم الشاذة' : 'Filtrage outliers & doublons'}
                 </span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">100%</span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">{formatPercentage(100, locale, 0)}</span>
               </div>
               <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div className="h-full bg-emerald-500 rounded-full w-full" />
@@ -151,16 +152,16 @@ export function HowItWorks({ locale, dict }: HowItWorksProps) {
             {locale === 'ar' ? 'القيمة الإرشادية المحسوبة' : 'Estimation Indicative du Modèle'}
           </span>
           <div className="text-2xl font-black text-brand-navy dark:text-white">
-            1 250 000 <span className="text-sm font-bold text-brand-blue">MAD</span>
+            {formatCurrency(1250000, locale)}
           </div>
           <div className="pt-1.5 border-t border-slate-200/60 dark:border-white/10 flex justify-around text-[11px]">
             <div>
               <span className="text-[9px] text-slate-400 block uppercase">Fourchette basse</span>
-              <span className="font-bold text-slate-700 dark:text-slate-200">1 190 000 MAD</span>
+              <span className="font-bold text-slate-700 dark:text-slate-200">{formatCurrency(1190000, locale)}</span>
             </div>
             <div>
               <span className="text-[9px] text-slate-400 block uppercase">Fourchette haute</span>
-              <span className="font-bold text-slate-700 dark:text-slate-200">1 320 000 MAD</span>
+              <span className="font-bold text-slate-700 dark:text-slate-200">{formatCurrency(1320000, locale)}</span>
             </div>
           </div>
         </div>
