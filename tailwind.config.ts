@@ -11,11 +11,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        background: "var(--bg-page)",
+        surface: {
+          DEFAULT: "var(--bg-surface)",
+          elevated: "var(--bg-surface-elevated)",
+          subtle: "var(--bg-surface-subtle)",
+        },
+        border: {
+          subtle: "var(--border-subtle)",
+          medium: "var(--border-medium)",
+          focus: "var(--border-focus)",
+        },
+        text: {
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          muted: "var(--text-muted)",
+          light: "var(--text-light)",
+        },
         brand: {
-          blue: "#1D4ED8",
-          "blue-hover": "#1E40AF",
-          "blue-light": "#3B82F6",
-          "blue-subtle": "rgba(29, 78, 216, 0.08)",
+          blue: "var(--accent-blue)",
+          "blue-hover": "var(--accent-blue-hover)",
+          "blue-subtle": "var(--accent-subtle)",
+          
+          /* Keeping legacy tokens temporarily so build doesn't break while refactoring */
           navy: "#0F172A",
           "navy-deep": "#080C15",
           "navy-surface": "#131C31",
@@ -26,15 +44,23 @@ const config: Config = {
           "off-white": "#F8FAFC",
           white: "#FFFFFF",
         },
+        status: {
+          success: "var(--success)",
+          warning: "var(--warning)",
+          danger: "var(--danger)",
+        },
+        overlay: "var(--overlay)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
         arabic: ["var(--font-arabic)", "'IBM Plex Sans Arabic'", "'Tajawal'", "sans-serif"],
       },
       boxShadow: {
-        "architectural": "0 20px 40px -15px rgba(15, 23, 42, 0.07)",
-        "architectural-dark": "0 20px 40px -15px rgba(0, 0, 0, 0.5)",
-        "subtle": "0 2px 10px rgba(15, 23, 42, 0.04)",
+        card: "var(--shadow-card)",
+        elevated: "var(--shadow-elevated)",
+        "architectural": "0 20px 40px -15px rgba(28, 25, 23, 0.08)",
+        "architectural-dark": "0 20px 40px -15px rgba(0, 0, 0, 0.6)",
+        "subtle": "0 2px 10px rgba(28, 25, 23, 0.04)",
       },
     },
   },

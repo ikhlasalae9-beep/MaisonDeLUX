@@ -29,7 +29,7 @@ export function QuickStartBar({ locale, dict }: QuickStartBarProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-3xl bg-white dark:bg-brand-navy-surface border border-slate-200/90 dark:border-white/10 rounded-2xl p-2.5 sm:p-3 shadow-xl shadow-slate-900/5 dark:shadow-black/40 transition-colors"
+      className="w-full max-w-3xl bg-white dark:bg-surface-elevated border border-slate-200/90 dark:border-white/10 rounded-2xl p-2.5 sm:p-3 shadow-xl shadow-slate-900/5 dark:shadow-black/40 transition-colors"
     >
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 sm:gap-3 items-center">
         {/* City selection field */}

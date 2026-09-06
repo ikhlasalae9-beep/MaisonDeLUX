@@ -44,8 +44,8 @@ export function Navbar({ locale, dict }: NavbarProps) {
       <div
         className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-7 rounded-2xl sm:rounded-full pointer-events-auto flex items-center justify-between gap-4 lg:gap-8 transition-all duration-300 ease-out ${
           isScrolled
-            ? 'h-15 sm:h-16 backdrop-blur-2xl bg-white/92 dark:bg-[#0B0F19]/92 border border-slate-200 dark:border-white/15 shadow-[0_10px_30px_-6px_rgba(15,23,42,0.1),0_2px_4px_0_rgba(15,23,42,0.06),inset_0_1px_0_0_rgba(255,255,255,0.95)] dark:shadow-[0_14px_40px_-6px_rgba(0,0,0,0.7),0_2px_4px_0_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.12)]'
-            : 'h-18 sm:h-20 backdrop-blur-xl bg-white/80 dark:bg-[#0B0F19]/80 border border-slate-200/80 dark:border-white/10 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_2px_0_rgba(15,23,42,0.04),inset_0_1px_0_0_rgba(255,255,255,0.9)] dark:shadow-[0_8px_32px_-4px_rgba(0,0,0,0.5),0_1px_3px_0_rgba(0,0,0,0.3),inset_0_1px_0_0_rgba(255,255,255,0.08)]'
+            ? 'h-15 sm:h-16 backdrop-blur-2xl bg-surface/90 dark:bg-surface-elevated/90 border border-border-subtle shadow-card'
+            : 'h-18 sm:h-20 backdrop-blur-xl bg-surface/70 dark:bg-surface/70 border border-border-subtle shadow-subtle'
         }`}
       >
         {/* Left: Official Horizontal Logo */}

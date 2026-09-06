@@ -35,6 +35,8 @@ export async function generateMetadata({
   };
 }
 
+import { LuxuryAmbientBackground } from '@/components/layout/LuxuryAmbientBackground';
+
 export default function LocaleLayout({
   children,
   params,
@@ -53,10 +55,11 @@ export default function LocaleLayout({
 
   return (
     <SmoothScroll>
+      <LuxuryAmbientBackground />
       <ScrollProgress locale={locale} />
       <LocaleHandler locale={locale} dir={dir} />
       <Navbar locale={locale} dict={dict} />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 z-10 relative">{children}</main>
       <Footer locale={locale} dict={dict} />
     </SmoothScroll>
   );

@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle, AlertTriangle, RefreshCw, ArrowLeft, ArrowRight, ShieldCheck } from 'lucide-react';
+import { CheckCircle, AlertTriangle, RefreshCw, ArrowLeft, ArrowRight, ShieldCheck, MapPin, Home, Building2, Key } from 'lucide-react';
 import { PredictResponse } from '@/lib/api/types';
 import { EstimatorFormData } from '@/types/estimator';
-import { formatCurrency, formatPricePerSquareMeter } from '@/lib/utils';
+import { formatCurrency, formatPricePerSquareMeter, formatArea } from '@/lib/utils';
 import { Button } from '@/components/common/Button';
 import { isRTL } from '@/lib/i18n/config';
 
@@ -35,59 +35,48 @@ export function Step5Result({
   const rtl = isRTL(locale);
   const ArrowIcon = rtl ? ArrowLeft : ArrowRight;
 
-  // 1. Loading State
   if (isSubmitting) {
     return (
-      <div className="py-16 text-center space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-brand-blue/10 dark:bg-blue-400/10 border border-brand-blue/20 flex items-center justify-center mx-auto text-brand-blue dark:text-blue-400 animate-pulse">
-          <RefreshCw className="w-6 h-6 animate-spin" />
+      <div className="py-24 text-center space-y-6">
+        <div className="w-16 h-16 rounded-full bg-brand-blue/10 dark:bg-blue-400/10 border-2 border-brand-blue/20 flex items-center justify-center mx-auto text-brand-blue dark:text-blue-400 animate-pulse">
+          <RefreshCw className="w-8 h-8 animate-spin" />
         </div>
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-          {dict.common.loading}
-        </h3>
-        <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
-          {locale === 'ar'
-            ? 'تتم معالجة مواصفات العقار عبر خوارزمية التقييم المطابقة للمنطقة.'
-            : 'Rapprochement des caractéristiques du bien avec les séries statistiques locales.'}
-        </p>
+        <div>
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            {dict.common.loading}
+          </h3>
+          <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
+            {locale === 'ar'
+              ? 'تتم معالجة مواصفات العقار عبر خوارزمية التقييم المطابقة للمنطقة.'
+              : 'Rapprochement des caractéristiques du bien avec les séries statistiques locales.'}
+          </p>
+        </div>
       </div>
     );
   }
 
-  // 2. Offline / Connecting / Honest State (No Fake Estimation)
   if (isOffline || error) {
     return (
-      <div className="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-brand-navy-surface border border-slate-200 dark:border-white/10 text-center space-y-6">
-        <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto text-amber-600 dark:text-amber-400">
-          <AlertTriangle className="w-7 h-7" />
+      <div className="p-8 sm:p-12 rounded-3xl bg-slate-50 dark:bg-surface-elevated border border-slate-200 dark:border-white/10 text-center space-y-6">
+        <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto text-amber-600 dark:text-amber-400">
+          <AlertTriangle className="w-8 h-8" />
         </div>
-
-        <div className="space-y-2 max-w-md mx-auto">
-          <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
+        <div className="space-y-3 max-w-md mx-auto">
+          <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">
             {d.offlineTitle}
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
             {d.offlineMessage}
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400 pt-2 font-mono">
-            {error || 'Statut: API ML en attente de déploiement / calibrage'}
+            {error || 'Statut: API ML en attente de déploiement'}
           </p>
         </div>
-
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onRetry}
-            icon={<RefreshCw className="w-4 h-4" />}
-          >
+        <div className="pt-6 flex flex-wrap items-center justify-center gap-4">
+          <Button variant="primary" size="md" onClick={onRetry} icon={<RefreshCw className="w-4 h-4" />}>
             {d.retry}
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onReset}
-          >
+          <Button variant="outline" size="md" onClick={onReset}>
             {dict.common.reset}
           </Button>
         </div>
@@ -95,90 +84,102 @@ export function Step5Result({
     );
   }
 
-  // 3. Authentic Prediction State (From Real Backend API)
   if (prediction && prediction.estimated_price_mad !== undefined) {
     const hasRange = prediction.prix_min !== undefined && prediction.prix_max !== undefined;
     const hasPpm = prediction.prix_par_m2 !== undefined;
     const modelVersion = prediction.model_version;
 
     return (
-      <div className="space-y-6">
-        {/* Main Price Card */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-brand-navy-surface border border-slate-200/90 dark:border-white/10 shadow-lg shadow-slate-900/5 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-            <CheckCircle className="w-3.5 h-3.5" />
-            <span>{d.title}</span>
+      <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-surface-elevated border border-slate-200 dark:border-white/10 shadow-card">
+          
+          {/* Subtle Background Architectural Motif */}
+          <div className="absolute top-0 right-0 p-8 opacity-[0.03] dark:opacity-[0.02] pointer-events-none">
+            <Home className="w-64 h-64 -mt-16 -mr-16" />
           </div>
 
-          <div>
-            <span className="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-1">
-              {d.priceLabel}
-            </span>
-            <div className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight">
-              {formatCurrency(prediction.estimated_price_mad, locale)}
-            </div>
-          </div>
-
-          {/* Optional Range (Only if real API provides it) */}
-          {hasRange && (
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5 max-w-md mx-auto">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400 block mb-1">
-                {d.rangeLabel}
-              </span>
-              <span className="text-sm font-bold text-slate-800 dark:text-slate-200 font-mono">
-                {formatCurrency(prediction.prix_min, locale)} — {formatCurrency(prediction.prix_max, locale)}
-              </span>
-            </div>
-          )}
-
-          {/* Metric Details (Only if available) */}
-          <div className="pt-4 border-t border-slate-100 dark:border-white/5 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs">
-            {hasPpm && (
-              <div>
-                <span className="text-slate-400 block">{d.pricePerM2Label}</span>
-                <span className="text-sm font-bold text-slate-800 dark:text-slate-200 font-mono">
-                  {formatPricePerSquareMeter(prediction.prix_par_m2, locale)}
-                </span>
-              </div>
-            )}
+          <div className="p-8 sm:p-12 relative z-10 text-center space-y-8">
+            {/* Header */}
             <div>
-              <span className="text-slate-400 block">{dict.estimation.cityField}</span>
-              <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                {prediction.ville || formData.ville}
-              </span>
-            </div>
-            {formData.quartier && (
-              <div>
-                <span className="text-slate-400 block">{dict.estimation.districtField}</span>
-                <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                  {formData.quartier}
-                </span>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 mb-6">
+                <CheckCircle className="w-4 h-4" />
+                <span>{d.title}</span>
               </div>
-            )}
-          </div>
-        </div>
+              <h2 className="text-sm uppercase tracking-widest font-bold text-slate-500 dark:text-slate-400 mb-2">
+                {d.priceLabel}
+              </h2>
+              <div className="text-5xl sm:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight">
+                {formatCurrency(prediction.estimated_price_mad, locale)}
+              </div>
+            </div>
 
-        {/* Dynamic Model Attribution (Never hard-coding "Phase 4") */}
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-white/5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-brand-blue dark:text-blue-400" />
-            <span>
-              {d.modelInfo} : {modelVersion ? `Modèle (${modelVersion})` : 'MaisonDeLUX Algorithmic Engine'}
-            </span>
-          </div>
-          <span className="font-mono">Devise: MAD</span>
-        </div>
+            {/* Contextual Properties Summary */}
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 py-6 border-y border-slate-100 dark:border-white/5">
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <MapPin className="w-4 h-4 text-brand-blue" />
+                <span className="font-semibold">{prediction.ville || formData.ville}</span>
+                {formData.quartier && <span className="text-slate-400">— {formData.quartier}</span>}
+              </div>
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <Building2 className="w-4 h-4 text-brand-blue" />
+                <span className="font-semibold">{formData.type_bien === 'appartement' ? (locale === 'ar' ? 'شقة' : 'Appartement') : (locale === 'ar' ? 'فيلا' : 'Villa')}</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <Key className="w-4 h-4 text-brand-blue" />
+                <span className="font-semibold">{formatArea(formData.surface, locale)}</span>
+              </div>
+            </div>
 
-        <p className="text-sm text-center text-slate-500">{locale === 'ar' ? 'تقدير إحصائي استرشادي، وليس تقييماً عقارياً رسمياً.' : 'Estimation statistique indicative, ne constituant pas une expertise immobilière officielle.'}</p>
-        {/* Actions */}
-        <div className="flex items-center justify-center gap-4 pt-2">
-          <Button
-            variant="outline"
-            size="md"
-            onClick={onReset}
-          >
-            {dict.common.reset}
-          </Button>
+            {/* Price Metrics Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              {hasRange && (
+                <div className="p-5 rounded-2xl bg-slate-50 dark:bg-surface border border-slate-100 dark:border-white/5 text-left rtl:text-right">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+                    {d.rangeLabel}
+                  </span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">
+                    {formatCurrency(prediction.prix_min, locale)} — {formatCurrency(prediction.prix_max, locale)}
+                  </span>
+                </div>
+              )}
+              {hasPpm && (
+                <div className="p-5 rounded-2xl bg-slate-50 dark:bg-surface border border-slate-100 dark:border-white/5 text-left rtl:text-right">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
+                    {d.pricePerM2Label}
+                  </span>
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">
+                    {formatPricePerSquareMeter(prediction.prix_par_m2, locale)}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Footer Trust & Actions */}
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="flex flex-col items-center sm:items-start rtl:sm:items-end text-left rtl:text-right">
+                <div className="flex items-center gap-2 text-xs font-semibold text-brand-blue dark:text-blue-400 mb-1">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>MaisonDeLUX Intelligence</span>
+                </div>
+                <p className="text-[11px] text-slate-500 max-w-xs">
+                  {locale === 'ar' 
+                    ? 'تقدير إحصائي استرشادي، وليس تقييماً عقارياً رسمياً.' 
+                    : 'Estimation statistique indicative, ne constituant pas une expertise immobilière officielle.'}
+                </p>
+              </div>
+              
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={onReset}
+                className="w-full sm:w-auto shadow-xl shadow-brand-blue/20"
+                icon={<RefreshCw className="w-4 h-4" />}
+              >
+                {locale === 'ar' ? 'إجراء تقييم جديد' : 'Nouvelle estimation'}
+              </Button>
+            </div>
+
+          </div>
         </div>
       </div>
     );
