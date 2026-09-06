@@ -3,10 +3,13 @@ import test from 'node:test';
 import { NextRequest } from 'next/server';
 import { createSessionToken, validateCredentials, verifySessionToken } from '../../lib/admin/auth';
 import { logEstimation, periodDays } from '../../lib/admin/analytics';
+import { databaseMetadata, resolveDatabaseUrl } from '../../lib/admin/db';
 import { middleware } from '../../middleware';
 import { GET as report } from '../../app/api/admin/report/route';
 import { POST as login } from '../../app/api/admin/login/route';
 import { POST as logout } from '../../app/api/admin/logout/route';
+import { GET as dbHealth } from '../../app/api/admin/db-health/route';
+import { POST as analyticsEvent } from '../../app/api/analytics/events/route';
 
 const original = { ...process.env };
 test.beforeEach(() => {
@@ -14,6 +17,8 @@ test.beforeEach(() => {
   process.env.ADMIN_PASSWORD = 'local-test-password';
   process.env.ADMIN_SESSION_SECRET = '0123456789abcdef0123456789abcdef';
   delete process.env.DATABASE_URL;
+  delete process.env.POSTGRES_URL;
+  delete process.env.POSTGRES_PRISMA_URL;
 });
 test.after(() => { process.env = original; });
 
@@ -51,6 +56,35 @@ test('protected admin API accepts a signed session', async () => {
 test('analytics logging is safely disabled without DATABASE_URL', async () => {
   assert.equal(await logEstimation({}), false);
   assert.deepEqual(periodDays, { today: 1, '7d': 7, '30d': 30, '90d': 90, all: null });
+});
+
+test('database URL resolution uses safe server-side fallback order', () => {
+  process.env.POSTGRES_PRISMA_URL = 'postgresql://user:secret@project.pooler.supabase.com:6543/postgres';
+  process.env.POSTGRES_URL = 'postgres://user:secret@preferred.pooler.supabase.com:6543/postgres';
+  assert.equal(resolveDatabaseUrl(), process.env.POSTGRES_URL);
+  process.env.DATABASE_URL = 'not-a-postgres-url';
+  assert.equal(resolveDatabaseUrl(), process.env.POSTGRES_URL);
+  process.env.DATABASE_URL = 'postgresql://user:secret@primary.pooler.supabase.com:6543/postgres';
+  assert.equal(resolveDatabaseUrl(), process.env.DATABASE_URL);
+  assert.deepEqual(databaseMetadata(), { provider: 'supabase', hostPresent: true, poolerDetected: true,
+    port: 6543, databaseConfigured: true });
+});
+
+test('analytics rejects an event missing a required database field', async () => {
+  const response = await analyticsEvent(new NextRequest('http://localhost/api/analytics/events', { method: 'POST',
+    body: JSON.stringify({ region: 'Rabat-Salé-Kénitra', city: 'Rabat', surface_m2: 90, estimated_price_mad: 1_000_000 }) }));
+  assert.equal(response.status, 400);
+});
+
+test('db-health rejects unauthorized requests and returns safe diagnostics when authorized', async () => {
+  const unauthorized = await dbHealth(new NextRequest('http://localhost/api/admin/db-health'));
+  assert.equal(unauthorized.status, 401);
+  const token = await createSessionToken('admin@maison-delux.com');
+  const authorized = await dbHealth(new NextRequest('http://localhost/api/admin/db-health',
+    { headers: { cookie: `maisondelux_admin=${token}` } }));
+  assert.equal(authorized.status, 503);
+  assert.deepEqual(await authorized.json(), { configured: false, connected: false, provider: 'unconfigured',
+    schemaReady: false, table: 'public.estimation_events', errorCode: 'DB_NOT_CONFIGURED' });
 });
 
 test('report is a valid PDF when analytics storage is not configured', async () => {

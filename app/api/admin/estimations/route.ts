@@ -8,5 +8,5 @@ export async function GET(request: NextRequest) {
       request.nextUrl.searchParams.get('search') || '', request.nextUrl.searchParams.get('region') || undefined,
       request.nextUrl.searchParams.get('city') || undefined);
     return NextResponse.json(data);
-  } catch (error) { console.error('Admin estimations:', error); return NextResponse.json({ error: 'Estimations indisponibles.' }, { status: 500 }); }
+  } catch { return NextResponse.json({ error: 'ANALYTICS_DATABASE_UNAVAILABLE' }, { status: 500 }); }
 }
