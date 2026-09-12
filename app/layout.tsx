@@ -43,6 +43,11 @@ export default function RootLayout({
             `,
           }}
         />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5319525778610660"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body className="min-h-screen flex flex-col bg-slate-50 dark:bg-brand-navy-deep text-slate-900 dark:text-white transition-colors duration-200">
         {children}
