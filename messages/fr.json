@@ -88,7 +88,7 @@
     "pillars": [
       {
         "title": "Périmètre de Modélisation Ciblé",
-        "description": "Le moteur de prédiction est actuellement entraîné sur le segment des appartements résidentiels à la vente. Les autres typologies (villas, duplex, terrains) sont en cours d'audit et ne sont pas simulées artificiellement."
+        "description": "Le service actif concerne les appartements et villas de Casablanca selon les catégories du modèle local. Les autres villes et typologies restent explicitement indisponibles."
       },
       {
         "title": "Prix d'Offre vs. Actes Notariés",
@@ -170,6 +170,90 @@
       "offlineSubtext": "Dès que le backend local ou distant est opérationnel, relancez l'évaluation pour obtenir la prédiction exacte du modèle.",
       "retry": "Réessayer la connexion"
     }
+  },
+  "phase3": {
+    "landing": {
+      "eyebrow": "Intelligence immobilière · Royaume du Maroc",
+      "title": "Comprendre la valeur immobilière, ville par ville.",
+      "subtitle": "MaisonDeLUX construit une expérience nationale de valorisation fondée sur des modèles locaux, des données documentées et une lecture exigeante du territoire.",
+      "primaryCta": "Explorer les villes",
+      "secondaryCta": "Notre démarche",
+      "visionEyebrow": "Une vision nationale",
+      "visionTitle": "Un même standard de rigueur, adapté à chaque marché local.",
+      "visionBody": "Le Maroc réunit des réalités urbaines distinctes. MaisonDeLUX développe chaque service ville par ville afin de respecter les données, les typologies et les dynamiques propres à chaque territoire.",
+      "citiesEyebrow": "Territoires",
+      "citiesTitle": "Casablanca ouvre une expérience appelée à grandir.",
+      "citiesBody": "Découvrez les villes référencées et suivez l'ouverture progressive des services d'estimation locaux.",
+      "allCities": "Voir toutes les villes",
+      "finalTitle": "Commencez par le territoire.",
+      "finalBody": "Explorez une ville, découvrez son contexte et accédez aux services réellement disponibles.",
+      "videoLabel": "Architecture et paysages urbains du Maroc"
+    },
+    "cities": {
+      "eyebrow": "Explorer le Maroc",
+      "title": "Villes et services locaux",
+      "subtitle": "Chaque page présente un territoire. L'estimation n'est proposée que lorsqu'un modèle local a été vérifié et activé.",
+      "searchLabel": "Rechercher une ville",
+      "searchPlaceholder": "Casablanca, Tanger, Marrakech…",
+      "regionLabel": "Région",
+      "statusLabel": "Disponibilité",
+      "allRegions": "Toutes les régions",
+      "allStatuses": "Tous les services",
+      "availableOnly": "Estimation disponible",
+      "comingSoonOnly": "Estimation à venir",
+      "available": "Estimation disponible",
+      "comingSoon": "Estimation à venir",
+      "discover": "Découvrir",
+      "empty": "Aucune ville ne correspond à ces critères."
+    },
+    "city": {
+      "architecture": "Architecture et identité urbaine",
+      "context": "Contexte immobilier",
+      "neighborhoods": "Quartiers de référence",
+      "gallery": "Regards sur la ville",
+      "genericIntro": "Une ville marocaine inscrite dans un territoire vivant, entre héritage, usages contemporains et évolution urbaine.",
+      "genericContext": "La page locale est ouverte à titre informatif. Le service d'estimation dédié n'est pas encore disponible.",
+      "estimate": "Estimer à Casablanca",
+      "unavailable": "L'estimation locale sera proposée après validation d'un modèle dédié.",
+      "back": "Toutes les villes"
+    },
+    "estimate": {
+      "eyebrow": "Modèle local vérifié",
+      "title": "Estimation immobilière à Casablanca",
+      "subtitle": "Décrivez le bien selon les catégories prises en charge par le modèle Casablanca.",
+      "propertyType": "Type de bien",
+      "neighborhood": "Quartier",
+      "area": "Surface (m²)",
+      "rooms": "Pièces",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de bain",
+      "floor": "Étage",
+      "condition": "État du bien",
+      "age": "Ancienneté",
+      "optional": "Optionnel",
+      "select": "Sélectionner",
+      "submit": "Calculer l'estimation",
+      "loading": "Analyse en cours…",
+      "metadataLoading": "Chargement du périmètre du modèle…",
+      "unavailable": "Le modèle Casablanca est momentanément indisponible.",
+      "resultTitle": "Estimation indicative",
+      "newEstimate": "Modifier les informations",
+      "disclaimer": "Cette valeur statistique repose sur des données d'annonces. Elle ne constitue ni un prix de transaction garanti ni une expertise notariale.",
+      "requiredError": "Renseignez tous les champs obligatoires avec des valeurs valides.",
+      "modelLabel": "Version du modèle"
+    }
+  },
+  "cityExperience": {
+    "available": "Disponible",
+    "prepared": "En préparation",
+    "comingSoon": "Bientôt disponible",
+    "informational": "Information",
+    "unavailable": "Indisponible",
+    "loadingTitle": "Chargement de la ville",
+    "emptyTitle": "Aucune ville ne correspond à votre recherche",
+    "exploreCities": "Explorer les villes",
+    "viewCity": "Découvrir la ville",
+    "estimate": "Estimer un bien"
   },
   "footer": {
     "brandDescription": "Plateforme d'intelligence prédictive dédiée à la valorisation immobilière au Maroc. Conçue avec une exigence architecturale et mathématique.",

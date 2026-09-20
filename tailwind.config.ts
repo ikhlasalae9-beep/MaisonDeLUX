@@ -44,6 +44,10 @@ const config: Config = {
           "off-white": "#F8FAFC",
           white: "#FFFFFF",
         },
+        morocco: {
+          red: "var(--accent-morocco-red)",
+          green: "var(--accent-morocco-green)",
+        },
         status: {
           success: "var(--success)",
           warning: "var(--warning)",
@@ -58,9 +62,37 @@ const config: Config = {
       boxShadow: {
         card: "var(--shadow-card)",
         elevated: "var(--shadow-elevated)",
+        focus: "var(--shadow-focus)",
         "architectural": "0 20px 40px -15px rgba(28, 25, 23, 0.08)",
         "architectural-dark": "0 20px 40px -15px rgba(0, 0, 0, 0.6)",
         "subtle": "0 2px 10px rgba(28, 25, 23, 0.04)",
+      },
+      borderRadius: {
+        control: "var(--radius-control)",
+        card: "var(--radius-card)",
+        media: "var(--radius-media)",
+        pill: "var(--radius-pill)",
+      },
+      spacing: {
+        "section-sm": "var(--space-section-sm)",
+        section: "var(--space-section)",
+      },
+      maxWidth: {
+        page: "var(--container-page)",
+      },
+      fontSize: {
+        display: ["var(--text-display)", { lineHeight: "1.02", letterSpacing: "-0.04em" }],
+        heading: ["var(--text-heading)", { lineHeight: "1.08", letterSpacing: "-0.03em" }],
+        subheading: ["var(--text-subheading)", { lineHeight: "1.35" }],
+      },
+      transitionDuration: {
+        fast: "var(--motion-fast)",
+        standard: "var(--motion-standard)",
+        slow: "var(--motion-slow)",
+      },
+      transitionTimingFunction: {
+        standard: "var(--ease-standard)",
+        emphasized: "var(--ease-emphasized)",
       },
     },
   },

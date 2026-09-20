@@ -5,7 +5,31 @@
  * No speculative or fabricated cities or coordinates.
  */
 
-export interface VerifiedCity {
+import type { CityContentKey } from './city-content';
+import type { CityMediaKey } from './city-media';
+
+export type CitySlug =
+  | 'casablanca'
+  | 'rabat'
+  | 'marrakech'
+  | 'tanger'
+  | 'agadir'
+  | 'fes'
+  | 'meknes'
+  | 'kenitra'
+  | 'sale'
+  | 'mohammedia'
+  | 'tetouan'
+  | 'el-jadida'
+  | 'temara'
+  | 'essaouira'
+  | 'oujda'
+  | 'bouskoura';
+
+export type CityPageStatus = 'published' | 'coming-soon' | 'hidden';
+export type EstimationStatus = 'available' | 'prepared' | 'unavailable';
+
+interface LegacyVerifiedCity {
   id: string;
   nameFr: string;
   nameAr: string;
@@ -13,11 +37,28 @@ export interface VerifiedCity {
   regionAr: string;
   regionKey: string; // Matches region name in public/maps/maroc.geojson
   status: 'active' | 'referenced';
+  /** Legacy national-estimator coverage; not city-specific model availability. */
   hasActiveModelCoverage: boolean;
   coordinates: [number, number]; // [longitude, latitude]
 }
 
-export const VERIFIED_CITIES: VerifiedCity[] = [
+export interface VerifiedCity extends LegacyVerifiedCity {
+  slug: CitySlug;
+  searchAliases: readonly string[];
+  cityPage: { status: CityPageStatus; publicVisible: boolean };
+  estimation: {
+    status: EstimationStatus;
+    publicEnabled: boolean;
+    backendStatusKey: string | null;
+  };
+  contentRef: CityContentKey | null;
+  mediaRef: CityMediaKey | null;
+  /** Backend registry key only; never an artifact path or a public-enabled signal. */
+  modelRef: string | null;
+  seoRef: CityContentKey | null;
+}
+
+const LEGACY_VERIFIED_CITIES: LegacyVerifiedCity[] = [
   {
     id: 'casablanca',
     nameFr: 'Casablanca',
@@ -195,6 +236,56 @@ export const VERIFIED_CITIES: VerifiedCity[] = [
     coordinates: [-7.65239, 33.44976],
   },
 ];
+
+type CityFoundation = Pick<
+  VerifiedCity,
+  'searchAliases' | 'cityPage' | 'estimation' | 'contentRef' | 'mediaRef' | 'modelRef' | 'seoRef'
+>;
+
+const unavailable = (aliases: readonly string[], mediaRef: CityMediaKey | null = null): CityFoundation => ({
+  searchAliases: aliases,
+  cityPage: { status: 'published', publicVisible: true },
+  estimation: { status: 'unavailable', publicEnabled: false, backendStatusKey: null },
+  contentRef: null,
+  mediaRef,
+  modelRef: null,
+  seoRef: null,
+});
+
+const CITY_FOUNDATION: Record<CitySlug, CityFoundation> = {
+  casablanca: {
+    searchAliases: ['Casablanca', 'Casa', 'الدار البيضاء'],
+    cityPage: { status: 'published', publicVisible: true },
+    estimation: { status: 'available', publicEnabled: true, backendStatusKey: 'casablanca' },
+    contentRef: 'casablanca',
+    mediaRef: 'casablanca',
+    modelRef: 'casablanca',
+    seoRef: 'casablanca',
+  },
+  rabat: unavailable(['Rabat', 'الرباط']),
+  marrakech: unavailable(['Marrakech', 'Marrakesh', 'مراكش'], 'marrakech'),
+  tanger: unavailable(['Tanger', 'Tangier', 'طنجة']),
+  agadir: unavailable(['Agadir', 'أكادير']),
+  fes: unavailable(['Fès', 'Fes', 'Fez', 'فاس']),
+  meknes: unavailable(['Meknès', 'Meknes', 'مكناس']),
+  kenitra: unavailable(['Kénitra', 'Kenitra', 'القنيطرة']),
+  sale: unavailable(['Salé', 'Sale', 'سلا']),
+  mohammedia: unavailable(['Mohammedia', 'المحمدية']),
+  tetouan: unavailable(['Tétouan', 'Tetouan', 'تطوان']),
+  'el-jadida': unavailable(['El Jadida', 'الجديدة']),
+  temara: unavailable(['Témara', 'Temara', 'تمارة']),
+  essaouira: unavailable(['Essaouira', 'Mogador', 'الصويرة']),
+  oujda: unavailable(['Oujda', 'وجدة']),
+  bouskoura: unavailable(['Bouskoura', 'بوسكورة']),
+};
+
+export const CITY_REGISTRY: readonly VerifiedCity[] = LEGACY_VERIFIED_CITIES.map((city) => {
+  const slug = city.id as CitySlug;
+  return { ...city, slug, ...CITY_FOUNDATION[slug] };
+});
+
+/** Compatibility alias for the current map and legacy national estimator. */
+export const VERIFIED_CITIES = CITY_REGISTRY;
 
 export const REGIONS_TRANSLATIONS: Record<string, { nameFr: string; nameAr: string }> = {
   'Tanger-Tetouan-Hoceima': {

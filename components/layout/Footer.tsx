@@ -12,6 +12,7 @@ interface FooterProps {
 export function Footer({ locale, dict }: FooterProps) {
   const currentYear = new Date().getFullYear();
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@maison-delux.com';
+  const resolveHref = (href: string) => `/${locale}${href}`;
 
   return (
     <footer className="border-t border-border-subtle bg-surface/50 dark:bg-surface-elevated/60 transition-colors z-20 relative">
@@ -42,7 +43,7 @@ export function Footer({ locale, dict }: FooterProps) {
                 return (
                   <li key={link.href}>
                     <a
-                      href={link.href}
+                      href={resolveHref(link.href)}
                       className="hover:text-brand-blue dark:hover:text-blue-400 transition-colors"
                     >
                       {label}
@@ -52,7 +53,7 @@ export function Footer({ locale, dict }: FooterProps) {
               })}
               <li>
                 <Link
-                  href={`/${locale}/estimation`}
+                  href={`/${locale}/cities/casablanca/estimate`}
                   className="font-medium text-brand-blue dark:text-blue-400 hover:underline"
                 >
                   {dict.common.estimateCta}

@@ -1,4 +1,4 @@
-import { PredictPayload, PredictResponse, CitiesResponse } from './types';
+import { PredictPayload, PredictResponse, CitiesResponse, CasablancaMetadata, CasablancaPredictPayload } from './types';
 
 
 /**
@@ -44,6 +44,31 @@ export async function predictProperty(
     };
   } finally {
     clearTimeout(timeoutId);
+  }
+}
+
+export async function fetchCasablancaMetadata(): Promise<CasablancaMetadata> {
+  const response = await fetch('/api/ml/metadata', { cache: 'no-store' });
+  if (!response.ok) throw new Error('Casablanca model metadata unavailable');
+  return response.json();
+}
+
+export async function predictCasablanca(payload: CasablancaPredictPayload): Promise<PredictResponse> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+  try {
+    const response = await fetch('/api/ml/estimate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || `Erreur serveur (${response.status})`);
+    if (!Number.isFinite(body.estimated_price_mad) || body.estimated_price_mad <= 0) throw new Error('Réponse invalide du service.');
+    return body;
+  } finally {
+    clearTimeout(timeout);
   }
 }
 

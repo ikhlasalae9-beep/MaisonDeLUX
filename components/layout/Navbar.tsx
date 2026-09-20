@@ -19,8 +19,9 @@ export function Navbar({ locale, dict }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname() || `/${locale}`;
-  const isEstimationPage = pathname.includes('/estimation');
+  const isEstimationPage = pathname.includes('/estimation') || pathname.endsWith('/estimate');
   const rtl = isRTL(locale);
+  const resolveHref = (href: string) => href.startsWith('#') ? `/${locale}${href}` : `/${locale}${href}`;
 
   const ArrowIcon = rtl ? ArrowLeft : ArrowRight;
 
@@ -61,7 +62,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
               return (
                 <a
                   key={link.href}
-                  href={link.href}
+                  href={resolveHref(link.href)}
                   className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/8 transition-all duration-200 select-none"
                 >
                   {label}
@@ -72,7 +73,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
         )}
 
         {/* Right: Cleanly Grouped Utilities + Divider + Primary CTA */}
-        <div className="hidden sm:flex items-center gap-3 shrink-0">
+        <div className="hidden lg:flex items-center gap-3 shrink-0">
           {/* Glass Language Switcher */}
           <LanguageSwitcher currentLocale={locale} />
 
@@ -85,7 +86,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
           {/* Luxury CTA Button */}
           {!isEstimationPage ? (
             <Link
-              href={`/${locale}/estimation`}
+              href={`/${locale}/cities/casablanca/estimate`}
               className={`group relative inline-flex items-center gap-2 rounded-full text-xs font-semibold text-white tracking-wide bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 hover:from-blue-600 hover:to-blue-500 shadow-[0_2px_12px_-2px_rgba(29,78,216,0.5),inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[0_2px_16px_-2px_rgba(59,130,246,0.5),inset_0_1px_0_0_rgba(255,255,255,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ${
                 isScrolled ? 'px-4 py-2' : 'px-4.5 sm:px-5 py-2 sm:py-2.5'
               }`}
@@ -106,7 +107,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
         </div>
 
         {/* Mobile controls: Theme toggle + Hamburger */}
-        <div className="flex items-center gap-2 sm:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
           <button
             type="button"
@@ -122,7 +123,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
 
       {/* Floating Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="sm:hidden mt-2 p-5 rounded-3xl backdrop-blur-2xl bg-white/95 dark:bg-[#0B0F19]/95 border border-slate-200/80 dark:border-white/10 shadow-2xl pointer-events-auto space-y-4">
+        <div className="lg:hidden mt-2 p-5 rounded-3xl backdrop-blur-2xl bg-white/95 dark:bg-[#0B0F19]/95 border border-slate-200/80 dark:border-white/10 shadow-2xl pointer-events-auto space-y-4">
           {!isEstimationPage && (
             <div className="flex flex-col space-y-1 border-b border-slate-200/60 dark:border-white/5 pb-4">
               {NAV_LINKS.map((link) => {
@@ -130,7 +131,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
                 return (
                   <a
                     key={link.href}
-                    href={link.href}
+                    href={resolveHref(link.href)}
                     onClick={() => setMobileMenuOpen(false)}
                     className="px-3 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/8 transition-colors flex items-center justify-between"
                   >
@@ -152,7 +153,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
           <div className="pt-2">
             {!isEstimationPage ? (
               <Link
-                href={`/${locale}/estimation`}
+                href={`/${locale}/cities/casablanca/estimate`}
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-semibold text-white bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 shadow-md"
               >

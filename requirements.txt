@@ -1,2 +1,5 @@
 flask>=3.1,<4
 werkzeug>=3.1,<4
+catboost==1.2.10
+joblib>=1.5,<2
+numpy>=2.0,<3

@@ -6,7 +6,7 @@ export interface NavLink {
 
 export const NAV_LINKS: NavLink[] = [
   {
-    href: '#explorer',
+    href: '/cities',
     labelFr: 'Territoires',
     labelAr: 'المناطق الجغرافية',
   },
@@ -24,10 +24,5 @@ export const NAV_LINKS: NavLink[] = [
     href: '#methodologie',
     labelFr: 'Transparence & Données',
     labelAr: 'الشفافية والبيانات',
-  },
-  {
-    href: '#faq',
-    labelFr: 'Questions fréquentes',
-    labelAr: 'الأسئلة الشائعة',
   },
 ];

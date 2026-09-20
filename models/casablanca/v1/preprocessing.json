@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "source": {
+    "notebook": "ml/notebooks/maisondelux_notebook1.ipynb",
+    "dataset": "ml/notebooks/mubawab_listings_clean.csv",
+    "encoding": "pandas.get_dummies",
+    "note": "This manifest reproduces the fitted model matrix without changing the original research files."
+  },
+  "logical_inputs": [
+    "city",
+    "property_type",
+    "neighborhood",
+    "area",
+    "rooms",
+    "bedrooms",
+    "bathrooms",
+    "floor",
+    "current_state",
+    "age"
+  ],
+  "training_features": [
+    "Type",
+    "Localisation",
+    "Area",
+    "Rooms",
+    "Bedrooms",
+    "Bathrooms",
+    "Floor",
+    "Current_state",
+    "Age"
+  ],
+  "numeric": {
+    "Area": { "input": "area", "transform": "log1p", "minimum_exclusive": 0 },
+    "Rooms": { "input": "rooms", "transform": "integer_cap", "minimum": 1, "cap": 10 },
+    "Bedrooms": { "input": "bedrooms", "transform": "integer_cap", "minimum": 1, "cap": 10 },
+    "Bathrooms": { "input": "bathrooms", "transform": "integer_cap", "minimum": 1, "cap": 10 },
+    "Floor": { "input": "floor", "transform": "integer_cap", "minimum": 0, "cap": 10 }
+  },
+  "categorical": {
+    "Type": {
+      "input": "property_type",
+      "accepted": {
+        "appartement": "Appartements",
+        "villa": "Villas"
+      },
+      "training_normalization": {
+        "Riad": "Villas",
+        "Maisons": "Villas"
+      }
+    },
+    "Localisation": {
+      "input": "neighborhood",
+      "accepted": [
+        "Ain Borja", "Ain Chock", "Ain Diab", "Ain Diab Extension", "Al Azhar",
+        "Al Hadika", "Al Hassania", "Al Osra", "Al Qods", "Anassi", "Anfa",
+        "Anfa Supérieur", "Aïn Sebaâ", "Beausite", "Beauséjour", "Belvédère",
+        "Benjdia", "Bernoussi", "Bourgogne Est", "Bourgogne Ouest", "Burger",
+        "CIL (Hay Salam)", "Californie", "Casablanca", "Casablanca Finance City",
+        "Casablanca Marina", "Centre Ville", "Derb Abdellah", "Derb Chorfa",
+        "Derb Ghalef", "Derb Loubila", "Derb Moulay Cherif", "Derb Omar",
+        "Derb Salama", "El Manar - El Hank", "Ferme Bretonne (Hay Arraha)",
+        "Foncière", "Franceville", "Garage Allal", "Gauthier", "Habbous",
+        "Hay Al Amal", "Hay Al Qods", "Hay Alamal", "Hay Albaraka", "Hay Alhoda",
+        "Hay Almassira 2", "Hay Arrahma", "Hay Arsalan", "Hay Chrifa", "Hay Hakam",
+        "Hay Hassani", "Hay Inara", "Hay Lalla Meriem", "Hay Lmkansa", "Hay M'barka",
+        "Hay Mansour", "Hay Mohammadi", "Hay Moulay Abdellah", "Hay Salama",
+        "Hay Tarik", "Hay Tasahol", "Hay Zobir", "Hermitage", "La Floride",
+        "La Gironde", "La Vilette", "Laymoune", "Les Crêtes", "Les Hôpitaux",
+        "Les princesses", "Lissasfa", "Longchamps (Hay Al Hanâa)", "Mandarona",
+        "Maârif", "Maârif Extension", "Mers Sultan", "Michouar", "Moulay Youssef",
+        "Nassim 1", "Nassim 2", "Oasis", "Oulfa", "Palmier", "Plateau (Al Batha)",
+        "Polo", "Port", "Quartier Bachkou", "Racine", "Racine Extension", "Riviera",
+        "Roches Noires", "Salmia 2", "Sidi El Khadir", "Sidi Maarouf", "Sidi Moumen",
+        "Sidi Othmane", "Tantonville", "Triangle d'Or", "Val Fleury"
+      ]
+    },
+    "Current_state": {
+      "input": "current_state",
+      "accepted": ["Bon état", "Nouveau", "À rénover"],
+      "missing_encoding": "all_zero"
+    },
+    "Age": {
+      "input": "age",
+      "accepted": ["1-5 ans", "10-20 ans", "20-30 ans", "30-50 ans", "5-10 ans", "50-70 ans", "Moins d'un an"],
+      "missing_encoding": "all_zero"
+    }
+  },
+  "model_feature_count": 117,
+  "model_feature_names": [
+    "Area", "Rooms", "Bedrooms", "Bathrooms", "Floor",
+    "Type_Appartements", "Type_Villas",
+    "Localisation_Ain Borja", "Localisation_Ain Chock", "Localisation_Ain Diab",
+    "Localisation_Ain Diab Extension", "Localisation_Al Azhar", "Localisation_Al Hadika",
+    "Localisation_Al Hassania", "Localisation_Al Osra", "Localisation_Al Qods",
+    "Localisation_Anassi", "Localisation_Anfa", "Localisation_Anfa Supérieur",
+    "Localisation_Aïn Sebaâ", "Localisation_Beausite", "Localisation_Beauséjour",
+    "Localisation_Belvédère", "Localisation_Benjdia", "Localisation_Bernoussi",
+    "Localisation_Bourgogne Est", "Localisation_Bourgogne Ouest", "Localisation_Burger",
+    "Localisation_CIL (Hay Salam)", "Localisation_Californie", "Localisation_Casablanca",
+    "Localisation_Casablanca Finance City", "Localisation_Casablanca Marina",
+    "Localisation_Centre Ville", "Localisation_Derb Abdellah", "Localisation_Derb Chorfa",
+    "Localisation_Derb Ghalef", "Localisation_Derb Loubila", "Localisation_Derb Moulay Cherif",
+    "Localisation_Derb Omar", "Localisation_Derb Salama", "Localisation_El Manar - El Hank",
+    "Localisation_Ferme Bretonne (Hay Arraha)", "Localisation_Foncière",
+    "Localisation_Franceville", "Localisation_Garage Allal", "Localisation_Gauthier",
+    "Localisation_Habbous", "Localisation_Hay Al Amal", "Localisation_Hay Al Qods",
+    "Localisation_Hay Alamal", "Localisation_Hay Albaraka", "Localisation_Hay Alhoda",
+    "Localisation_Hay Almassira 2", "Localisation_Hay Arrahma", "Localisation_Hay Arsalan",
+    "Localisation_Hay Chrifa", "Localisation_Hay Hakam", "Localisation_Hay Hassani",
+    "Localisation_Hay Inara", "Localisation_Hay Lalla Meriem", "Localisation_Hay Lmkansa",
+    "Localisation_Hay M'barka", "Localisation_Hay Mansour", "Localisation_Hay Mohammadi",
+    "Localisation_Hay Moulay Abdellah", "Localisation_Hay Salama", "Localisation_Hay Tarik",
+    "Localisation_Hay Tasahol", "Localisation_Hay Zobir", "Localisation_Hermitage",
+    "Localisation_La Floride", "Localisation_La Gironde", "Localisation_La Vilette",
+    "Localisation_Laymoune", "Localisation_Les Crêtes", "Localisation_Les Hôpitaux",
+    "Localisation_Les princesses", "Localisation_Lissasfa",
+    "Localisation_Longchamps (Hay Al Hanâa)", "Localisation_Mandarona",
+    "Localisation_Maârif", "Localisation_Maârif Extension", "Localisation_Mers Sultan",
+    "Localisation_Michouar", "Localisation_Moulay Youssef", "Localisation_Nassim 1",
+    "Localisation_Nassim 2", "Localisation_Oasis", "Localisation_Oulfa",
+    "Localisation_Palmier", "Localisation_Plateau (Al Batha)", "Localisation_Polo",
+    "Localisation_Port", "Localisation_Quartier Bachkou", "Localisation_Racine",
+    "Localisation_Racine Extension", "Localisation_Riviera", "Localisation_Roches Noires",
+    "Localisation_Salmia 2", "Localisation_Sidi El Khadir", "Localisation_Sidi Maarouf",
+    "Localisation_Sidi Moumen", "Localisation_Sidi Othmane", "Localisation_Tantonville",
+    "Localisation_Triangle d'Or", "Localisation_Val Fleury",
+    "Current_state_Bon état", "Current_state_Nouveau", "Current_state_À rénover",
+    "Age_1-5 ans", "Age_10-20 ans", "Age_20-30 ans", "Age_30-50 ans",
+    "Age_5-10 ans", "Age_50-70 ans", "Age_Moins d'un an"
+  ],
+  "target": {
+    "name": "Price",
+    "transform": "none",
+    "prediction_inverse_transform": "none",
+    "currency": "MAD"
+  }
+}

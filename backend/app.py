@@ -6,6 +6,9 @@ from pathlib import Path
 from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
 
+from backend.inference.casablanca import CasablancaInferenceError, load_manifest, load_metadata, load_model
+from backend.inference.registry import MODEL_REGISTRY, ModelRegistryError, predict_for_city
+
 try:
     import pandas as pd
 except ImportError:
@@ -191,19 +194,63 @@ def http_error(error):
 
 @app.post('/api/estimate')
 @app.post('/estimate')
-def estimate():
+def legacy_estimate_disabled():
+    return jsonify(
+        error="L'ancien service national est fermé. Utilisez /api/ml/estimate pour Casablanca.",
+        code='legacy_estimator_disabled',
+    ), 410
+
+
+@app.post('/api/ml/estimate')
+def city_estimate():
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
     try:
-        frame = validate(request.get_json())
-    except ValueError as error:
-        return jsonify(error=str(error)), 400
-    try:
-        price = float(model.predict(frame)[0])
-        if not math.isfinite(price) or price <= 0:
-            raise ValueError('Invalid model output')
+        return jsonify(**predict_for_city(payload))
+    except (CasablancaInferenceError, ModelRegistryError) as error:
+        return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
-        app.logger.exception('Inference failed')
-        return jsonify(error="Le service d'estimation est momentanément indisponible."), 503
-    return jsonify(estimated_price_mad=round(price), currency='MAD', model_version='v1')
+        app.logger.exception('Casablanca inference failed')
+        return jsonify(
+            error="Le service d'estimation de Casablanca est momentanément indisponible.",
+            code='model_unavailable',
+        ), 503
+
+
+@app.get('/api/ml/metadata')
+def city_model_metadata():
+    manifest = load_manifest()
+    model_metadata = load_metadata()
+    entry = MODEL_REGISTRY['casablanca']
+    return jsonify(
+        city='Casablanca',
+        status=entry['status'],
+        public_enabled=entry['public_enabled'],
+        model_version=model_metadata['model_version'],
+        supported={
+            'property_types': list(manifest['categorical']['Type']['accepted']),
+            'neighborhoods': manifest['categorical']['Localisation']['accepted'],
+            'current_states': manifest['categorical']['Current_state']['accepted'],
+            'ages': manifest['categorical']['Age']['accepted'],
+        },
+    )
+
+
+@app.get('/api/ml/health')
+def city_model_health():
+    entry = MODEL_REGISTRY['casablanca']
+    try:
+        load_model()
+    except Exception:
+        app.logger.exception('Casablanca model health check failed')
+        return jsonify(status='unavailable', city='Casablanca', public_enabled=False), 503
+    return jsonify(
+        status=entry['status'],
+        city=entry['city'],
+        model_version=entry['version'],
+        public_enabled=entry['public_enabled'],
+    )
 
 
 @app.get('/api/villes')

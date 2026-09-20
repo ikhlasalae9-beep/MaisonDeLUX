@@ -28,8 +28,8 @@ def test_health_endpoint(client):
     assert res2.status_code == 200
     assert res2.get_json()['status'] == 'ok'
 
-def test_valid_apartment_estimate(client):
-    """Verify valid apartment estimation returns proper structure."""
+def test_legacy_apartment_estimate_is_closed(client):
+    """Verify archived national estimation cannot bypass city policy."""
     payload = {
         'city': 'Casablanca',
         'region': 'Casablanca-Settat',
@@ -44,25 +44,19 @@ def test_valid_apartment_estimate(client):
         'furnished_status': 'unknown'
     }
     res = client.post('/api/estimate', json=payload)
-    assert res.status_code == 200
-    data = res.get_json()
-    assert 'estimated_price_mad' in data
-    assert math.isfinite(data[
-        'estimated_price_mad']) and data[
-        'estimated_price_mad'] > 0
-    assert data['currency'] == 'MAD'
-    assert data['model_version'] == 'v1'
+    assert res.status_code == 410
+    assert res.get_json()['code'] == 'legacy_estimator_disabled'
 
 def test_invalid_request(client):
     """Verify invalid payloads return 400 with descriptive error."""
-    res = client.post('/api/estimate', json={'surface_m2': -10})
+    res = client.post('/api/ml/estimate', json={'surface_m2': -10})
     assert res.status_code == 400
     assert 'error' in res.get_json()
 
-    res = client.post('/api/estimate', json={'surface_m2': 'cent'})
+    res = client.post('/api/ml/estimate', json={'surface_m2': 'cent'})
     assert res.status_code == 400
 
-    res = client.post('/api/estimate', data='not json', content_type='application/json')
+    res = client.post('/api/ml/estimate', data='not json', content_type='application/json')
     assert res.status_code == 400
 
 def test_same_origin_api_request(client):
@@ -77,27 +71,25 @@ def test_same_origin_api_request(client):
     assert metrics_res.get_json()['model_name'] == 'XGBoost'
 
 def test_known_sanity_prediction(client):
-    """Verify known sanity prediction for Casablanca / Maârif 90m2 apartment."""
+    """Verify Casablanca requests reach the activated CatBoost adapter."""
     payload = {
         'city': 'Casablanca',
-        'region': 'Casablanca-Settat',
         'neighborhood': 'Maârif',
         'property_type': 'appartement',
-        'surface_m2': 90,
+        'area': 90,
+        'rooms': 3,
         'bedrooms': 2,
         'bathrooms': 1,
-        'parking': 'unknown',
-        'balcony': 'unknown',
-        'sea_view': 'unknown',
-        'furnished_status': 'unknown'
+        'floor': 2,
+        'current_state': 'Bon état',
+        'age': '10-20 ans',
     }
-    res = client.post('/api/estimate', json=payload)
+    res = client.post('/api/ml/estimate', json=payload)
     assert res.status_code == 200
     data = res.get_json()
     assert data['currency'] == 'MAD'
-    assert data['model_version'] == 'v1'
-    # Expected: approx 1,288,988 MAD
-    assert abs(data['estimated_price_mad'] - 1288988) <= 1000
+    assert data['model_version'] == 'casablanca-catboost-v1'
+    assert data['estimated_price_mad'] > 0
 
 def test_lightweight_joblib_parity():
     """Verify that LightweightModel exactly reproduces the original joblib pipeline."""
@@ -141,13 +133,14 @@ def test_lightweight_joblib_parity():
             assert abs(pred_orig - pred_light) < 1.0
 
 
-def test_requirements_file_is_minimal():
-    """Verify requirements.txt contains strictly minimal web runtime without ML heavyweights."""
+def test_requirements_include_verified_casablanca_runtime():
+    """Verify the serverless runtime declares the activated adapter dependencies."""
     reqs_text = (ROOT / 'requirements.txt').read_text(encoding='utf-8')
     lines = [l.strip() for l in reqs_text.splitlines() if l.strip() and not l.startswith('#')]
     assert 'flask>=3.1,<4' in lines
     assert 'werkzeug>=3.1,<4' in lines
-    assert len(lines) == 2
-    for forbidden in ['numpy', 'xgboost', 'scipy', 'scikit-learn', 'pandas', 'joblib']:
+    assert 'catboost==1.2.10' in lines
+    assert 'joblib>=1.5,<2' in lines
+    assert 'numpy>=2.0,<3' in lines
+    for forbidden in ['xgboost', 'scipy', 'scikit-learn', 'pandas']:
         assert not any(forbidden in l for l in lines)
-

@@ -88,8 +88,8 @@ export function TrustMethodology({ locale, dict }: TrustMethodologyProps) {
             </strong>
             <p className="text-amber-800 dark:text-amber-300/90 text-xs sm:text-[13px]">
               {locale === 'ar'
-                ? 'التقديرات المقدمة ذات طبيعة إحصائية استرشادية، وتخضع لنطاق البيانات المعتمدة لقطاع الشقق السكنية. يهدف المحرك لتقديم قراءة رقمية محايدة تدعم اتخاذ القرار دون أن تلغي دور التوثيق القانوني والخبرة العقارية الميدانية.'
-                : 'Les estimations générées sont de nature probabiliste et statistique, circonscrites au jeu de données audité du segment des appartements. Elles constituent une aide à la décision neutre et ne sauraient remplacer une visite sur site ou l\'expertise légale d\'un notaire.'}
+                ? 'التقديرات المقدمة إحصائية واسترشادية، وتقتصر حالياً على الشقق والفيلات في الدار البيضاء وفق الفئات المدعومة. وهي لا تعوض المعاينة الميدانية أو الخبرة العقارية القانونية.'
+                : 'Les estimations sont statistiques et indicatives, limitées aux appartements et villas de Casablanca selon les catégories prises en charge. Elles ne remplacent ni une visite sur site ni une expertise immobilière légale.'}
             </p>
           </div>
         </motion.div>

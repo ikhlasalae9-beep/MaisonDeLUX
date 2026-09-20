@@ -51,9 +51,9 @@ export function HowItWorks({ locale, dict }: HowItWorksProps) {
       icon: <FileText className="w-5 h-5 text-brand-blue dark:text-blue-400" />,
       details: [
         locale === 'ar' ? 'السعر التقديري بالدرهم' : 'Prix estimé en MAD',
-        locale === 'ar' ? 'متوسط سعر المتر المربع' : 'Prix au mètre carré',
-        locale === 'ar' ? 'النطاق السعري' : 'Fourchette d\'estimation',
-        locale === 'ar' ? 'بطاقة العقار المرجعية' : 'Fiche de synthèse du bien'
+        locale === 'ar' ? 'نسخة النموذج المحلي' : 'Version du modèle local',
+        locale === 'ar' ? 'تنبيه واضح حول طبيعة التقدير' : 'Cadre indicatif clairement signalé',
+        locale === 'ar' ? 'بدون قيمة بديلة مصطنعة' : 'Aucune valeur de secours fabriquée'
       ]
     }
   ];

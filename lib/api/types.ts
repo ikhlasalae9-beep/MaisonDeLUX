@@ -32,3 +32,29 @@ export interface ApiStatusCheck {
   modelVersion?: string;
   message?: string;
 }
+
+export interface CasablancaPredictPayload {
+  city: 'Casablanca';
+  property_type: string;
+  neighborhood: string;
+  area: number;
+  rooms: number;
+  bedrooms: number;
+  bathrooms: number;
+  floor: number;
+  current_state: string | null;
+  age: string | null;
+}
+
+export interface CasablancaMetadata {
+  city: 'Casablanca';
+  status: 'available' | 'prepared' | 'unavailable';
+  public_enabled: boolean;
+  model_version: string;
+  supported: {
+    property_types: string[];
+    neighborhoods: string[];
+    current_states: string[];
+    ages: string[];
+  };
+}

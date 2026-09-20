@@ -1,0 +1,42 @@
+{
+  "model_id": "casablanca-catboost-alae",
+  "model_version": "casablanca-catboost-v1",
+  "city": "Casablanca",
+  "status": "prepared_not_publicly_enabled",
+  "algorithm": "CatBoostRegressor",
+  "artifact": "models/casablanca/v1/model.pkl",
+  "artifact_sha256": "b5ba50e9b6fd35203b556c840fe97170ee23441a6cce0ffa927f3c09944b8e1d",
+  "original_artifact": "ml/notebooks/modele_MaisonDeLUX.pkl",
+  "original_notebook": "ml/notebooks/maisondelux_notebook1.ipynb",
+  "training_dataset": "ml/notebooks/mubawab_listings_clean.csv",
+  "feature_count": 117,
+  "logical_input_count": 10,
+  "supported_property_types": ["appartement", "villa"],
+  "notebook_reported_metrics": {
+    "r2_train": 0.9753,
+    "r2_test": 0.8055,
+    "rmse_test_mad": 3437222,
+    "mae_test_mad": 1103661
+  },
+  "metrics_status": "not_independently_verified",
+  "local_compatibility": {
+    "python": "3.12.10",
+    "catboost": "1.2.10",
+    "joblib": "1.5.3",
+    "numpy": "2.4.4",
+    "pandas_used_for_manifest_verification": "2.2.3"
+  },
+  "training_parameters": {
+    "loss_function": "RMSE",
+    "depth": 4,
+    "iterations": 500,
+    "l2_leaf_reg": 5,
+    "learning_rate": 0.05,
+    "random_seed": 42
+  },
+  "verification_limitations": [
+    "No Alae-supplied trusted reference prediction was available.",
+    "A successful load and finite prediction verify runtime compatibility, not production accuracy or exact reference parity.",
+    "The public backend is intentionally not wired to this prepared model in Phase 1B."
+  ]
+}
