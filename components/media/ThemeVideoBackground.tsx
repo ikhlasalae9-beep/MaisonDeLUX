@@ -76,8 +76,8 @@ export function ThemeVideoBackground({
 
   return <div className={cn('absolute inset-0 overflow-hidden', className)}>
     {lightFallbackSrc ? <>
-      <Image src={lightFallbackSrc} alt="" fill priority sizes="100vw" className={cn('object-cover dark:hidden', imageClassName)} />
-      <Image src={fallbackSrc} alt="" fill priority sizes="100vw" className={cn('hidden object-cover dark:block', imageClassName)} />
+      <Image src={lightFallbackSrc} alt="" fill priority sizes="(min-width: 1024px) 58vw, 100vw" className={cn('object-cover dark:hidden', imageClassName)} />
+      <Image src={fallbackSrc} alt="" fill sizes="(min-width: 1024px) 58vw, 100vw" className={cn('hidden object-cover dark:block', imageClassName)} />
     </> : <Image src={fallbackSrc} alt="" fill priority sizes="100vw" className={cn('object-cover', imageClassName)} />}
     <video
       ref={videoRef}
@@ -86,7 +86,7 @@ export function ThemeVideoBackground({
       muted
       loop
       playsInline
-      preload={reducedMotion ? 'none' : 'auto'}
+      preload="none"
       onPlaying={(event) => setPlayingSrc(event.currentTarget.currentSrc)}
       onPause={() => setPlayingSrc('')}
       onWaiting={() => setPlayingSrc('')}

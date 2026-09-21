@@ -6,7 +6,6 @@ import { getDictionary } from '@/lib/i18n/getDictionary';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { LocaleHandler } from '@/components/common/LocaleHandler';
-import { SmoothScroll } from '@/components/common/SmoothScroll';
 import { ScrollProgress } from '@/components/common/ScrollProgress';
 
 export function generateStaticParams() {
@@ -54,13 +53,13 @@ export default function LocaleLayout({
   const dir = getDirection(locale);
 
   return (
-    <SmoothScroll>
+    <>
       <LuxuryAmbientBackground />
       <ScrollProgress locale={locale} />
       <LocaleHandler locale={locale} dir={dir} />
       <Navbar locale={locale} dict={dict} />
       <main className="flex-1 z-10 relative">{children}</main>
       <Footer locale={locale} dict={dict} />
-    </SmoothScroll>
+    </>
   );
 }
