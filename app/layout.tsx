@@ -24,6 +24,9 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
         <link rel="icon" type="image/png" href="/brand/icons/maisondelux-app-blue.png" />
         <link rel="apple-touch-icon" href="/brand/icons/maisondelux-app-blue.png" />
         <script

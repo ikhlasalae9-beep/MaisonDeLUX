@@ -26,6 +26,7 @@ export function ThemeVideoBackground({
   const [dark, setDark] = useState(false);
   const [mediaInitialized, setMediaInitialized] = useState(false);
   const [playingSrc, setPlayingSrc] = useState('');
+  const [readyPosters, setReadyPosters] = useState<string[]>([]);
   // Default to reduced motion so server-rendered markup never forces autoplay
   // before the browser preference has been read.
   const [reducedMotion, setReducedMotion] = useState(true);
@@ -46,8 +47,13 @@ export function ThemeVideoBackground({
   }, []);
 
   const src = dark || !lightSrc ? darkSrc : lightSrc;
-  const activeSrc = mediaInitialized ? src : '';
+  const activePoster = dark && lightFallbackSrc ? fallbackSrc : lightFallbackSrc ?? fallbackSrc;
+  const activeSrc = mediaInitialized && !reducedMotion && readyPosters.includes(activePoster) ? src : '';
   const videoVisible = !reducedMotion && Boolean(activeSrc) && playingSrc.endsWith(activeSrc);
+
+  const posterLoaded = (poster: string) => {
+    setReadyPosters((current) => current.includes(poster) ? current : [...current, poster]);
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -55,7 +61,6 @@ export function ThemeVideoBackground({
     autoplayAttemptRef.current = '';
     setPlayingSrc('');
     video.pause();
-    video.load();
   }, [activeSrc]);
 
   useEffect(() => {
@@ -67,26 +72,32 @@ export function ThemeVideoBackground({
       setPlayingSrc('');
       return;
     }
-    if (autoplayAttemptRef.current === activeSrc) return;
-    autoplayAttemptRef.current = activeSrc;
-    void video.play().catch(() => {
-      setPlayingSrc('');
-    });
   }, [activeSrc, reducedMotion]);
+
+  const attemptPlayback = () => {
+    const video = videoRef.current;
+    if (!video || !activeSrc || reducedMotion || autoplayAttemptRef.current === activeSrc) return;
+    video.muted = true;
+    video.defaultMuted = true;
+    autoplayAttemptRef.current = activeSrc;
+    void video.play().catch(() => setPlayingSrc(''));
+  };
 
   return <div className={cn('absolute inset-0 overflow-hidden', className)}>
     {lightFallbackSrc ? <>
-      <Image src={lightFallbackSrc} alt="" fill priority sizes="(min-width: 1024px) 58vw, 100vw" className={cn('object-cover dark:hidden', imageClassName)} />
-      <Image src={fallbackSrc} alt="" fill sizes="(min-width: 1024px) 58vw, 100vw" className={cn('hidden object-cover dark:block', imageClassName)} />
-    </> : <Image src={fallbackSrc} alt="" fill priority sizes="100vw" className={cn('object-cover', imageClassName)} />}
+      <Image src={lightFallbackSrc} alt="" fill loading="lazy" fetchPriority="high" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(lightFallbackSrc)} className={cn('object-cover dark:hidden', imageClassName)} />
+      <Image src={fallbackSrc} alt="" fill loading="lazy" fetchPriority="high" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('hidden object-cover dark:block', imageClassName)} />
+    </> : <Image src={fallbackSrc} alt="" fill priority sizes="100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('object-cover', imageClassName)} />}
     <video
       ref={videoRef}
       aria-hidden="true"
       src={activeSrc || undefined}
+      autoPlay={Boolean(activeSrc)}
       muted
       loop
       playsInline
       preload="none"
+      onCanPlay={attemptPlayback}
       onPlaying={(event) => setPlayingSrc(event.currentTarget.currentSrc)}
       onPause={() => setPlayingSrc('')}
       onWaiting={() => setPlayingSrc('')}
