@@ -14,5 +14,5 @@ export default function CityEstimatePage({ params }: { params: { locale: string;
   const city = getCityBySlug(params.citySlug);
   if (!city || city.slug !== 'casablanca' || !city.estimation.publicEnabled) notFound();
   const copy = getDictionary(params.locale).phase3.estimate;
-  return <div className="min-h-screen bg-surface-subtle pt-24 sm:pt-28"><Section><PageContainer><SectionHeading eyebrow={copy.eyebrow} title={copy.title} description={copy.subtitle} /><div className="mt-10"><CasablancaEstimator locale={params.locale} copy={copy} /></div></PageContainer></Section></div>;
+  return <div className="min-h-screen bg-surface-subtle pt-16 sm:pt-24"><Section><PageContainer><SectionHeading eyebrow={copy.eyebrow} title={copy.title} description={copy.subtitle} /><div className="mt-8 sm:mt-10"><CasablancaEstimator locale={params.locale} copy={copy} /></div></PageContainer></Section></div>;
 }

@@ -244,7 +244,7 @@ type CityFoundation = Pick<
 
 const unavailable = (aliases: readonly string[], mediaRef: CityMediaKey | null = null): CityFoundation => ({
   searchAliases: aliases,
-  cityPage: { status: 'published', publicVisible: true },
+  cityPage: { status: 'hidden', publicVisible: false },
   estimation: { status: 'unavailable', publicEnabled: false, backendStatusKey: null },
   contentRef: null,
   mediaRef,

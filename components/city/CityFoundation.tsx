@@ -14,7 +14,7 @@ export function Section({
   className?: string;
   labelledBy?: string;
 }) {
-  return <section aria-labelledby={labelledBy} className={cn('py-section-sm lg:py-section', className)}>{children}</section>;
+  return <section aria-labelledby={labelledBy} className={cn('py-12 sm:py-section-sm lg:py-section', className)}>{children}</section>;
 }
 
 export function SectionHeading({
@@ -37,8 +37,8 @@ export function SectionHeading({
   return (
     <header className={cn('max-w-3xl', align === 'center' && 'mx-auto text-center', className)}>
       {eyebrow && <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-brand-blue">{eyebrow}</p>}
-      <Heading id={id} className="text-heading text-text-primary">{title}</Heading>
-      {description && <p className="mt-5 text-base leading-7 text-text-secondary sm:text-lg">{description}</p>}
+      <Heading id={id} className="text-[clamp(1.9rem,8.5vw,3.5rem)] leading-[1.1] tracking-[-.03em] text-text-primary">{title}</Heading>
+      {description && <p className="mt-4 text-[15px] leading-7 text-text-secondary sm:mt-5 sm:text-lg">{description}</p>}
     </header>
   );
 }

@@ -11,23 +11,23 @@ export function CasablancaEditorialArticle({ locale }: { locale: string }) {
   return <article>
     <Section>
       <PageContainer>
-        <header className="grid gap-8 border-b border-border-subtle pb-12 lg:grid-cols-[1fr_18rem] lg:items-end">
-          <div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[.16em] text-brand-blue">{copy.kicker}</p><p className="mt-5 text-2xl leading-relaxed text-text-primary sm:text-3xl">{copy.dek}</p></div>
-          <CardSurface className="p-6"><p className="text-4xl font-bold text-brand-blue">{copy.regionalFact.value}</p><p className="mt-2 font-semibold text-text-primary">{copy.regionalFact.label}</p><p className="mt-3 text-xs leading-5 text-text-muted">{copy.regionalFact.context}</p></CardSurface>
+        <header className="grid gap-6 border-b border-border-subtle pb-10 sm:gap-8 sm:pb-12 lg:grid-cols-[1fr_18rem] lg:items-end">
+          <div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[.16em] text-brand-blue">{copy.kicker}</p><p className="mt-4 text-xl leading-8 text-text-primary sm:mt-5 sm:text-3xl sm:leading-relaxed">{copy.dek}</p></div>
+          <CardSurface className="p-5 sm:p-6"><p className="text-3xl font-bold text-brand-blue sm:text-4xl">{copy.regionalFact.value}</p><p className="mt-2 font-semibold text-text-primary">{copy.regionalFact.label}</p><p className="mt-3 text-xs leading-5 text-text-muted">{copy.regionalFact.context}</p></CardSurface>
         </header>
       </PageContainer>
     </Section>
 
     {copy.sections.map((section, index) => <Section key={section.id} className={index === 1 ? 'bg-surface-subtle' : undefined}>
       <PageContainer>
-        <div className={`grid gap-9 lg:grid-cols-2 lg:items-center ${index % 2 ? '' : 'lg:[&>*:first-child]:order-2'}`}>
+        <div className={`grid gap-7 sm:gap-9 lg:grid-cols-2 lg:items-center ${index % 2 ? '' : 'lg:[&>*:first-child]:order-2'}`}>
           <figure>
-            <MediaContainer ratio={index === 1 ? 'portrait' : 'landscape'} className="shadow-card">
+            <MediaContainer ratio="landscape" className="shadow-card sm:aspect-auto sm:min-h-[28rem] lg:aspect-auto">
               <Image src={media.gallery[index].src} alt={localizedMediaText(media.gallery[index].alt, locale)} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
             </MediaContainer>
-            <figcaption className="mt-3 text-sm text-text-muted">{copy.captions[index]}</figcaption>
+            <figcaption className="mt-3 text-xs leading-5 text-text-muted sm:text-sm">{copy.captions[index]}</figcaption>
           </figure>
-          <div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[.16em] text-brand-blue">{section.eyebrow}</p><h2 className="mt-3 text-heading text-text-primary">{section.title}</h2><div className="mt-6 space-y-5 text-base leading-8 text-text-secondary sm:text-lg">{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></div>
+          <div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[.16em] text-brand-blue">{section.eyebrow}</p><h2 className="mt-3 text-[clamp(1.75rem,8vw,3.5rem)] leading-[1.12] text-text-primary">{section.title}</h2><div className="mt-5 space-y-4 text-[15px] leading-7 text-text-secondary sm:mt-6 sm:space-y-5 sm:text-lg sm:leading-8">{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></div>
         </div>
       </PageContainer>
     </Section>)}

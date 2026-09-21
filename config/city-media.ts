@@ -30,9 +30,10 @@ const BRAND_FALLBACK = '/brand/logo/maisondelux-logo-primary.png';
 
 export const LANDING_MEDIA_CONFIG = {
   hero: {
-    dark: '/media/landing/hero-dark.mp4',
-    light: '/media/landing/hero-light.mp4',
-    poster: null,
+    dark: '/media/landing/hero-dark-web.mp4',
+    light: '/media/landing/hero-light-web.mp4',
+    darkPoster: '/media/landing/hero-dark-poster.jpg',
+    lightPoster: '/media/landing/hero-light-poster.jpg',
   },
 } as const;
 
@@ -56,8 +57,8 @@ export const CITY_MEDIA_CONFIG: Record<string, CityMediaConfig> = {
   casablanca: {
     id: 'casablanca',
     hero: {
-      src: '/media/cities/casablanca/Casablanca-hero.mp4',
-      poster: null,
+      src: '/media/cities/casablanca/Casablanca-hero-web.mp4',
+      poster: '/media/cities/casablanca/Casablanca-hero-poster.jpg',
       ariaLabel: { fr: 'Présentation vidéo de Casablanca', ar: 'عرض مرئي لمدينة الدار البيضاء' },
     },
     gallery: casablancaGallery,

@@ -20,10 +20,10 @@ import {
 
 const publicAssetExists = (src: string) => existsSync(join(process.cwd(), 'public', src.replace(/^\//, '')));
 
-test('the registry contains 16 unique, public informational city pages', () => {
+test('the registry preserves 16 cities while only Casablanca is public', () => {
   assert.equal(CITY_REGISTRY.length, 16);
   assert.equal(new Set(CITY_REGISTRY.map((city) => city.slug)).size, 16);
-  assert.ok(CITY_REGISTRY.every((city) => city.cityPage.publicVisible === true));
+  assert.deepEqual(CITY_REGISTRY.filter((city) => city.cityPage.publicVisible).map((city) => city.slug), ['casablanca']);
   assert.equal(CITY_REGISTRY.filter((city) => city.estimation.publicEnabled).map((city) => city.slug).join(','), 'casablanca');
 });
 
@@ -53,11 +53,13 @@ test('Casablanca is the sole publicly enabled city model', () => {
 
 test('other cities remain explicitly unavailable', () => {
   const otherCities = CITY_REGISTRY.filter((city) => city.slug !== 'casablanca');
-  assert.ok(otherCities.every((city) => city.cityPage.status === 'published'));
+  assert.ok(otherCities.every((city) => city.cityPage.status === 'hidden'));
+  assert.ok(otherCities.every((city) => city.cityPage.publicVisible === false));
   assert.ok(otherCities.every((city) => city.estimation.status === 'unavailable'));
   assert.ok(otherCities.every((city) => city.estimation.backendStatusKey === null));
   assert.ok(otherCities.every((city) => city.modelRef === null));
   assert.ok(otherCities.every((city) => city.seoRef === null));
+  assert.ok(otherCities.every((city) => publicCityPath('fr', city) === null));
 });
 
 test('future route helpers are deterministic while public routing stays closed', () => {
@@ -76,6 +78,8 @@ test('city search handles accents and aliases', () => {
 test('every configured media path resolves to an existing public asset', () => {
   assert.ok(publicAssetExists(LANDING_MEDIA_CONFIG.hero.dark));
   assert.ok(publicAssetExists(LANDING_MEDIA_CONFIG.hero.light));
+  assert.ok(publicAssetExists(LANDING_MEDIA_CONFIG.hero.darkPoster));
+  assert.ok(publicAssetExists(LANDING_MEDIA_CONFIG.hero.lightPoster));
 
   for (const media of Object.values(CITY_MEDIA_CONFIG)) {
     assert.ok(publicAssetExists(media.fallback), `missing fallback: ${media.fallback}`);

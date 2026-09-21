@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
@@ -18,6 +18,8 @@ interface NavbarProps {
 export function Navbar({ locale, dict }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname() || `/${locale}`;
   const isEstimationPage = pathname.includes('/estimation') || pathname.endsWith('/estimate');
   const rtl = isRTL(locale);
@@ -35,23 +37,46 @@ export function Navbar({ locale, dict }: NavbarProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const focusable = menuRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])');
+    focusable?.[0]?.focus();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      } else if (event.key === 'Tab' && focusable?.length) {
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', handleKeyDown); };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => { setMobileMenuOpen(false); }, [pathname]);
+
   return (
     <header
-      className={`sticky top-0 z-50 w-full px-3 sm:px-6 lg:px-8 pointer-events-none transition-all duration-300 ease-out ${
-        isScrolled ? 'pt-2 sm:pt-2.5' : 'pt-3.5 sm:pt-4.5'
+      className={`sticky top-0 z-50 w-full px-2.5 pt-[max(.5rem,env(safe-area-inset-top))] sm:px-6 lg:px-8 pointer-events-none transition-all duration-300 ease-out ${
+        isScrolled ? 'sm:pt-2.5' : 'sm:pt-4.5'
       }`}
     >
       {/* Floating Glassmorphic Island */}
       <div
-        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-7 rounded-2xl sm:rounded-full pointer-events-auto flex items-center justify-between gap-4 lg:gap-8 transition-all duration-300 ease-out ${
+        className={`max-w-7xl mx-auto px-3 sm:px-6 lg:px-7 rounded-2xl sm:rounded-full pointer-events-auto flex items-center justify-between gap-2 lg:gap-8 transition-all duration-300 ease-out ${
           isScrolled
-            ? 'h-15 sm:h-16 backdrop-blur-2xl bg-surface/90 dark:bg-surface-elevated/90 border border-border-subtle shadow-card'
-            : 'h-18 sm:h-20 backdrop-blur-xl bg-surface/70 dark:bg-surface/70 border border-border-subtle shadow-subtle'
+            ? 'h-14 sm:h-16 backdrop-blur-lg bg-surface/95 dark:bg-surface-elevated/95 border border-border-subtle shadow-card'
+            : 'h-16 sm:h-20 bg-surface/95 dark:bg-surface/95 border border-border-subtle shadow-subtle sm:backdrop-blur-xl'
         }`}
       >
         {/* Left: Official Horizontal Logo */}
         <div className="flex items-center shrink-0">
-          <BrandLogo locale={locale} size={isScrolled ? 'compact' : 'default'} />
+          <BrandLogo locale={locale} size="compact" />
         </div>
 
         {/* Center: Main Navigation with Refined Glass Pills */}
@@ -110,11 +135,13 @@ export function Navbar({ locale, dict }: NavbarProps) {
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
           <button
+            ref={menuButtonRef}
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-full text-slate-700 dark:text-slate-300 bg-slate-100/80 dark:bg-white/6 hover:bg-slate-200/80 dark:hover:bg-white/12 border border-slate-200/80 dark:border-white/10 transition-colors"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-slate-700 dark:text-slate-300 bg-slate-100/80 dark:bg-white/6 hover:bg-slate-200/80 dark:hover:bg-white/12 border border-slate-200/80 dark:border-white/10 transition-colors"
             aria-label="Menu de navigation"
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? <X className="w-4.5 h-4.5" /> : <Menu className="w-4.5 h-4.5" />}
           </button>
@@ -123,7 +150,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
 
       {/* Floating Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden mt-2 p-5 rounded-3xl backdrop-blur-2xl bg-white/95 dark:bg-[#0B0F19]/95 border border-slate-200/80 dark:border-white/10 shadow-2xl pointer-events-auto space-y-4">
+        <div ref={menuRef} id="mobile-navigation" role="dialog" aria-modal="true" aria-label={locale === 'ar' ? 'قائمة التنقل' : 'Menu de navigation'} className="lg:hidden mt-2 max-h-[calc(100dvh-5.5rem-env(safe-area-inset-top))] overflow-y-auto p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-slate-200/80 dark:border-white/10 shadow-elevated pointer-events-auto space-y-4">
           {!isEstimationPage && (
             <div className="flex flex-col space-y-1 border-b border-slate-200/60 dark:border-white/5 pb-4">
               {NAV_LINKS.map((link) => {

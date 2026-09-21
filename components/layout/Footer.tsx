@@ -16,12 +16,12 @@ export function Footer({ locale, dict }: FooterProps) {
 
   return (
     <footer className="border-t border-border-subtle bg-surface/50 dark:bg-surface-elevated/60 transition-colors z-20 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 pb-[max(2.5rem,env(safe-area-inset-bottom))]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-7 lg:gap-12 mb-10 sm:mb-12">
           {/* Brand description column */}
-          <div className="md:col-span-4 space-y-4">
+          <div className="sm:col-span-2 md:col-span-4 space-y-4">
             <BrandLogo locale={locale} />
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed pr-4">
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed pe-4">
               {dict.footer.brandDescription}
             </p>
             <div className="pt-2">
@@ -96,7 +96,7 @@ export function Footer({ locale, dict }: FooterProps) {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-slate-200/60 dark:border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        <div className="border-t border-slate-200/60 dark:border-white/5 pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500">
           <p>
             © {currentYear} {dict.common.brandName} · {dict.common.allRightsReserved}
           </p>

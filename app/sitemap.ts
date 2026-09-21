@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.9,
     },
-    ...CITY_REGISTRY.map((city) => ({
+    ...CITY_REGISTRY.filter((city) => city.cityPage.publicVisible).map((city) => ({
       url: `${baseUrl}/${locale}/cities/${city.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,

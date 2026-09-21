@@ -8,7 +8,7 @@ export function ThemeVideoBackground({
   darkSrc,
   lightSrc,
   fallbackSrc,
-  label,
+  lightFallbackSrc,
   className,
   imageClassName,
   videoClassName,
@@ -16,21 +16,28 @@ export function ThemeVideoBackground({
   darkSrc: string;
   lightSrc?: string;
   fallbackSrc: string;
-  label: string;
+  lightFallbackSrc?: string;
   className?: string;
   imageClassName?: string;
   videoClassName?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const autoplayAttemptRef = useRef('');
   const [dark, setDark] = useState(false);
-  const [readySrc, setReadySrc] = useState('');
-  const [failedSrc, setFailedSrc] = useState('');
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [mediaInitialized, setMediaInitialized] = useState(false);
+  const [playingSrc, setPlayingSrc] = useState('');
+  // Default to reduced motion so server-rendered markup never forces autoplay
+  // before the browser preference has been read.
+  const [reducedMotion, setReducedMotion] = useState(true);
 
   useEffect(() => {
     const root = document.documentElement;
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => { setDark(root.classList.contains('dark')); setReducedMotion(motion.matches); };
+    const sync = () => {
+      setDark(root.classList.contains('dark'));
+      setReducedMotion(motion.matches);
+      setMediaInitialized(true);
+    };
     sync();
     const observer = new MutationObserver(sync);
     observer.observe(root, { attributes: true, attributeFilter: ['class'] });
@@ -39,41 +46,54 @@ export function ThemeVideoBackground({
   }, []);
 
   const src = dark || !lightSrc ? darkSrc : lightSrc;
-  const canPlay = readySrc === src;
-  const failed = failedSrc === src;
+  const activeSrc = mediaInitialized ? src : '';
+  const videoVisible = !reducedMotion && Boolean(activeSrc) && playingSrc.endsWith(activeSrc);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || failed) return;
-    const reveal = () => {
-      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) setReadySrc(src);
-    };
-    reveal();
-    video.addEventListener('loadeddata', reveal);
-    video.addEventListener('canplay', reveal);
-    return () => {
-      video.removeEventListener('loadeddata', reveal);
-      video.removeEventListener('canplay', reveal);
-    };
-  }, [failed, src]);
+    if (!video || !activeSrc) return;
+    autoplayAttemptRef.current = '';
+    setPlayingSrc('');
+    video.pause();
+    video.load();
+  }, [activeSrc]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !activeSrc) return;
+    if (reducedMotion) {
+      autoplayAttemptRef.current = '';
+      video.pause();
+      setPlayingSrc('');
+      return;
+    }
+    if (autoplayAttemptRef.current === activeSrc) return;
+    autoplayAttemptRef.current = activeSrc;
+    void video.play().catch(() => {
+      setPlayingSrc('');
+    });
+  }, [activeSrc, reducedMotion]);
 
   return <div className={cn('absolute inset-0 overflow-hidden', className)}>
-    <Image src={fallbackSrc} alt="" fill priority sizes="100vw" className={cn('object-cover', imageClassName)} />
-    {!failed ? <video
-      key={src}
+    {lightFallbackSrc ? <>
+      <Image src={lightFallbackSrc} alt="" fill priority sizes="100vw" className={cn('object-cover dark:hidden', imageClassName)} />
+      <Image src={fallbackSrc} alt="" fill priority sizes="100vw" className={cn('hidden object-cover dark:block', imageClassName)} />
+    </> : <Image src={fallbackSrc} alt="" fill priority sizes="100vw" className={cn('object-cover', imageClassName)} />}
+    <video
       ref={videoRef}
-      aria-label={label}
-      autoPlay={!reducedMotion}
+      aria-hidden="true"
+      src={activeSrc || undefined}
       muted
-      loop={!reducedMotion}
+      loop
       playsInline
-      preload="auto"
-      onCanPlay={() => {
-        setReadySrc(src);
-        if (!reducedMotion) void videoRef.current?.play().catch(() => setFailedSrc(src));
-      }}
-      onError={() => setFailedSrc(src)}
-      className={cn('absolute inset-0 h-full w-full object-cover transition-opacity duration-slow', canPlay ? 'opacity-100' : 'opacity-0', videoClassName)}
-    ><source src={src} type="video/mp4" /></video> : null}
+      preload={reducedMotion ? 'none' : 'auto'}
+      onPlaying={(event) => setPlayingSrc(event.currentTarget.currentSrc)}
+      onPause={() => setPlayingSrc('')}
+      onWaiting={() => setPlayingSrc('')}
+      onStalled={() => setPlayingSrc('')}
+      onEnded={() => setPlayingSrc('')}
+      onError={() => setPlayingSrc('')}
+      className={cn('absolute inset-0 h-full w-full object-cover transition-opacity duration-slow', videoVisible ? 'opacity-100' : 'opacity-0', videoClassName)}
+    />
   </div>;
 }

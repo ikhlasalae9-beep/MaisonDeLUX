@@ -11,5 +11,5 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
 export default function CitiesPage({ params }: { params: { locale: string } }) {
   const dict = getDictionary(params.locale);
   const copy = dict.phase3.cities;
-  return <div className="pt-24 sm:pt-28"><Section><PageContainer><SectionHeading eyebrow={copy.eyebrow} title={copy.title} description={copy.subtitle} /><div className="mt-10"><CasablancaSpotlight locale={params.locale} copy={copy} /></div></PageContainer></Section></div>;
+  return <div className="pt-16 sm:pt-24"><Section><PageContainer><SectionHeading eyebrow={copy.eyebrow} title={copy.title} description={copy.subtitle} /><div className="mt-8 sm:mt-10"><CasablancaSpotlight locale={params.locale} copy={copy} /></div></PageContainer></Section></div>;
 }

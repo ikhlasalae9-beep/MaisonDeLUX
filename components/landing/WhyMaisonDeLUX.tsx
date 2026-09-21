@@ -17,7 +17,7 @@ export function WhyMaisonDeLUX({ locale, dict }: WhyMaisonDeLUXProps) {
   return (
     <section
       id="pourquoi"
-      className="min-h-auto lg:min-h-[100svh] flex flex-col justify-center py-16 sm:py-20 lg:py-10 scroll-mt-24 lg:scroll-mt-28 bg-white dark:bg-brand-navy transition-colors border-t border-slate-200/80 dark:border-white/5 relative"
+      className="min-h-auto lg:min-h-[100svh] flex flex-col justify-center overflow-x-hidden py-16 sm:py-20 lg:py-10 scroll-mt-24 lg:scroll-mt-28 bg-white dark:bg-brand-navy transition-colors border-t border-slate-200/80 dark:border-white/5 relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         {/* Section Header with Scroll Reveal */}
