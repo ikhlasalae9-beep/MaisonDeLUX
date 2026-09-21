@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import { IBM_Plex_Sans_Arabic, Plus_Jakarta_Sans } from 'next/font/google';
 import '@/app/globals.css';
+
+const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], display: 'swap', variable: '--font-jakarta' });
+const plexArabic = IBM_Plex_Sans_Arabic({ weight: ['300', '400', '500', '600', '700'], subsets: ['arabic'], display: 'swap', variable: '--font-plex-arabic', preload: false });
 
 export const metadata: Metadata = {
   title: "MaisonDeLUX — L'intelligence prédictive de valorisation immobilière au Maroc",
@@ -22,11 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" className={`${jakarta.variable} ${plexArabic.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" />
         <link rel="icon" type="image/png" href="/brand/icons/maisondelux-app-blue.png" />
         <link rel="apple-touch-icon" href="/brand/icons/maisondelux-app-blue.png" />
         <script

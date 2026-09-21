@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-arabic: 'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
+  --font-sans: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  --font-arabic: var(--font-plex-arabic), 'Tajawal', sans-serif;
 
   /* Premium Light Theme tokens - Real Estate / Architectural */
   --bg-page: #FAFAF9; /* Warm off-white */

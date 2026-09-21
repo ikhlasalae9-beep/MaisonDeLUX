@@ -85,8 +85,8 @@ export function ThemeVideoBackground({
 
   return <div className={cn('absolute inset-0 overflow-hidden', className)}>
     {lightFallbackSrc ? <>
-      <Image src={lightFallbackSrc} alt="" fill loading="lazy" fetchPriority="high" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(lightFallbackSrc)} className={cn('object-cover dark:hidden', imageClassName)} />
-      <Image src={fallbackSrc} alt="" fill loading="lazy" fetchPriority="high" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('hidden object-cover dark:block', imageClassName)} />
+      <Image src={lightFallbackSrc} alt="" fill priority sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(lightFallbackSrc)} className={cn('object-cover dark:hidden', imageClassName)} />
+      <Image src={fallbackSrc} alt="" fill loading="eager" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('hidden object-cover dark:block', imageClassName)} />
     </> : <Image src={fallbackSrc} alt="" fill priority sizes="100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('object-cover', imageClassName)} />}
     <video
       ref={videoRef}
