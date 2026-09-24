@@ -30,8 +30,9 @@ const BRAND_FALLBACK = '/brand/logo/maisondelux-logo-primary.png';
 
 export const LANDING_MEDIA_CONFIG = {
   hero: {
-    dark: '/media/landing/hero-dark-web.mp4',
-    light: '/media/landing/hero-light-web.mp4',
+    dark: '/media/landing/hero-dark.webm',
+    light: '/media/landing/hero-light.webm',
+    type: 'video/webm',
     darkPoster: '/media/landing/hero-dark-poster.jpg',
     lightPoster: '/media/landing/hero-light-poster.jpg',
   },

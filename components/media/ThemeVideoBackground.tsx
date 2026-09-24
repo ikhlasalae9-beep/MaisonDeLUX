@@ -9,6 +9,7 @@ export function ThemeVideoBackground({
   lightSrc,
   fallbackSrc,
   lightFallbackSrc,
+  sourceType,
   className,
   imageClassName,
   videoClassName,
@@ -17,6 +18,7 @@ export function ThemeVideoBackground({
   lightSrc?: string;
   fallbackSrc: string;
   lightFallbackSrc?: string;
+  sourceType?: string;
   className?: string;
   imageClassName?: string;
   videoClassName?: string;
@@ -27,29 +29,23 @@ export function ThemeVideoBackground({
   const [mediaInitialized, setMediaInitialized] = useState(false);
   const [playingSrc, setPlayingSrc] = useState('');
   const [readyPosters, setReadyPosters] = useState<string[]>([]);
-  // Default to reduced motion so server-rendered markup never forces autoplay
-  // before the browser preference has been read.
-  const [reducedMotion, setReducedMotion] = useState(true);
 
   useEffect(() => {
     const root = document.documentElement;
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const sync = () => {
       setDark(root.classList.contains('dark'));
-      setReducedMotion(motion.matches);
       setMediaInitialized(true);
     };
     sync();
     const observer = new MutationObserver(sync);
     observer.observe(root, { attributes: true, attributeFilter: ['class'] });
-    motion.addEventListener('change', sync);
-    return () => { observer.disconnect(); motion.removeEventListener('change', sync); };
+    return () => observer.disconnect();
   }, []);
 
   const src = dark || !lightSrc ? darkSrc : lightSrc;
   const activePoster = dark && lightFallbackSrc ? fallbackSrc : lightFallbackSrc ?? fallbackSrc;
-  const activeSrc = mediaInitialized && !reducedMotion && readyPosters.includes(activePoster) ? src : '';
-  const videoVisible = !reducedMotion && Boolean(activeSrc) && playingSrc.endsWith(activeSrc);
+  const activeSrc = mediaInitialized && readyPosters.includes(activePoster) ? src : '';
+  const videoVisible = Boolean(activeSrc) && playingSrc === activeSrc;
 
   const posterLoaded = (poster: string) => {
     setReadyPosters((current) => current.includes(poster) ? current : [...current, poster]);
@@ -61,22 +57,17 @@ export function ThemeVideoBackground({
     autoplayAttemptRef.current = '';
     setPlayingSrc('');
     video.pause();
-  }, [activeSrc]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !activeSrc) return;
-    if (reducedMotion) {
-      autoplayAttemptRef.current = '';
+    return () => {
       video.pause();
-      setPlayingSrc('');
-      return;
-    }
-  }, [activeSrc, reducedMotion]);
+      video.removeAttribute('src');
+      video.querySelectorAll('source').forEach((source) => source.removeAttribute('src'));
+      video.load();
+    };
+  }, [activeSrc]);
 
   const attemptPlayback = () => {
     const video = videoRef.current;
-    if (!video || !activeSrc || reducedMotion || autoplayAttemptRef.current === activeSrc) return;
+    if (!video || !activeSrc || autoplayAttemptRef.current === activeSrc) return;
     video.muted = true;
     video.defaultMuted = true;
     autoplayAttemptRef.current = activeSrc;
@@ -89,22 +80,25 @@ export function ThemeVideoBackground({
       <Image src={fallbackSrc} alt="" fill loading="eager" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('hidden object-cover dark:block', imageClassName)} />
     </> : <Image src={fallbackSrc} alt="" fill priority sizes="100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('object-cover', imageClassName)} />}
     <video
+      key={sourceType ? activeSrc || 'inactive' : undefined}
       ref={videoRef}
       aria-hidden="true"
-      src={activeSrc || undefined}
+      src={sourceType ? undefined : activeSrc || undefined}
       autoPlay={Boolean(activeSrc)}
       muted
       loop
       playsInline
       preload="none"
       onCanPlay={attemptPlayback}
-      onPlaying={(event) => setPlayingSrc(event.currentTarget.currentSrc)}
+      onPlaying={() => setPlayingSrc(activeSrc)}
       onPause={() => setPlayingSrc('')}
       onWaiting={() => setPlayingSrc('')}
       onStalled={() => setPlayingSrc('')}
       onEnded={() => setPlayingSrc('')}
       onError={() => setPlayingSrc('')}
       className={cn('absolute inset-0 h-full w-full object-cover transition-opacity duration-slow', videoVisible ? 'opacity-100' : 'opacity-0', videoClassName)}
-    />
+    >
+      {sourceType && activeSrc ? <source src={activeSrc} type={sourceType} /> : null}
+    </video>
   </div>;
 }
