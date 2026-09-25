@@ -120,8 +120,8 @@ export function EstimatorShell({ locale, dict }: EstimatorShellProps) {
       // Best-effort anonymous analytics. Its failure never affects the successful prediction.
       void fetch('/api/analytics/events', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...analyticsPayload, estimated_price_mad: res.data.estimated_price_mad,
-          model_version: res.data.model_version || 'v1', locale,
+        body: JSON.stringify({ input_features: analyticsPayload, city: formData.ville,
+          estimated_price_mad: res.data.estimated_price_mad, model_version: res.data.model_version || 'v1',
           event_key: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : undefined }),
       }).catch((loggingError) => console.error('Analytics logging failed:', loggingError));
     }

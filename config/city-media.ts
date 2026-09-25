@@ -13,6 +13,7 @@ export interface ImageMedia {
 
 export interface VideoMedia {
   src: string;
+  type: string;
   poster: string | null;
   ariaLabel: LocalizedMediaText;
 }
@@ -59,6 +60,7 @@ export const CITY_MEDIA_CONFIG: Record<string, CityMediaConfig> = {
     id: 'casablanca',
     hero: {
       src: '/media/cities/casablanca/Casablanca-hero-web.mp4',
+      type: 'video/mp4',
       poster: '/media/cities/casablanca/Casablanca-hero-poster.jpg',
       ariaLabel: { fr: 'Présentation vidéo de Casablanca', ar: 'عرض مرئي لمدينة الدار البيضاء' },
     },

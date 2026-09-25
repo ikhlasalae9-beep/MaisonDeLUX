@@ -25,8 +25,19 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
     event.preventDefault(); setError(''); setResult(null);
     const required = ['property_type', 'neighborhood', 'area', 'rooms', 'bedrooms', 'bathrooms', 'floor'] as const;
     if (required.some((field) => form[field] === '') || Number(form.area) <= 0 || [form.rooms, form.bedrooms, form.bathrooms].some((value) => Number(value) < 1) || Number(form.floor) < 0) { setError(copy.requiredError); return; }
+    if (!metadata) { setError(copy.unavailable); return; }
     setLoading(true);
-    try { setResult(await predictCasablanca({ city: 'Casablanca', property_type: form.property_type, neighborhood: form.neighborhood, area: Number(form.area), rooms: Number(form.rooms), bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms), floor: Number(form.floor), current_state: form.current_state || null, age: form.age || null })); }
+    try {
+      const inputFeatures = { city: 'Casablanca', property_type: form.property_type, neighborhood: form.neighborhood, area: Number(form.area), rooms: Number(form.rooms), bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms), floor: Number(form.floor), current_state: form.current_state || null, age: form.age || null } as const;
+      const prediction = await predictCasablanca(inputFeatures);
+      setResult(prediction);
+      void fetch('/api/analytics/events', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event_key: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : undefined,
+          city: inputFeatures.city, model_version: prediction.model_version || metadata.model_version,
+          input_features: inputFeatures, estimated_price_mad: prediction.estimated_price_mad }),
+      }).catch((loggingError) => console.error('Analytics logging failed:', loggingError));
+    }
     catch (reason) { setError(reason instanceof Error ? reason.message : copy.unavailable); }
     finally { setLoading(false); }
   }

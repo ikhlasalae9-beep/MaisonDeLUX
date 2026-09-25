@@ -28,6 +28,8 @@ function fakeDatabase(tableExists = true) {
     else if (text.includes('SELECT c.id AS city_id') && text.includes('JOIN public.model_versions')) rows = values[0] === 'Casablanca' && values[1] === 'casablanca-catboost-v1'
       ? [{ city_id: 1, name: 'Casablanca', region: 'Casablanca-Settat', model_version_id: 7, version: 'casablanca-catboost-v1' }] : [];
     else if (text.startsWith('INSERT INTO public.estimation_events')) {
+      assert.match(text, /\(event_key,created_at,city_id,model_version_id,input_features,estimated_price_mad,is_test\) VALUES/);
+      assert.doesNotMatch(text, /\b(region|neighborhood|property_type|surface_m2|bedrooms|bathrooms|model_version|locale)\b/);
       if (!records.some((row) => row.event_key === values[0])) records.push({ event_key: values[0], city_id: values[2], model_version_id: values[3],
         input_features: JSON.parse(String(values[4])), estimated_price_mad: values[5], is_test: values[6] });
     } else if (text.includes('COUNT(*)::int total') && text.includes('AVG(e.estimated_price_mad)')) rows = [{ total: records.length, today: records.length,
@@ -85,4 +87,7 @@ test('analytics insert is idempotent and overview supports empty/populated data'
   assert.equal((await getOverview('all') as any).kpis.total, 1);
   const response = await analyticsRoute(new NextRequest('http://localhost/api/analytics/events', { method: 'POST', body: JSON.stringify(event) }));
   assert.equal(response.status, 202);
+  const invalid = await analyticsRoute(new NextRequest('http://localhost/api/analytics/events', { method: 'POST',
+    body: JSON.stringify({ ...event, input_features: undefined, property_type: 'appartement', area: 90 }) }));
+  assert.equal(invalid.status, 400);
 });

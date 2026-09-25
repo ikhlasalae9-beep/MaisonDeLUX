@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const p = request.nextUrl.searchParams.get('period') as Period;
     const data = await getEstimations(p in periodDays ? p : '30d', Number(request.nextUrl.searchParams.get('page') || 1),
       request.nextUrl.searchParams.get('search') || '', request.nextUrl.searchParams.get('cityId') || undefined,
-      request.nextUrl.searchParams.get('includeTests') === 'true');
+      request.nextUrl.searchParams.get('modelId') || undefined, request.nextUrl.searchParams.get('includeTests') === 'true');
     return NextResponse.json(data);
   } catch { return NextResponse.json({ error: 'ANALYTICS_DATABASE_UNAVAILABLE' }, { status: 500 }); }
 }
