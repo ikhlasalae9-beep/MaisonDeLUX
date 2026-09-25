@@ -1,3 +1,7 @@
 import { NextResponse } from 'next/server';
-import { modelMetadata } from '@/lib/admin/model';
-export async function GET() { return NextResponse.json(modelMetadata); }
+import { getOverview } from '@/lib/admin/analytics';
+export const dynamic = 'force-dynamic';
+export async function GET() {
+  const data = await getOverview('all');
+  return NextResponse.json({ configured: data.configured, models: 'models' in data ? data.models : [] });
+}

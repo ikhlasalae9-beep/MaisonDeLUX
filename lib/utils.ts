@@ -7,13 +7,11 @@ export function cn(...inputs: ClassValue[]) {
 
 type Numeric = number | string | null | undefined;
 const FALLBACK = '—';
-const localeCode = (locale = 'fr') => locale === 'ar' ? 'ar-MA' : 'fr-MA';
+const localeCode = (locale = 'fr') => locale === 'ar' ? 'ar-MA' : 'fr-FR';
 const numeric = (value: Numeric) => value === '' || value == null || !Number.isFinite(Number(value)) ? null : Number(value);
 const formatted = (value: Numeric, locale: string, options: Intl.NumberFormatOptions) => {
   const number = numeric(value);
-  const formattedStr = number == null ? FALLBACK : new Intl.NumberFormat(localeCode(locale), options).format(number);
-  // Ensure we use regular spaces for grouping rather than narrow no-break space that some browsers return
-  return formattedStr.replace(/[\u202F\u00A0]/g, ' ');
+  return number == null ? FALLBACK : new Intl.NumberFormat(localeCode(locale), options).format(number);
 };
 
 export function formatInteger(value: Numeric, locale = 'fr') {

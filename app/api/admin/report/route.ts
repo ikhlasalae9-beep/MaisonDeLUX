@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib';
 import { getOverview, Period, periodDays } from '@/lib/admin/analytics';
-import { modelMetadata } from '@/lib/admin/model';
-import { formatArea, formatCurrency, formatDate, formatInteger, formatNumber, formatPercentage, formatPricePerSquareMeter } from '@/lib/utils';
+import { formatArea, formatCurrency, formatDate, formatInteger } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,10 +79,7 @@ export async function GET(request: NextRequest) {
       page.drawText(ascii(value), { x: x + 12, y: cy - 42, size: value.length > 17 ? 11 : 14, font: bold, color: navy });
     });
     y -= 166; y = sectionTitle(page, 'Profil moyen des biens', y, bold);
-    const profile = data.profile || {}; const profileItems = [
-      ['Surface', formatArea(k.avg_surface)], ['Chambres', formatNumber(profile.bedrooms)], ['Salles de bain', formatNumber(profile.bathrooms)],
-      ['Parking', formatPercentage((profile.parking || 0) * 100)], ['Balcon', formatPercentage((profile.balcony || 0) * 100)], ['Meuble', formatPercentage((profile.furnished || 0) * 100)],
-    ];
+    const profileItems = [['Surface', formatArea(k.avg_surface)], ['Villes utilisees', formatInteger(k.cities)], ['Modeles enregistres', formatInteger(data.models?.length || 0)]];
     profileItems.forEach(([label, value], index) => { const x = M + (index % 3) * 166; const py = y - Math.floor(index / 3) * 28;
       page.drawText(label, { x, y: py, size: 8, font: regular, color: slate }); page.drawText(ascii(value), { x: x + 70, y: py, size: 9, font: bold, color: navy });
     });
@@ -98,9 +94,9 @@ export async function GET(request: NextRequest) {
         page.drawRectangle({ x: M + index * CONTENT / activity.length + 1, y: chartY, width: Math.max(2, bw), height: h, color: blue });
       }); y = chartY - 34;
     }
-    y = sectionTitle(page, 'Estimations par region', y, bold);
-    if (!data.regions?.length) { emptyState(page, y, regular, bold); y -= 100; }
-    else { barChart(page, data.regions, M, y - 124, CONTENT, 118, (row) => row.name, (row) => Number(row.count), regular); y -= 154; }
+    y = sectionTitle(page, 'Villes et territoires', y, bold);
+    if (!data.cities?.length) { emptyState(page, y, regular, bold); y -= 100; }
+    else { barChart(page, data.cities, M, y - 124, CONTENT, 118, (row) => row.name, (row) => Number(row.estimation_count), regular); y -= 154; }
     y = sectionTitle(page, 'Distribution des valeurs estimees', y, bold);
     if (!data.prices?.length) { emptyState(page, y, regular, bold); y -= 100; }
     else { barChart(page, data.prices, M, y - 112, CONTENT, 106, (row) => row.bucket, (row) => Number(row.count), regular); y -= 142; }
@@ -112,32 +108,30 @@ export async function GET(request: NextRequest) {
       data.cities.slice(0, 7).forEach((row: any, index: number) => { const py = y - 45 - index * 22;
         if (index % 2 === 0) page.drawRectangle({ x: M, y: py - 5, width: CONTENT, height: 22, color: light });
         page.drawText(ascii(row.name).slice(0, 38), { x: M + 10, y: py, size: 8, font: regular, color: navy });
-        page.drawText(formatInteger(row.count), { x: 350, y: py, size: 8, font: regular, color: navy });
-        page.drawText(ascii(formatPercentage(row.percentage)), { x: 450, y: py, size: 8, font: regular, color: navy });
+        page.drawText(formatInteger(row.estimation_count), { x: 350, y: py, size: 8, font: regular, color: navy });
+        page.drawText(row.public_enabled ? 'Public' : 'Non public', { x: 450, y: py, size: 8, font: regular, color: navy });
       });
     }
 
     // Page 3 - model, method and governance.
     page = addPage(); y = 766; y = sectionTitle(page, 'Methodologie et modele', y, bold);
     y = drawWrapped(page, `Les indicateurs synthetisent les estimations reussies pour la periode selectionnee. Les prix moyens et medians sont exprimes en dirhams marocains. Le prix au metre carre neutralise partiellement les ecarts de surface et n'est affiche par ville qu'a partir de trois observations.`, M, y, CONTENT, regular, 10, slate, 15) - 22;
-    const metrics: any = modelMetadata.test_metrics;
-    const modelRows = [
-      ['Modele', `${modelMetadata.model_name} - version v1`], ['Jeu de test', `${formatInteger(modelMetadata.test_rows)} observations`],
-      ['R2', formatNumber(metrics.R2, 'fr', 2)], ['MAE', formatCurrency(metrics.MAE)], ['RMSE', formatCurrency(metrics.RMSE)],
-      ['Erreur mediane', formatCurrency(metrics.MedianAE)], ['MdAPE', formatPercentage(metrics.MdAPE_pct)],
-    ];
+    const registeredModel: any = data.models?.[0]; const metrics: any = registeredModel?.metrics || {};
+    const modelRows = registeredModel ? [
+      ['Modele', `${registeredModel.architecture || 'Non renseigne'} - ${registeredModel.version}`],
+      ['Ville', registeredModel.city_name], ['Statut', registeredModel.status],
+      ['Inference publique', registeredModel.public_inference_enabled ? 'Active' : 'Inactive'],
+      ['R2 test (non verifie independamment)', String(metrics.r2_test ?? '-')],
+      ['MAE test (non verifie independamment)', formatCurrency(metrics.mae_test_mad)],
+      ['RMSE test (non verifie independamment)', formatCurrency(metrics.rmse_test_mad)],
+    ] : [['Modele', 'Aucun modele enregistre']];
     y = sectionTitle(page, 'Referentiel de performance', y, bold);
     modelRows.forEach(([label, value], index) => { const py = y - index * 30;
       page.drawLine({ start: { x: M, y: py - 9 }, end: { x: W - M, y: py - 9 }, thickness: .4, color: rgb(.87,.89,.92) });
       page.drawText(label, { x: M, y: py, size: 9, font: regular, color: slate }); page.drawText(ascii(value), { x: 245, y: py, size: 9, font: bold, color: navy });
     }); y -= modelRows.length * 30 + 28;
-    y = sectionTitle(page, 'Lecture des prix au m2', y, bold);
-    if (!data.ppm?.length) { emptyState(page, y, regular, bold, 'Volume insuffisant pour une comparaison robuste'); y -= 100; }
-    else { data.ppm.slice(0, 6).forEach((row: any, index: number) => { const py = y - index * 24;
-      page.drawText(ascii(row.name).slice(0, 28), { x: M, y: py, size: 8.5, font: regular, color: navy });
-      page.drawText(ascii(formatPricePerSquareMeter(row.value)), { x: 270, y: py, size: 8.5, font: bold, color: blue });
-      page.drawText(`${formatInteger(row.count)} observations`, { x: 420, y: py, size: 7.5, font: regular, color: slate });
-    }); y -= Math.min(data.ppm.length, 6) * 24 + 22; }
+    y = sectionTitle(page, 'Gouvernance des donnees', y, bold);
+    y = drawWrapped(page, "Les statistiques d'usage excluent les evenements de test par defaut. Les entrees sont lues depuis input_features et reliees aux registres de villes et de modeles.", M, y, CONTENT, regular, 9, slate, 14) - 22;
     y = sectionTitle(page, 'Avertissement', y, bold);
     page.drawRectangle({ x: M, y: y - 92, width: CONTENT, height: 92, color: paleBlue, borderColor: rgb(.75,.82,.94), borderWidth: .7 });
     drawWrapped(page, disclaimer, M + 16, y - 24, CONTENT - 32, regular, 9, navy, 14);
