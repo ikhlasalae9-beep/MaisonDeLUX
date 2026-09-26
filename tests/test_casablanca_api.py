@@ -42,26 +42,38 @@ def test_ml_health_and_metadata_are_casablanca_only(client):
     assert "Maârif" in body["supported"]["neighborhoods"]
 
 
-def test_valid_casablanca_request_uses_catboost(client, payload):
+def test_valid_casablanca_request_uses_catboost_without_phase_a_dependency(client, payload):
     response = client.post("/api/ml/estimate", json=payload)
     assert response.status_code == 200
     body = response.get_json()
     assert math.isfinite(body["estimated_price_mad"])
     assert body["estimated_price_mad"] > 0
     assert body["model_version"] == "casablanca-catboost-v1"
+    assert "explanation" not in body
+    assert "comparables" not in body
+
+
+def test_optional_context_is_loaded_separately_after_prediction(client, payload):
+    normal = client.post("/api/ml/estimate", json=payload).get_json()
+    response = client.post("/api/ml/context", json=payload)
+    assert response.status_code == 200
+    body = response.get_json()
+    assert normal["model_version"] == "casablanca-catboost-v1"
     assert body["explanation"]["method"] == "catboost_shap_values"
     assert body["comparables"]
 
 
-def test_simulation_mode_uses_same_model_without_heavy_context(client, payload):
-    normal = client.post("/api/ml/estimate", json=payload).get_json()
-    response = client.post("/api/ml/estimate?context=0", json=payload)
-    assert response.status_code == 200
-    body = response.get_json()
-    assert body["estimated_price_mad"] == normal["estimated_price_mad"]
-    assert body["model_version"] == "casablanca-catboost-v1"
-    assert "explanation" not in body
-    assert "comparables" not in body
+def test_comparable_failure_cannot_block_base_prediction(client, payload, monkeypatch):
+    import backend.inference.casablanca as casablanca
+
+    monkeypatch.setattr(casablanca, "_comparables", lambda _payload: (_ for _ in ()).throw(FileNotFoundError()))
+    prediction = client.post("/api/ml/estimate", json=payload)
+    context = client.post("/api/ml/context", json=payload)
+    assert prediction.status_code == 200
+    assert prediction.get_json()["estimated_price_mad"] > 0
+    assert context.status_code == 200
+    assert context.get_json()["unavailable"] == ["comparables"]
+    assert context.get_json()["explanation"]["method"] == "catboost_shap_values"
 
 
 @pytest.mark.parametrize(

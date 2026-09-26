@@ -80,3 +80,9 @@ export interface CasablancaMetadata {
     ages: string[];
   };
 }
+
+export interface CasablancaContextResponse {
+  explanation?: PredictResponse['explanation'];
+  comparables?: PredictResponse['comparables'];
+  unavailable?: Array<'explanation' | 'comparables'>;
+}

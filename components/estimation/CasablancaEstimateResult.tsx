@@ -15,7 +15,7 @@ const FACTOR_LABELS: Record<string, { fr: string; ar: string }> = {
   current_state: { fr: 'État du bien', ar: 'حالة العقار' }, age: { fr: 'Ancienneté', ar: 'عمر العقار' },
 };
 
-export function CasablancaEstimateResult({ completed, supported, locale, copy, onReset }: { completed: CompletedCasablancaEstimation; supported: CasablancaMetadata['supported']; locale: string; copy: any; onReset: () => void }) {
+export function CasablancaEstimateResult({ completed, supported, contextLoading, locale, copy, onReset }: { completed: CompletedCasablancaEstimation; supported: CasablancaMetadata['supported']; contextLoading: boolean; locale: string; copy: any; onReset: () => void }) {
   const { prediction, inputFeatures, estimatedAt } = completed;
   const amount = useCountUp(prediction.estimated_price_mad);
   const money = (value: number) => new Intl.NumberFormat(locale === 'ar' ? 'ar-MA' : 'fr-MA', { maximumFractionDigits: 0 }).format(Math.round(value));
@@ -44,33 +44,33 @@ export function CasablancaEstimateResult({ completed, supported, locale, copy, o
       </section>
     </CardSurface>
 
-    <Explainability prediction={prediction} locale={locale} copy={copy} money={money} />
-    <Comparables prediction={prediction} locale={locale} copy={copy} money={money} />
+    <Explainability prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
+    <Comparables prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
     <Simulator input={inputFeatures} supported={supported} original={prediction.estimated_price_mad} copy={copy} money={money} />
     <button type="button" onClick={onReset} className="min-h-11 text-sm font-semibold text-brand-blue">{copy.newEstimate}</button>
   </div>;
 }
 
-function Explainability({ prediction, locale, copy, money }: { prediction: PredictResponse; locale: string; copy: any; money: (value: number) => string }) {
+function Explainability({ prediction, loading, locale, copy, money }: { prediction: PredictResponse; loading: boolean; locale: string; copy: any; money: (value: number) => string }) {
   const factors = useMemo(() => [...(prediction.explanation?.factors || [])].sort((a, b) => Math.abs(b.contribution_mad) - Math.abs(a.contribution_mad)).slice(0, 6), [prediction]);
   const max = Math.max(...factors.map((factor) => Math.abs(factor.contribution_mad)), 1);
   return <CardSurface className="p-5 sm:p-6"><div className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-brand-blue" /><h2 className="text-lg font-bold">{copy.understandTitle}</h2></div>
     <p className="mt-2 text-sm leading-6 text-text-secondary">{copy.understandIntro}</p>
-    <div className="mt-5 space-y-4">{factors.map((factor) => {
+    {loading && !factors.length ? <AnalysisLoading copy={copy} /> : !factors.length ? <p className="mt-4 text-sm text-text-secondary">{copy.analysisUnavailable}</p> : <div className="mt-5 space-y-4">{factors.map((factor) => {
       const positive = factor.contribution_mad >= 0; const label = FACTOR_LABELS[factor.key]?.[locale === 'ar' ? 'ar' : 'fr'] || factor.key;
       return <div key={factor.key}><div className="flex items-center justify-between gap-3 text-sm"><span className="font-semibold">{label}</span><span className={`flex items-center gap-1 tabular-nums ${positive ? 'text-emerald-700' : 'text-rose-700'}`}>{positive ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}{positive ? '+' : '−'}{money(Math.abs(factor.contribution_mad))} MAD</span></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100"><div className={`h-full rounded-full ${positive ? 'bg-emerald-500' : 'bg-rose-500'}`} style={{ width: `${Math.max(4, Math.abs(factor.contribution_mad) / max * 100)}%` }} /></div></div>;
-    })}</div>
+    })}</div>}
   </CardSurface>;
 }
 
-function Comparables({ prediction, locale, copy, money }: { prediction: PredictResponse; locale: string; copy: any; money: (value: number) => string }) {
+function Comparables({ prediction, loading, locale, copy, money }: { prediction: PredictResponse; loading: boolean; locale: string; copy: any; money: (value: number) => string }) {
   const comparables = prediction.comparables || [];
   return <CardSurface className="p-5 sm:p-6"><div className="flex items-center gap-3"><Building2 className="h-5 w-5 text-brand-blue" /><h2 className="text-lg font-bold">{copy.comparablesTitle}</h2></div>
     <p className="mt-2 text-sm leading-6 text-text-secondary">{copy.comparablesDisclaimer}</p>
-    <div className="mt-5 grid gap-3">{comparables.map((item, index) => <article key={`${item.neighborhood}-${item.area}-${item.listing_price_mad}-${index}`} className="rounded-control border border-border-medium p-4">
+    {loading && !comparables.length ? <AnalysisLoading copy={copy} /> : !comparables.length ? <p className="mt-4 text-sm text-text-secondary">{copy.analysisUnavailable}</p> : <div className="mt-5 grid gap-3">{comparables.map((item, index) => <article key={`${item.neighborhood}-${item.area}-${item.listing_price_mad}-${index}`} className="rounded-control border border-border-medium p-4">
       <div className="flex flex-wrap items-start justify-between gap-2"><div><p className="font-semibold">{item.neighborhood} · {item.property_type}</p><p className="mt-1 text-xs text-text-secondary">{item.area} m² · {item.rooms} {copy.rooms.toLocaleLowerCase(locale)} · {item.bedrooms} {copy.bedrooms.toLocaleLowerCase(locale)}</p></div><p className="font-bold tabular-nums">{money(item.listing_price_mad)} MAD</p></div>
       <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-text-secondary">{item.same_neighborhood ? <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-emerald-800">{copy.sameNeighborhood}</span> : null}<span className="rounded-full bg-slate-100 px-2.5 py-1">{copy.areaDifference}: {money(item.area_difference_m2)} m²</span></div>
-    </article>)}</div>
+    </article>)}</div>}
   </CardSurface>;
 }
 
@@ -84,7 +84,7 @@ function Simulator({ input, supported, original, copy, money }: { input: Casabla
     if (loading || Number(scenario.area) <= 0 || Number(scenario.floor) < 0) return;
     setLoading(true); setError('');
     try {
-      const result = await predictCasablanca({ ...input, area: Number(scenario.area), floor: Number(scenario.floor), current_state: scenario.current_state || null, age: scenario.age || null }, { includeContext: false });
+      const result = await predictCasablanca({ ...input, area: Number(scenario.area), floor: Number(scenario.floor), current_state: scenario.current_state || null, age: scenario.age || null });
       setSimulated(result.estimated_price_mad);
     } catch (reason) { setError(reason instanceof Error ? reason.message : copy.unavailable); }
     finally { setLoading(false); }
@@ -99,6 +99,7 @@ function Simulator({ input, supported, original, copy, money }: { input: Casabla
 function SmallInput({ label, type, value, onChange }: { label: string; type: string; value: string; onChange: (value: string) => void }) { return <label><span className="mb-2 block text-xs font-semibold">{label}</span><input type={type} min="0" value={value} onChange={(event) => onChange(event.target.value)} className="h-11 w-full rounded-control border border-border-medium bg-background px-3 outline-none focus:border-brand-blue focus:shadow-focus" /></label>; }
 function SmallSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (value: string) => void; options: string[] }) { return <label><span className="mb-2 block text-xs font-semibold">{label}</span><select value={value} onChange={(event) => onChange(event.target.value)} className="h-11 w-full rounded-control border border-border-medium bg-background px-3 outline-none focus:border-brand-blue focus:shadow-focus"><option value="">—</option>{options.map((option) => <option key={option}>{option}</option>)}</select></label>; }
 function Value({ label, value }: { label: string; value: string }) { return <div><dt className="text-xs text-text-secondary">{label}</dt><dd className="mt-1 font-bold tabular-nums">{value}</dd></div>; }
+function AnalysisLoading({ copy }: { copy: any }) { return <div className="mt-4 flex items-center gap-3 text-sm text-text-secondary" aria-live="polite"><span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-blue/20 border-t-brand-blue" />{copy.analysisLoading}</div>; }
 
 function useCountUp(target: number) {
   const [value, setValue] = useState(0);

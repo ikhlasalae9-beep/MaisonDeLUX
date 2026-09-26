@@ -23,9 +23,7 @@ MODEL_REGISTRY = {
 }
 
 
-def predict_for_city(
-    payload: Mapping[str, Any], *, allow_prepared: bool = False, include_context: bool = True
-) -> dict[str, Any]:
+def _public_entry(payload: Mapping[str, Any], *, allow_prepared: bool = False) -> dict[str, Any]:
     city = payload.get("city") if isinstance(payload, Mapping) else None
     key = city.strip().casefold() if isinstance(city, str) else ""
     entry = MODEL_REGISTRY.get(key)
@@ -33,4 +31,13 @@ def predict_for_city(
         raise ModelRegistryError("No model is registered for this city")
     if not entry["public_enabled"] and not allow_prepared:
         raise ModelRegistryError("This city model is prepared but not publicly enabled")
-    return entry["predict"](payload, include_context=include_context)
+    return entry
+
+
+def predict_for_city(payload: Mapping[str, Any], *, allow_prepared: bool = False) -> dict[str, Any]:
+    return _public_entry(payload, allow_prepared=allow_prepared)["predict"](payload)
+
+
+def context_for_city(payload: Mapping[str, Any], *, allow_prepared: bool = False) -> dict[str, Any]:
+    _public_entry(payload, allow_prepared=allow_prepared)
+    return casablanca.prediction_context(payload)

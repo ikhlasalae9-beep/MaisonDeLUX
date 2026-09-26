@@ -13,6 +13,7 @@ from backend.inference.casablanca import (
     load_manifest,
     load_model,
     predict,
+    prediction_context,
     transform,
 )
 from backend.inference.registry import ModelRegistryError, predict_for_city
@@ -109,8 +110,9 @@ def test_valid_property_reaches_model_without_price_inverse_transform(valid_payl
 
 
 def test_prediction_context_uses_native_shap_and_real_reference_rows(valid_payload):
-    response = predict(valid_payload)
-    explanation = response["explanation"]
+    prediction = predict(valid_payload)
+    context = prediction_context(valid_payload)
+    explanation = context["explanation"]
     assert explanation["method"] == "catboost_shap_values"
     assert {factor["key"] for factor in explanation["factors"]} == {
         "property_type", "neighborhood", "area", "rooms", "bedrooms",
@@ -119,9 +121,9 @@ def test_prediction_context_uses_native_shap_and_real_reference_rows(valid_paylo
     reconstructed = explanation["baseline_mad"] + sum(
         factor["contribution_mad"] for factor in explanation["factors"]
     )
-    assert reconstructed == pytest.approx(response["estimated_price_mad"], abs=6)
+    assert reconstructed == pytest.approx(prediction["estimated_price_mad"], abs=6)
 
-    comparables = response["comparables"]
+    comparables = context["comparables"]
     assert 1 <= len(comparables) <= 4
     assert all(item["property_type"] == "Appartements" for item in comparables)
     with (ROOT / "ml/notebooks/mubawab_listings_clean.csv").open(encoding="utf-8", newline="") as stream:
@@ -134,13 +136,12 @@ def test_prediction_context_uses_native_shap_and_real_reference_rows(valid_paylo
     ) for item in comparables)
 
 
-def test_context_can_be_skipped_without_changing_prediction(valid_payload):
-    enriched = predict(valid_payload)
-    lightweight = predict(valid_payload, include_context=False)
-    assert lightweight["estimated_price_mad"] == enriched["estimated_price_mad"]
-    assert lightweight["model_version"] == enriched["model_version"]
-    assert "explanation" not in lightweight
-    assert "comparables" not in lightweight
+def test_base_prediction_never_eagerly_runs_phase_a_context(valid_payload):
+    response = predict(valid_payload)
+    assert response["estimated_price_mad"] > 0
+    assert response["model_version"] == "casablanca-catboost-v1"
+    assert "explanation" not in response
+    assert "comparables" not in response
 
 
 def test_unsupported_city_and_property_type_are_rejected(valid_payload):

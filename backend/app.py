@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
 
 from backend.inference.casablanca import CasablancaInferenceError, load_manifest, load_metadata, load_model
-from backend.inference.registry import MODEL_REGISTRY, ModelRegistryError, predict_for_city
+from backend.inference.registry import MODEL_REGISTRY, ModelRegistryError, context_for_city, predict_for_city
 
 try:
     import pandas as pd
@@ -207,8 +207,7 @@ def city_estimate():
     if not isinstance(payload, dict):
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
     try:
-        include_context = request.args.get('context', '1') != '0'
-        return jsonify(**predict_for_city(payload, include_context=include_context))
+        return jsonify(**predict_for_city(payload))
     except (CasablancaInferenceError, ModelRegistryError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
@@ -217,6 +216,20 @@ def city_estimate():
             error="Le service d'estimation de Casablanca est momentanément indisponible.",
             code='model_unavailable',
         ), 503
+
+
+@app.post('/api/ml/context')
+def city_estimate_context():
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
+    try:
+        return jsonify(**context_for_city(payload))
+    except (CasablancaInferenceError, ModelRegistryError) as error:
+        return jsonify(error=str(error), code='unsupported_request'), 400
+    except Exception:
+        app.logger.exception('Optional Casablanca context failed')
+        return jsonify(unavailable=['explanation', 'comparables']), 200
 
 
 @app.get('/api/ml/metadata')

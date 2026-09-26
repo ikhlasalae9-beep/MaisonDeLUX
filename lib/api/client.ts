@@ -1,4 +1,4 @@
-import { PredictPayload, PredictResponse, CitiesResponse, CasablancaMetadata, CasablancaPredictPayload } from './types';
+import { PredictPayload, PredictResponse, CitiesResponse, CasablancaContextResponse, CasablancaMetadata, CasablancaPredictPayload } from './types';
 
 
 /**
@@ -47,17 +47,25 @@ export async function predictProperty(
   }
 }
 
+let casablancaMetadataRequest: Promise<CasablancaMetadata> | null = null;
 export async function fetchCasablancaMetadata(): Promise<CasablancaMetadata> {
-  const response = await fetch('/api/ml/metadata', { cache: 'no-store' });
-  if (!response.ok) throw new Error('Casablanca model metadata unavailable');
-  return response.json();
+  if (!casablancaMetadataRequest) {
+    casablancaMetadataRequest = fetch('/api/ml/metadata', { cache: 'no-store' }).then((response) => {
+      if (!response.ok) throw new Error('Casablanca model metadata unavailable');
+      return response.json();
+    }).catch((error) => {
+      casablancaMetadataRequest = null;
+      throw error;
+    });
+  }
+  return casablancaMetadataRequest;
 }
 
-export async function predictCasablanca(payload: CasablancaPredictPayload, options?: { includeContext?: boolean }): Promise<PredictResponse> {
+export async function predictCasablanca(payload: CasablancaPredictPayload): Promise<PredictResponse> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch(`/api/ml/estimate${options?.includeContext === false ? '?context=0' : ''}`, {
+    const response = await fetch('/api/ml/estimate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -70,6 +78,16 @@ export async function predictCasablanca(payload: CasablancaPredictPayload, optio
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function fetchCasablancaContext(payload: CasablancaPredictPayload): Promise<CasablancaContextResponse> {
+  const response = await fetch('/api/ml/context', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) throw new Error('Optional Casablanca analysis unavailable');
+  return response.json();
 }
 
 /**

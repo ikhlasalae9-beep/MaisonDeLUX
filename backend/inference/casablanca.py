@@ -13,7 +13,6 @@ from typing import Any, Mapping
 
 import joblib
 import numpy as np
-from catboost import Pool
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -155,6 +154,9 @@ def transform(payload: Mapping[str, Any]) -> np.ndarray:
 
 
 def _local_contributions(matrix: np.ndarray) -> dict[str, Any]:
+    # Keep CatBoost's explainability module off metadata/page-startup paths.
+    from catboost import Pool
+
     names = load_manifest()["model_feature_names"]
     shap = load_model().get_feature_importance(
         Pool(matrix, feature_names=names), type="ShapValues"
@@ -240,18 +242,33 @@ def _comparables(payload: Mapping[str, Any], *, limit: int = 4) -> list[dict[str
     ]
 
 
-def predict(payload: Mapping[str, Any], *, include_context: bool = True) -> dict[str, Any]:
+def prediction_context(payload: Mapping[str, Any]) -> dict[str, Any]:
+    """Optional Phase A analysis; failures here must never block base inference."""
+    matrix = transform(payload)
+    response: dict[str, Any] = {}
+    unavailable: list[str] = []
+    try:
+        response["explanation"] = _local_contributions(matrix)
+    except Exception:
+        unavailable.append("explanation")
+    try:
+        response["comparables"] = _comparables(payload)
+    except Exception:
+        unavailable.append("comparables")
+    if unavailable:
+        response["unavailable"] = unavailable
+    return response
+
+
+def predict(payload: Mapping[str, Any]) -> dict[str, Any]:
+    """Run only the approved preprocessing -> CatBoost prediction path."""
     matrix = transform(payload)
     raw_price = float(load_model().predict(matrix)[0])
     if not math.isfinite(raw_price) or raw_price <= 0:
         raise RuntimeError("Casablanca model returned an invalid price")
     metadata = load_metadata()
-    response = {
+    return {
         "estimated_price_mad": round(raw_price),
         "currency": "MAD",
         "model_version": metadata["model_version"],
     }
-    if include_context:
-        response["explanation"] = _local_contributions(matrix)
-        response["comparables"] = _comparables(payload)
-    return response

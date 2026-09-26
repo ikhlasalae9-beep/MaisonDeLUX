@@ -2,11 +2,16 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
-import { fetchCasablancaMetadata, predictCasablanca } from '@/lib/api/client';
+import dynamic from 'next/dynamic';
+import { fetchCasablancaContext, fetchCasablancaMetadata, predictCasablanca } from '@/lib/api/client';
 import type { CasablancaMetadata, CasablancaPredictPayload, PredictResponse } from '@/lib/api/types';
 import { Button } from '@/components/common/Button';
 import { CardSurface, StatePanel } from '@/components/city/CityFoundation';
-import { CasablancaEstimateResult } from '@/components/estimation/CasablancaEstimateResult';
+
+const CasablancaEstimateResult = dynamic(
+  () => import('@/components/estimation/CasablancaEstimateResult').then((module) => module.CasablancaEstimateResult),
+  { ssr: false },
+);
 
 const initialForm = { property_type: '', neighborhood: '', area: '', rooms: '', bedrooms: '', bathrooms: '', floor: '', current_state: '', age: '' };
 export type CompletedCasablancaEstimation = { prediction: PredictResponse; inputFeatures: CasablancaPredictPayload; estimatedAt: string };
@@ -18,7 +23,9 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [metadataLoading, setMetadataLoading] = useState(true);
+  const [contextLoading, setContextLoading] = useState(false);
   const submittingRef = useRef(false);
+  const contextKeyRef = useRef('');
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { fetchCasablancaMetadata().then((value) => { if (value.public_enabled && value.status === 'available') setMetadata(value); }).catch(() => undefined).finally(() => setMetadataLoading(false)); }, []);
@@ -37,13 +44,25 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
     try {
       const inputFeatures: CasablancaPredictPayload = { city: 'Casablanca', property_type: form.property_type, neighborhood: form.neighborhood, area: Number(form.area), rooms: Number(form.rooms), bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms), floor: Number(form.floor), current_state: form.current_state || null, age: form.age || null };
       const prediction = await predictCasablanca(inputFeatures);
-      setResult({ prediction, inputFeatures, estimatedAt: new Date().toISOString() });
+      const estimatedAt = new Date().toISOString();
+      contextKeyRef.current = estimatedAt;
+      setResult({ prediction, inputFeatures, estimatedAt });
+      setContextLoading(true);
+      void fetchCasablancaContext(inputFeatures).then((context) => {
+        setResult((current) => current?.estimatedAt === estimatedAt
+          ? { ...current, prediction: { ...current.prediction, explanation: context.explanation, comparables: context.comparables } }
+          : current);
+      }).catch((contextError) => console.warn('Optional estimation context unavailable:', contextError)).finally(() => {
+        if (contextKeyRef.current === estimatedAt) setContextLoading(false);
+      });
       void fetch('/api/analytics/events', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ event_key: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : undefined,
           city: inputFeatures.city, model_version: prediction.model_version || metadata.model_version,
           input_features: inputFeatures, estimated_price_mad: prediction.estimated_price_mad }),
-      }).catch((loggingError) => console.error('Analytics logging failed:', loggingError));
+      }).then((response) => response.json()).then((analytics) => {
+        if (!analytics.stored) console.warn('Analytics persistence unavailable');
+      }).catch((loggingError) => console.warn('Analytics persistence unavailable:', loggingError));
     }
     catch (reason) { setError(reason instanceof Error ? reason.message : copy.unavailable); }
     finally { submittingRef.current = false; setLoading(false); }
@@ -75,7 +94,7 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
       {error ? <div role="alert" className="mt-5 flex items-start gap-2 rounded-control border border-status-danger/25 bg-status-danger/10 p-4 text-sm text-status-danger"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div> : null}
       <Button type="submit" size="lg" loading={loading} className="mt-6 min-h-12 w-full sm:w-auto">{loading ? copy.loading : copy.submit}</Button>
     </fieldset></form></CardSurface>
-    <div ref={resultRef} className="scroll-mt-24">{loading ? <ResultSkeleton copy={copy} /> : result ? <CasablancaEstimateResult completed={result} supported={metadata.supported} locale={locale} copy={copy} onReset={() => setResult(null)} /> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div>
+    <div ref={resultRef} className="scroll-mt-24">{loading ? <ResultSkeleton copy={copy} /> : result ? <CasablancaEstimateResult completed={result} supported={metadata.supported} contextLoading={contextLoading} locale={locale} copy={copy} onReset={() => { contextKeyRef.current = ''; setResult(null); setContextLoading(false); }} /> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div>
   </div>;
 }
 
