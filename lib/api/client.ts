@@ -1,4 +1,4 @@
-import { PredictPayload, PredictResponse, CitiesResponse, CasablancaContextResponse, CasablancaMetadata, CasablancaPredictPayload } from './types';
+import { PredictPayload, PredictResponse, CitiesResponse, CasablancaContextResponse, CasablancaPredictPayload } from './types';
 
 
 /**
@@ -45,20 +45,6 @@ export async function predictProperty(
   } finally {
     clearTimeout(timeoutId);
   }
-}
-
-let casablancaMetadataRequest: Promise<CasablancaMetadata> | null = null;
-export async function fetchCasablancaMetadata(): Promise<CasablancaMetadata> {
-  if (!casablancaMetadataRequest) {
-    casablancaMetadataRequest = fetch('/api/ml/metadata', { cache: 'no-store' }).then((response) => {
-      if (!response.ok) throw new Error('Casablanca model metadata unavailable');
-      return response.json();
-    }).catch((error) => {
-      casablancaMetadataRequest = null;
-      throw error;
-    });
-  }
-  return casablancaMetadataRequest;
 }
 
 export async function predictCasablanca(payload: CasablancaPredictPayload): Promise<PredictResponse> {

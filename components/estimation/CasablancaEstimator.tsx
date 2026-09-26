@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { fetchCasablancaContext, fetchCasablancaMetadata, predictCasablanca } from '@/lib/api/client';
+import { fetchCasablancaContext, predictCasablanca } from '@/lib/api/client';
 import type { CasablancaMetadata, CasablancaPredictPayload, PredictResponse } from '@/lib/api/types';
 import { Button } from '@/components/common/Button';
 import { CardSurface, StatePanel } from '@/components/city/CityFoundation';
@@ -16,29 +16,27 @@ const CasablancaEstimateResult = dynamic(
 const initialForm = { property_type: '', neighborhood: '', area: '', rooms: '', bedrooms: '', bathrooms: '', floor: '', current_state: '', age: '' };
 export type CompletedCasablancaEstimation = { prediction: PredictResponse; inputFeatures: CasablancaPredictPayload; estimatedAt: string };
 
-export function CasablancaEstimator({ locale, copy }: { locale: string; copy: any }) {
-  const [metadata, setMetadata] = useState<CasablancaMetadata | null>(null);
+export function CasablancaEstimator({ locale, copy, metadata }: { locale: string; copy: any; metadata: CasablancaMetadata }) {
   const [form, setForm] = useState(initialForm);
   const [result, setResult] = useState<CompletedCasablancaEstimation | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [metadataLoading, setMetadataLoading] = useState(true);
   const [contextLoading, setContextLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
   const submittingRef = useRef(false);
   const contextKeyRef = useRef('');
   const resultRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { fetchCasablancaMetadata().then((value) => { if (value.public_enabled && value.status === 'available') setMetadata(value); }).catch(() => undefined).finally(() => setMetadataLoading(false)); }, []);
   const update = (field: keyof typeof initialForm, value: string) => setForm((current) => ({ ...current, [field]: value }));
   const labelFor = (value: string) => locale !== 'ar' ? (value === 'appartement' ? 'Appartement' : value === 'villa' ? 'Villa' : value) : value === 'appartement' ? 'شقة' : value === 'villa' ? 'فيلا' : value;
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (submittingRef.current) return;
-    setError(''); setResult(null);
+    setError('');
     const required = ['property_type', 'neighborhood', 'area', 'rooms', 'bedrooms', 'bathrooms', 'floor'] as const;
     if (required.some((field) => form[field] === '') || Number(form.area) <= 0 || [form.rooms, form.bedrooms, form.bathrooms].some((value) => Number(value) < 1) || Number(form.floor) < 0) { setError(copy.requiredError); return; }
-    if (!metadata) { setError(copy.unavailable); return; }
     submittingRef.current = true;
     setLoading(true);
     try {
@@ -47,6 +45,7 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
       const estimatedAt = new Date().toISOString();
       contextKeyRef.current = estimatedAt;
       setResult({ prediction, inputFeatures, estimatedAt });
+      setEditing(false);
       setContextLoading(true);
       void fetchCasablancaContext(inputFeatures).then((context) => {
         setResult((current) => current?.estimatedAt === estimatedAt
@@ -68,13 +67,11 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
     finally { submittingRef.current = false; setLoading(false); }
   }
 
+  const resultTimestamp = result?.estimatedAt;
   useEffect(() => {
-    if (!result || !resultRef.current || !window.matchMedia('(max-width: 1023px)').matches) return;
+    if (!resultTimestamp || !resultRef.current || editing) return;
     requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-  }, [result]);
-
-  if (metadataLoading) return <StatePanel title={copy.metadataLoading} busy />;
-  if (!metadata) return <StatePanel title={copy.unavailable} description={copy.disclaimer} />;
+  }, [resultTimestamp, editing]);
 
   const fields = [
     { key: 'area', label: copy.area, min: 1, step: '0.1' }, { key: 'rooms', label: copy.rooms, min: 1, step: '1' },
@@ -82,20 +79,25 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
     { key: 'floor', label: copy.floor, min: 0, step: '1' },
   ] as const;
 
-  return <div className="grid gap-5 sm:gap-6 lg:grid-cols-[1.45fr_.85fr] lg:items-start">
-    <CardSurface className="p-4 min-[360px]:p-5 sm:p-8"><form onSubmit={submit} noValidate><fieldset disabled={loading} className="disabled:opacity-70">
-      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
-        <SelectField label={copy.propertyType} value={form.property_type} onChange={(value) => update('property_type', value)} options={metadata.supported.property_types} placeholder={copy.select} labelFor={labelFor} />
-        <SelectField label={copy.neighborhood} value={form.neighborhood} onChange={(value) => update('neighborhood', value)} options={metadata.supported.neighborhoods} placeholder={copy.select} />
-        {fields.map((field) => <label key={field.key}><span className="mb-2 block text-sm font-semibold">{field.label}</span><input type="number" inputMode={field.step === '1' ? 'numeric' : 'decimal'} min={field.min} step={field.step} value={form[field.key]} onChange={(event) => update(field.key, event.target.value)} className="h-12 w-full rounded-control border border-border-medium bg-background px-4 text-base outline-none focus:border-brand-blue focus:shadow-focus" required /></label>)}
-        <SelectField label={`${copy.condition} (${copy.optional})`} value={form.current_state} onChange={(value) => update('current_state', value)} options={metadata.supported.current_states} placeholder={copy.select} />
-        <SelectField label={`${copy.age} (${copy.optional})`} value={form.age} onChange={(value) => update('age', value)} options={metadata.supported.ages} placeholder={copy.select} />
-      </div>
-      {error ? <div role="alert" className="mt-5 flex items-start gap-2 rounded-control border border-status-danger/25 bg-status-danger/10 p-4 text-sm text-status-danger"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div> : null}
-      <Button type="submit" size="lg" loading={loading} className="mt-6 min-h-12 w-full sm:w-auto">{loading ? copy.loading : copy.submit}</Button>
-    </fieldset></form></CardSurface>
-    <div ref={resultRef} className="scroll-mt-24">{loading ? <ResultSkeleton copy={copy} /> : result ? <CasablancaEstimateResult completed={result} supported={metadata.supported} contextLoading={contextLoading} locale={locale} copy={copy} onReset={() => { contextKeyRef.current = ''; setResult(null); setContextLoading(false); }} /> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div>
+  const formCard = <EstimatorForm form={form} fields={fields} metadata={metadata} copy={copy} loading={loading} error={error} labelFor={labelFor} update={update} submit={submit} />;
+  const edit = () => { setEditing(true); requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })); };
+
+  if (result) return <div className="space-y-5 sm:space-y-6">
+    <div ref={formRef} className="scroll-mt-28">{editing ? formCard : <CardSurface className="hidden items-center justify-between gap-4 p-4 lg:flex"><div><p className="text-sm font-bold">{result.inputFeatures.neighborhood} · {labelFor(result.inputFeatures.property_type)}</p><p className="mt-1 text-xs text-text-secondary">{result.inputFeatures.area} m² · {result.inputFeatures.rooms} {copy.rooms.toLocaleLowerCase(locale)}</p></div><button type="button" onClick={edit} className="min-h-11 rounded-control border border-border-medium px-4 text-sm font-semibold text-brand-blue transition hover:border-brand-blue">← {copy.newEstimate}</button></CardSurface>}</div>
+    <div ref={resultRef} className="scroll-mt-32"><CasablancaEstimateResult completed={result} supported={metadata.supported} contextLoading={contextLoading} locale={locale} copy={copy} onEdit={edit} /></div>
   </div>;
+
+  return <div className="grid gap-5 sm:gap-6 lg:grid-cols-[1.45fr_.85fr] lg:items-start"><div ref={formRef} className="scroll-mt-28">{formCard}</div><div ref={resultRef} className="scroll-mt-32">{loading ? <ResultSkeleton copy={copy} /> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div></div>;
+}
+
+function EstimatorForm({ form, fields, metadata, copy, loading, error, labelFor, update, submit }: { form: typeof initialForm; fields: ReadonlyArray<{ key: keyof typeof initialForm; label: string; min: number; step: string }>; metadata: CasablancaMetadata; copy: any; loading: boolean; error: string; labelFor: (value: string) => string; update: (field: keyof typeof initialForm, value: string) => void; submit: (event: FormEvent) => void }) {
+  return <CardSurface className="p-4 min-[360px]:p-5 sm:p-8"><form onSubmit={submit} noValidate><fieldset disabled={loading} className="disabled:opacity-70"><div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
+    <SelectField label={copy.propertyType} value={form.property_type} onChange={(value) => update('property_type', value)} options={metadata.supported.property_types} placeholder={copy.select} labelFor={labelFor} />
+    <SelectField label={copy.neighborhood} value={form.neighborhood} onChange={(value) => update('neighborhood', value)} options={metadata.supported.neighborhoods} placeholder={copy.select} />
+    {fields.map((field) => <label key={field.key}><span className="mb-2 block text-sm font-semibold">{field.label}</span><input type="number" inputMode={field.step === '1' ? 'numeric' : 'decimal'} min={field.min} step={field.step} value={form[field.key]} onChange={(event) => update(field.key, event.target.value)} className="h-12 w-full rounded-control border border-border-medium bg-background px-4 text-base outline-none focus:border-brand-blue focus:shadow-focus" required /></label>)}
+    <SelectField label={`${copy.condition} (${copy.optional})`} value={form.current_state} onChange={(value) => update('current_state', value)} options={metadata.supported.current_states} placeholder={copy.select} />
+    <SelectField label={`${copy.age} (${copy.optional})`} value={form.age} onChange={(value) => update('age', value)} options={metadata.supported.ages} placeholder={copy.select} />
+  </div>{error ? <div role="alert" className="mt-5 flex items-start gap-2 rounded-control border border-status-danger/25 bg-status-danger/10 p-4 text-sm text-status-danger"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div> : null}<Button type="submit" size="lg" loading={loading} className="mt-6 min-h-12 w-full sm:w-auto">{loading ? copy.loading : copy.submit}</Button></fieldset></form></CardSurface>;
 }
 
 function ResultSkeleton({ copy }: { copy: any }) {

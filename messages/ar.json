@@ -247,12 +247,16 @@
       "cityLabel": "المدينة",
       "estimatedAt": "تم إنشاء التقدير في",
       "understandTitle": "فهم تقديري",
+      "influenceSubtitle": "تأثير خصائص العقار على هذا التقدير",
       "understandIntro": "مساهمات محلية يحسبها نموذج CatBoost لهذا التقدير، وتوضح تأثير كل خاصية صعوداً أو نزولاً دون إثبات علاقة سببية.",
+      "upwardInfluence": "مساهمة نحو الارتفاع",
+      "downwardInfluence": "مساهمة نحو الانخفاض",
       "analysisLoading": "جارٍ تحميل التحليل الإضافي...",
       "analysisUnavailable": "هذا التحليل الإضافي غير متاح مؤقتاً، ويبقى التقدير صالحاً.",
       "comparablesTitle": "عقارات مماثلة",
       "comparablesDisclaimer": "عقارات مشابهة من البيانات المرجعية. المبالغ أسعار معروضة في الإعلانات وليست أسعار معاملات مؤكدة.",
       "sameNeighborhood": "نفس الحي",
+      "closestComparable": "الأقرب",
       "areaDifference": "فرق المساحة",
       "simulatorTitle": "محاكاة سيناريو آخر",
       "simulatorIntro": "عدّلوا الخصائص المدعومة ثم استخدموا نموذج الدار البيضاء نفسه.",
@@ -261,7 +265,11 @@
       "simulationSentence": "وفقاً للنموذج، بهذه الخصائص...",
       "originalEstimate": "التقدير الأصلي",
       "simulatedEstimate": "التقدير المحاكى",
-      "difference": "الفرق المطلق"
+      "difference": "الفرق المطلق",
+      "currentEstimate": "التقدير الحالي",
+      "simulatedScenario": "السيناريو المحاكى",
+      "variation": "التغير",
+      "noVariation": "لا يوجد تغير — معايير المحاكاة مطابقة لمعايير التقدير الأصلي."
     }
   },
   "cityExperience": {

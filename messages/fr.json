@@ -247,12 +247,16 @@
       "cityLabel": "Ville",
       "estimatedAt": "Estimation générée le",
       "understandTitle": "Comprendre mon estimation",
+      "influenceSubtitle": "Influence des caractéristiques sur cette estimation",
       "understandIntro": "Contributions locales calculées par le modèle CatBoost pour cette estimation. Elles indiquent l'influence à la hausse ou à la baisse de chaque caractéristique, sans établir de causalité.",
+      "upwardInfluence": "Contribution à la hausse",
+      "downwardInfluence": "Contribution à la baisse",
       "analysisLoading": "Chargement de l'analyse complémentaire...",
       "analysisUnavailable": "Cette analyse complémentaire est momentanément indisponible. L'estimation reste valide.",
       "comparablesTitle": "Biens comparables",
       "comparablesDisclaimer": "Biens similaires issus des données de référence. Les montants sont des prix affichés d'annonce, pas des prix de transaction confirmés.",
       "sameNeighborhood": "Même quartier",
+      "closestComparable": "Le plus proche",
       "areaDifference": "Écart de surface",
       "simulatorTitle": "Simuler un autre scénario",
       "simulatorIntro": "Ajustez des caractéristiques déjà prises en charge, puis interrogez le même modèle Casablanca.",
@@ -261,7 +265,11 @@
       "simulationSentence": "Selon le modèle, avec ces caractéristiques...",
       "originalEstimate": "Estimation originale",
       "simulatedEstimate": "Estimation simulée",
-      "difference": "Écart absolu"
+      "difference": "Écart absolu",
+      "currentEstimate": "Estimation actuelle",
+      "simulatedScenario": "Scénario simulé",
+      "variation": "Variation",
+      "noVariation": "Aucune variation — les paramètres simulés sont identiques à l'estimation initiale."
     }
   },
   "cityExperience": {
