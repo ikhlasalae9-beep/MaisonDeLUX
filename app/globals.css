@@ -180,6 +180,24 @@ html[dir="rtl"] h4 {
   outline-offset: 2px;
 }
 
+.auth-input {
+  min-height: 3rem;
+  width: 100%;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-control);
+  background: var(--bg-surface);
+  padding-inline: 1rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.auth-input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
 /* Restrained geometric texture for future city surfaces. */
 .zellige-pattern {
   position: absolute;

@@ -7,8 +7,8 @@ from api.index import app
 ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture
-def client():
-    return app.test_client()
+def client(signed_client):
+    return signed_client
 
 def test_model_file_loading():
     """Verify that model artifacts and reference files exist and are readable."""

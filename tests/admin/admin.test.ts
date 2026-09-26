@@ -86,8 +86,8 @@ test('analytics insert is idempotent and overview supports empty/populated data'
   assert.equal(database.records[0].city_id, 1); assert.equal(database.records[0].model_version_id, 7);
   assert.equal((await getOverview('all') as any).kpis.total, 1);
   const response = await analyticsRoute(new NextRequest('http://localhost/api/analytics/events', { method: 'POST', body: JSON.stringify(event) }));
-  assert.equal(response.status, 202);
+  assert.equal(response.status, 410); // Client-authored predictions must never enter analytics.
   const invalid = await analyticsRoute(new NextRequest('http://localhost/api/analytics/events', { method: 'POST',
     body: JSON.stringify({ ...event, input_features: undefined, property_type: 'appartement', area: 90 }) }));
-  assert.equal(invalid.status, 400);
+  assert.equal(invalid.status, 410);
 });

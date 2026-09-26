@@ -22,7 +22,7 @@ PACKAGE_DIR = ROOT / "models" / "casablanca" / "v1"
 MODEL_PATH = PACKAGE_DIR / "model.pkl"
 MANIFEST_PATH = PACKAGE_DIR / "preprocessing.json"
 METADATA_PATH = PACKAGE_DIR / "metadata.json"
-REFERENCE_DATASET_PATH = ROOT / "ml" / "notebooks" / "mubawab_listings_clean.csv"
+REFERENCE_DATASET_PATH = ROOT / "server-data" / "casablanca-market.csv"
 LOGGER = logging.getLogger(__name__)
 
 

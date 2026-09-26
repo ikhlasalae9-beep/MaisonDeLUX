@@ -5,6 +5,7 @@ import struct
 from pathlib import Path
 from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
+from backend.security import require_gateway
 
 from backend.inference.casablanca import CasablancaInferenceError, load_manifest, load_metadata, load_model
 from backend.inference.registry import MODEL_REGISTRY, ModelRegistryError, context_for_city, predict_for_city
@@ -203,6 +204,9 @@ def legacy_estimate_disabled():
 
 @app.post('/api/ml/estimate')
 def city_estimate():
+    denied = require_gateway()
+    if denied is not None:
+        return denied
     payload = request.get_json(silent=True)
     if not isinstance(payload, dict):
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
@@ -220,6 +224,9 @@ def city_estimate():
 
 @app.post('/api/ml/context')
 def city_estimate_context():
+    denied = require_gateway()
+    if denied is not None:
+        return denied
     payload = request.get_json(silent=True)
     if not isinstance(payload, dict):
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
@@ -253,6 +260,9 @@ def city_model_metadata():
 
 @app.get('/api/ml/health')
 def city_model_health():
+    denied = require_gateway()
+    if denied is not None:
+        return denied
     entry = MODEL_REGISTRY['casablanca']
     try:
         load_model()

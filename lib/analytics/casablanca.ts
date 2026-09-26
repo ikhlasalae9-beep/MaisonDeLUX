@@ -3,7 +3,7 @@ import path from 'node:path';
 import preprocessing from '@/models/casablanca/v1/preprocessing.json';
 import type { CountPoint, DataQualityAnalytics, DriftAnalytics, DriftFeature, MarketAnalytics, NumericDistribution } from './types';
 
-const DATASET = 'ml/notebooks/mubawab_listings_clean.csv';
+const DATASET = 'server-data/casablanca-market.csv';
 export const MIN_NEIGHBORHOOD_OBSERVATIONS = 8;
 export const MIN_DRIFT_OBSERVATIONS = 30;
 

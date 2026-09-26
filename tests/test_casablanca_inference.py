@@ -23,8 +23,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ORIGINALS = {
     "ml/notebooks/modele_MaisonDeLUX.pkl": "b5ba50e9b6fd35203b556c840fe97170ee23441a6cce0ffa927f3c09944b8e1d",
     "ml/notebooks/maisondelux_notebook1.ipynb": "d6868054da607581fe19aa25e5056267cc8228874f5ed87e3bf8bf5b14939312",
-    "ml/notebooks/mubawab_listings_clean.csv": "45331a0f1615c6fe3bdd77051e3c4b5e3e5411f43223e2c4eedc2d4443f5bcfe",
 }
+DATASET_NORMALIZED_SHA256 = "65e65bc43c693d8ba22016ac771510789de722dd2b56a6ecf1aeda699d027486"
 
 
 def sha256(path: Path) -> str:
@@ -50,6 +50,8 @@ def valid_payload():
 def test_original_research_files_are_unchanged_and_copy_is_identical():
     for relative_path, expected in ORIGINALS.items():
         assert sha256(ROOT / relative_path) == expected
+    dataset = (ROOT / "server-data/casablanca-market.csv").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(dataset).hexdigest() == DATASET_NORMALIZED_SHA256
     assert sha256(ROOT / "models/casablanca/v1/model.pkl") == ORIGINALS[
         "ml/notebooks/modele_MaisonDeLUX.pkl"
     ]
@@ -126,7 +128,7 @@ def test_prediction_context_uses_native_shap_and_real_reference_rows(valid_paylo
     comparables = context["comparables"]
     assert 1 <= len(comparables) <= 4
     assert all(item["property_type"] == "Appartements" for item in comparables)
-    with (ROOT / "ml/notebooks/mubawab_listings_clean.csv").open(encoding="utf-8", newline="") as stream:
+    with (ROOT / "server-data/casablanca-market.csv").open(encoding="utf-8", newline="") as stream:
         source_rows = list(csv.DictReader(stream))
     assert all(any(
         row["Localisation"] == item["neighborhood"]

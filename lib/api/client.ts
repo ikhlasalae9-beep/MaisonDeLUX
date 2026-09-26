@@ -47,7 +47,8 @@ export async function predictProperty(
   }
 }
 
-export async function predictCasablanca(payload: CasablancaPredictPayload): Promise<PredictResponse> {
+export class EstimationError extends Error { constructor(public code: string, message: string) { super(message); } }
+export async function predictCasablanca(payload: CasablancaPredictPayload, options: { eventId?: string; locale?: string; requestId?: string } = {}): Promise<PredictResponse> {
   // A Python/CatBoost serverless instance can legitimately take longer than 15s
   // to cold-start. Keep a finite guard, but do not cancel healthy cold inference.
   const predictionTimeoutMs = 60_000;
@@ -58,31 +59,33 @@ export async function predictCasablanca(payload: CasablancaPredictPayload): Prom
     controller.abort();
   }, predictionTimeoutMs);
   try {
-    const response = await fetch('/api/ml/estimate', {
+    const response = await fetch(options.eventId ? `/api/estimations/${options.eventId}/simulate` : '/api/estimations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(options.eventId ? { input: payload } : { input: payload, request_id: options.requestId || crypto.randomUUID() }),
       signal: controller.signal,
     });
     const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(body.error || `Erreur serveur (${response.status})`);
-    if (!Number.isFinite(body.estimated_price_mad) || body.estimated_price_mad <= 0) throw new Error('Réponse invalide du service.');
+    if (!response.ok) throw new EstimationError(body.code || 'SERVICE_UNAVAILABLE', body.code === 'RATE_LIMITED' ? (options.locale === 'ar' ? 'محاولات كثيرة. حاول بعد قليل.' : 'Trop de demandes. Réessayez dans un moment.') : (options.locale === 'ar' ? 'تعذر إتمام التقدير. حاول مجدداً.' : 'L’estimation n’a pas pu aboutir. Veuillez réessayer.'));
+    if (!Number.isFinite(body.estimated_price_mad) || body.estimated_price_mad <= 0) throw new Error(options.locale === 'ar' ? 'تعذر إتمام التقدير. حاول مجدداً.' : 'Réponse invalide du service.');
     return body;
   } catch (error) {
     if (timedOut) {
-      throw new Error("Le délai d'estimation a été dépassé. Veuillez réessayer.");
+      throw new Error(options.locale === 'ar' ? 'انتهت مهلة التقدير. يرجى إعادة المحاولة.' : "Le délai d'estimation a été dépassé. Veuillez réessayer.");
     }
-    throw error;
+    if (error instanceof EstimationError) throw error;
+    throw new Error(options.locale === 'ar' ? 'تعذر الاتصال بخدمة التقدير. حاول مجدداً.' : 'Connexion au service indisponible. Veuillez réessayer.');
   } finally {
     clearTimeout(timeout);
   }
 }
 
-export async function fetchCasablancaContext(payload: CasablancaPredictPayload): Promise<CasablancaContextResponse> {
-  const response = await fetch('/api/ml/context', {
+export async function fetchCasablancaContext(_payload: CasablancaPredictPayload, eventId?: string): Promise<CasablancaContextResponse> {
+  if (!eventId) throw new Error('Optional Casablanca analysis unavailable');
+  const response = await fetch(`/api/estimations/${eventId}/context`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: '{}',
   });
   if (!response.ok) throw new Error('Optional Casablanca analysis unavailable');
   return response.json();

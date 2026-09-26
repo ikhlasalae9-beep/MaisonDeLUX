@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import { getCasablancaDataQuality, getCasablancaDrift, getCasablancaMarketAnalytics } from '@/lib/analytics/casablanca';
 import { getProductionInputFeatures } from '@/lib/admin/analytics';
 import { databaseConfigured } from '@/lib/admin/db';
+import { adminGate } from '@/lib/admin/require';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const denied=await adminGate();if(denied)return denied;
   try {
     const inputs = await getProductionInputFeatures();
     const market = getCasablancaMarketAnalytics();

@@ -8,8 +8,8 @@ from api.index import app
 
 
 @pytest.fixture
-def client():
-    return app.test_client()
+def client(signed_client):
+    return signed_client
 
 
 @pytest.fixture

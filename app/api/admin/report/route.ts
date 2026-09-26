@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib';
 import { getOverview, Period, periodDays } from '@/lib/admin/analytics';
+import { adminGate } from '@/lib/admin/require';
 import { formatArea, formatCurrency, formatDate, formatInteger } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -48,6 +49,7 @@ function barChart(page: PDFPage, rows: any[], x: number, y: number, width: numbe
 }
 
 export async function GET(request: NextRequest) {
+  const denied=await adminGate(request);if(denied)return denied;
   try {
     const candidate = request.nextUrl.searchParams.get('period') as Period; const period = candidate in periodDays ? candidate : '30d';
     const data: any = await getOverview(period); const k = data.kpis || {};

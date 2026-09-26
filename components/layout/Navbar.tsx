@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import { Menu, X, ArrowRight, ArrowLeft, Sparkles, UserRound, LogOut } from 'lucide-react';
 import { BrandLogo } from '@/components/common/BrandLogo';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
@@ -18,9 +18,14 @@ interface NavbarProps {
 export function Navbar({ locale, dict }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname() || `/${locale}`;
+  useEffect(() => { let active=true;void fetch('/api/auth/session',{cache:'no-store'}).then(response=>response.json()).then(data=>{if(active)setAuthenticated(data.authenticated===true);}).catch(()=>{});return()=>{active=false;}; },[pathname]);
+  async function logout(){const response=await fetch('/api/auth/logout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({locale})});if(response.ok)window.location.assign(`/${locale}`);}
+  const accountLabel=authenticated?(locale==='ar'?'فضائي':'Mon espace'):(locale==='ar'?'تسجيل الدخول':'Connexion');
+  const accountHref=authenticated?`/${locale}/account`:`/${locale}/auth/login`;
   const isEstimationPage = pathname.includes('/estimation') || pathname.endsWith('/estimate');
   const rtl = isRTL(locale);
   const resolveHref = (href: string) => href.startsWith('#') ? `/${locale}${href}` : `/${locale}${href}`;
@@ -106,6 +111,9 @@ export function Navbar({ locale, dict }: NavbarProps) {
           {/* Glass Tactile Theme Toggle */}
           <ThemeToggle />
 
+          <Link href={accountHref} aria-label={accountLabel} title={accountLabel} className="inline-flex h-11 w-9 items-center justify-center text-text-secondary"><UserRound className="h-4 w-4"/></Link>
+          {authenticated?<button onClick={logout} aria-label={locale==='ar'?'تسجيل الخروج':'Déconnexion'} title={locale==='ar'?'تسجيل الخروج':'Déconnexion'} className="inline-flex h-11 w-8 items-center justify-center text-text-secondary"><LogOut className="h-4 w-4"/></button>:null}
+
           {/* Subtle Hairline Divider */}
           <div className="h-4.5 w-px bg-slate-200/80 dark:bg-white/10 mx-0.5" />
 
@@ -179,6 +187,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
           </div>
 
           <div className="pt-2">
+            <div className="mb-3 flex items-center justify-between gap-3 text-sm"><Link className="inline-flex min-h-11 items-center text-brand-blue" href={accountHref}>{accountLabel}</Link>{authenticated?<button className="min-h-11" onClick={logout}>{locale==='ar'?'تسجيل الخروج':'Déconnexion'}</button>:null}</div>
             {!isEstimationPage ? (
               <Link
                 href={`/${locale}/cities/casablanca/estimate`}

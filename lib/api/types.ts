@@ -13,6 +13,9 @@ export interface PredictPayload {
 }
 
 export interface PredictResponse {
+  estimation_event_id?: string;
+  guest?: boolean;
+  phase_c_degraded?: boolean;
   estimated_price_mad: number;
   currency?: string;
   prix_min?: number;

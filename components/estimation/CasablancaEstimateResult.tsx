@@ -9,6 +9,8 @@ import type { CasablancaMetadata, CasablancaPredictPayload, PredictResponse } fr
 import type { CompletedCasablancaEstimation } from '@/components/estimation/CasablancaEstimator';
 import { Button } from '@/components/common/Button';
 import { CardSurface } from '@/components/city/CityFoundation';
+import { PassportAccountCTA } from '@/components/auth/PassportAccountCTA';
+import { SavePropertyButton } from '@/components/account/SavePropertyButton';
 
 const FACTOR_LABELS: Record<string, { fr: string; ar: string }> = {
   property_type: { fr: 'Type de bien', ar: 'نوع العقار' }, neighborhood: { fr: 'Quartier', ar: 'الحي' },
@@ -47,13 +49,15 @@ export function CasablancaEstimateResult({ completed, supported, contextLoading,
       </section>
     </CardSurface>
 
+    {prediction.guest ? <PassportAccountCTA locale={locale} /> : null}
+    {prediction.guest === false ? <SavePropertyButton input={inputFeatures} locale={locale} /> : null}
     <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
       <Explainability prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
       <Comparables prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
     </div>
     <MarketContext prediction={prediction} area={inputFeatures.area} loading={contextLoading} copy={copy} money={money} />
     {getCityBySlug('casablanca')?.market.publicEnabled ? <Link href={cityMarketPath(locale, 'casablanca')} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-blue"><BarChart3 className="h-4 w-4"/>{locale === 'ar' ? 'عرض سياق السوق' : 'Voir le contexte du marché'}<ArrowRight className="h-4 w-4 rtl:rotate-180"/></Link> : null}
-    <Simulator input={inputFeatures} supported={supported} original={prediction.estimated_price_mad} copy={copy} money={money} />
+    <Simulator input={inputFeatures} supported={supported} original={prediction.estimated_price_mad} copy={copy} money={money} eventId={prediction.estimation_event_id} locale={locale} />
     <button type="button" onClick={onEdit} className="min-h-11 text-sm font-semibold text-brand-blue lg:hidden">← {copy.newEstimate}</button>
   </div>;
 }
@@ -93,7 +97,7 @@ function MarketContext({ prediction, area, loading, copy, money }: { prediction:
   </CardSurface>;
 }
 
-function Simulator({ input, supported, original, copy, money }: { input: CasablancaPredictPayload; supported: CasablancaMetadata['supported']; original: number; copy: any; money: (value: number) => string }) {
+function Simulator({ input, supported, original, copy, money, eventId, locale }: { input: CasablancaPredictPayload; supported: CasablancaMetadata['supported']; original: number; copy: any; money: (value: number) => string; eventId?: string; locale: string }) {
   const [scenario, setScenario] = useState({ area: String(input.area), floor: String(input.floor), current_state: input.current_state || '', age: input.age || '' });
   const [simulated, setSimulated] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -103,7 +107,8 @@ function Simulator({ input, supported, original, copy, money }: { input: Casabla
     if (loading || Number(scenario.area) <= 0 || Number(scenario.floor) < 0) return;
     setLoading(true); setError('');
     try {
-      const result = await predictCasablanca({ ...input, area: Number(scenario.area), floor: Number(scenario.floor), current_state: scenario.current_state || null, age: scenario.age || null });
+      if (!eventId) throw new Error(locale === 'ar' ? 'هذا الجواز غير متاح للمحاكاة.' : 'Ce Passeport ne peut pas être simulé.');
+      const result = await predictCasablanca({ ...input, area: Number(scenario.area), floor: Number(scenario.floor), current_state: scenario.current_state || null, age: scenario.age || null }, { eventId, locale });
       setSimulated(result.estimated_price_mad);
     } catch (reason) { setError(reason instanceof Error ? reason.message : copy.unavailable); }
     finally { setLoading(false); }

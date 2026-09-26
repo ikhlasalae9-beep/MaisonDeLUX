@@ -4,7 +4,7 @@ import { getCasablancaDataQuality, getCasablancaDrift, getCasablancaMarketAnalyt
 
 test('Casablanca market aggregates come from the approved reference dataset', () => {
   const market = getCasablancaMarketAnalytics();
-  assert.equal(market.dataset, 'ml/notebooks/mubawab_listings_clean.csv');
+  assert.equal(market.dataset, 'server-data/casablanca-market.csv');
   assert.equal(market.kpis.usableListings, 1172);
   assert.equal(market.kpis.neighborhoodsRepresented, 100);
   assert.equal(market.kpis.medianListingPriceMad, 2_300_000);

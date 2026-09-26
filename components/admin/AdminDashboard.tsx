@@ -12,8 +12,9 @@ import {
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { formatArea, formatCurrency, formatDate, formatInteger, formatNumber } from '@/lib/utils';
 import { DataQualityPanel, InputDriftPanel } from '@/components/admin/DataIntelligencePanels';
+import { UsersSecurity } from '@/components/admin/UsersSecurity';
 
-type Tab = 'overview' | 'cities' | 'models' | 'estimations' | 'quality' | 'drift';
+type Tab = 'overview' | 'cities' | 'models' | 'estimations' | 'quality' | 'drift' | 'security';
 type City = any;
 type Model = any;
 
@@ -58,7 +59,7 @@ export function AdminDashboard() {
   const openModel=(id:unknown)=>{setSelectedModelId(String(id));setSelectedCityId(null);setTab('models')};
   const openEstimates=(id?:unknown)=>{setCityId(id==null?'':String(id));setPage(1);setTab('estimations');setSelectedCityId(null);setSelectedModelId(null)};
   async function logout(){await fetch('/api/admin/logout',{method:'POST'});router.replace('/admin/login');router.refresh()}
-  const nav=[['overview','Vue d’ensemble',LayoutDashboard],['cities','Villes & Territoires',MapPinned],['models','Modèles IA',BrainCircuit],['estimations','Estimations',BarChart3],['quality','Données & Qualité',Database],['drift','Surveillance des entrées',ScanSearch]] as const;
+  const nav=[['overview','Vue d’ensemble',LayoutDashboard],['cities','Villes & Territoires',MapPinned],['models','Modèles IA',BrainCircuit],['estimations','Estimations',BarChart3],['quality','Données & Qualité',Database],['drift','Surveillance des entrées',ScanSearch],['security','Utilisateurs & Sécurité',ShieldCheck]] as const;
 
   return <div className="min-h-screen bg-[#f6f8fc] font-sans text-slate-700 dark:bg-[#080f1d] dark:text-slate-200">
     {menu&&<button aria-label="Fermer le menu" onClick={()=>setMenu(false)} className="fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-sm lg:hidden"/>}
@@ -77,6 +78,7 @@ export function AdminDashboard() {
         {tab==='estimations'&&<Estimations data={data} rows={rows} search={search} setSearch={setSearch} page={page} setPage={setPage} includeTests={includeTests} setIncludeTests={(v:boolean)=>{setIncludeTests(v);setPage(1)}} onCity={openCity}/>}
         {tab==='quality'&&<DataQualityPanel data={intelligence} loading={intelligenceLoading}/>}
         {tab==='drift'&&<InputDriftPanel data={intelligence} loading={intelligenceLoading}/>}
+        {tab==='security'&&<UsersSecurity/>}
       </div>
     </main>
   </div>;
