@@ -87,7 +87,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
 
         {/* Center: Main Navigation with Refined Glass Pills */}
         {!isEstimationPage && (
-          <nav className="hidden lg:flex items-center justify-center gap-1 xl:gap-2" aria-label="Navigation principale">
+          <nav className="hidden xl:flex items-center justify-center gap-1 xl:gap-2" aria-label="Navigation principale">
             {NAV_LINKS.map((link) => {
               const label = locale === 'ar' ? link.labelAr : link.labelFr;
               return (
@@ -104,7 +104,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
         )}
 
         {/* Right: Cleanly Grouped Utilities + Divider + Primary CTA */}
-        <div className="hidden lg:flex items-center gap-3 shrink-0">
+        <div className="hidden xl:flex items-center gap-3 shrink-0">
           {/* Glass Language Switcher */}
           <LanguageSwitcher currentLocale={locale} />
 
@@ -141,7 +141,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
         </div>
 
         {/* Mobile controls: Theme toggle + Hamburger */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 xl:hidden">
           <ThemeToggle />
           <button
             ref={menuButtonRef}
@@ -159,7 +159,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
 
       {/* Floating Mobile Drawer */}
       {mobileMenuOpen && (
-        <div ref={menuRef} id="mobile-navigation" role="dialog" aria-modal="true" aria-label={locale === 'ar' ? 'قائمة التنقل' : 'Menu de navigation'} className="lg:hidden mt-2 max-h-[calc(100dvh-5.5rem-env(safe-area-inset-top))] overflow-y-auto p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-slate-200/80 dark:border-white/10 shadow-elevated pointer-events-auto space-y-4">
+        <div ref={menuRef} id="mobile-navigation" role="dialog" aria-modal="true" aria-label={locale === 'ar' ? 'قائمة التنقل' : 'Menu de navigation'} className="xl:hidden mt-2 max-h-[calc(100dvh-5.5rem-env(safe-area-inset-top))] overflow-y-auto p-4 rounded-2xl bg-white dark:bg-[#0B0F19] border border-slate-200/80 dark:border-white/10 shadow-elevated pointer-events-auto space-y-4">
           {!isEstimationPage && (
             <div className="flex flex-col space-y-1 border-b border-slate-200/60 dark:border-white/5 pb-4">
               {NAV_LINKS.map((link) => {

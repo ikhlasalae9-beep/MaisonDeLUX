@@ -3,8 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LOCALES, getDirection } from '@/lib/i18n/config';
 import { getDictionary } from '@/lib/i18n/getDictionary';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
+import { RouteShell } from '@/components/layout/RouteShell';
 import { LocaleHandler } from '@/components/common/LocaleHandler';
 import { ScrollProgress } from '@/components/common/ScrollProgress';
 
@@ -57,9 +56,7 @@ export default function LocaleLayout({
       <LuxuryAmbientBackground />
       <ScrollProgress locale={locale} />
       <LocaleHandler locale={locale} dir={dir} />
-      <Navbar locale={locale} dict={dict} />
-      <main className="flex-1 z-10 relative">{children}</main>
-      <Footer locale={locale} dict={dict} />
+      <RouteShell locale={locale} dict={dict}>{children}</RouteShell>
     </>
   );
 }

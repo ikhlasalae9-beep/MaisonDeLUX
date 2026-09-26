@@ -30,7 +30,6 @@ export function AuthForm({ locale, mode }: { locale: string; mode: string }) {
     finally { setBusy(false); }
   }
   const form=<div className="p-6 sm:p-9 lg:p-10">
-    <div className="mb-7 lg:hidden"><BrandLogo locale={locale} size="compact" /></div>
     <div className="mb-7"><span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue"><LockKeyhole className="h-5 w-5" /></span><h1 className="mt-5 text-2xl font-black tracking-tight text-text-primary sm:text-3xl">{title}</h1><p className="mt-2 text-sm leading-6 text-text-secondary">{subtitle}</p></div>
     <form onSubmit={submit}><fieldset disabled={busy} className="space-y-5 disabled:opacity-60">
       {mode === 'signup' ? <Field label={ar?'الاسم المعروض':'Nom affiché'}><input name="display_name" maxLength={80} autoComplete="name" className="auth-input" /></Field> : null}
@@ -44,7 +43,7 @@ export function AuthForm({ locale, mode }: { locale: string; mode: string }) {
   </div>;
   if(!primary)return <CardSurface className="mx-auto max-w-xl overflow-hidden">{form}</CardSurface>;
   return <CardSurface className="mx-auto grid max-w-5xl overflow-hidden lg:grid-cols-[.92fr_1.08fr]">
-    <aside className="relative hidden overflow-hidden bg-[#0b1628] p-10 text-white lg:flex lg:flex-col lg:justify-between"><div className="absolute -end-24 -top-24 h-72 w-72 rounded-full bg-brand-blue/25 blur-3xl"/><div className="relative"><BrandLogo locale={locale} size="compact" /><span className="mt-16 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-blue-100"><Sparkles className="h-3.5 w-3.5"/>{ar?'فضاؤك العقاري الذكي':'Votre espace immobilier intelligent'}</span><h2 className="mt-6 text-3xl font-black leading-tight">{ar?'حوّل كل تقدير إلى قرار أوضح.':'Transformez chaque estimation en décision plus claire.'}</h2></div><ul className="relative mt-12 space-y-4">{benefits.map(item=><li key={item} className="flex items-center gap-3 text-sm text-white/80"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-blue/20 text-blue-300"><Check className="h-3.5 w-3.5"/></span>{item}</li>)}</ul></aside>
+    <aside className="relative hidden overflow-hidden bg-[#0b1628] p-10 text-white lg:flex lg:flex-col lg:justify-between"><div className="absolute -end-24 -top-24 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl"/><div className="relative"><BrandLogo locale={locale} size="compact" inverse /><span className="mt-14 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-blue-100"><Sparkles className="h-3.5 w-3.5"/>{ar?'فضاؤك العقاري الذكي':'Votre espace immobilier intelligent'}</span><h2 className="mt-6 text-3xl font-black leading-tight !text-white">{ar?'حوّل كل تقدير إلى قرار أوضح.':'Transformez chaque estimation en décision plus claire.'}</h2></div><ul className="relative mt-10 space-y-3">{benefits.map(item=><li key={item} className="flex items-center gap-3 text-sm text-blue-50/90"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-400/15 text-blue-200"><Check className="h-3.5 w-3.5"/></span>{item}</li>)}</ul></aside>
     {form}
   </CardSurface>;
 }
