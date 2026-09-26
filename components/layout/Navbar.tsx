@@ -62,6 +62,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
 
   return (
     <header
+      data-site-navbar
       className={`sticky top-0 z-50 w-full px-2.5 pt-[max(.5rem,env(safe-area-inset-top))] sm:px-6 lg:px-8 pointer-events-none transition-all duration-300 ease-out ${
         isScrolled ? 'sm:pt-2.5' : 'sm:pt-4.5'
       }`}

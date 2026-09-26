@@ -106,6 +106,17 @@ html {
   scroll-margin-top: var(--navbar-offset);
 }
 
+.scroll-target-offset {
+  scroll-margin-top: calc(var(--navbar-offset) + env(safe-area-inset-top));
+}
+
+@media (max-width: 639px) {
+  :root {
+    --navbar-height: 72px;
+    --navbar-offset: 92px;
+  }
+}
+
 html.lenis, html.lenis body {
   height: auto;
 }

@@ -245,6 +245,22 @@ def _comparables(payload: Mapping[str, Any], *, limit: int = 4) -> list[dict[str
     ]
 
 
+def _market_context(payload: Mapping[str, Any]) -> dict[str, Any]:
+    minimum_observations = 8
+    matches = [row for row in _reference_rows() if row["neighborhood"] == payload["neighborhood"]]
+    price_per_m2 = sorted(float(row["listing_price_mad"]) / float(row["area"]) for row in matches if float(row["area"]) > 0)
+    middle = len(price_per_m2) // 2
+    median_value = (price_per_m2[middle] if len(price_per_m2) % 2 else
+                    (price_per_m2[middle - 1] + price_per_m2[middle]) / 2) if price_per_m2 else 0
+    return {
+        "neighborhood": str(payload["neighborhood"]),
+        "listing_count": len(price_per_m2),
+        "median_listing_price_per_m2": round(median_value),
+        "minimum_observations": minimum_observations,
+        "benchmark_eligible": len(price_per_m2) >= minimum_observations,
+    }
+
+
 def prediction_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     """Optional Phase A analysis; failures here must never block base inference."""
     matrix = transform(payload)
@@ -258,6 +274,10 @@ def prediction_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         response["comparables"] = _comparables(payload)
     except Exception:
         unavailable.append("comparables")
+    try:
+        response["market_context"] = _market_context(payload)
+    except Exception:
+        unavailable.append("market_context")
     if unavailable:
         response["unavailable"] = unavailable
     return response

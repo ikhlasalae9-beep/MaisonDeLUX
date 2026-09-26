@@ -19,12 +19,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: city.slug === "casablanca" ? 0.9 : 0.6,
     })),
-    {
-      url: `${baseUrl}/${locale}/cities/casablanca/estimate`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.9,
-    },
+    ...CITY_REGISTRY.filter(city => city.cityPage.publicVisible).flatMap(city => [
+      ...(city.estimation.publicEnabled ? [{ url: `${baseUrl}/${locale}/cities/${city.slug}/estimate`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 }] : []),
+      ...(city.market.publicEnabled ? [{ url: `${baseUrl}/${locale}/cities/${city.slug}/market`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 }] : []),
+    ]),
   ]);
 
   return [

@@ -29,6 +29,11 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    outputFileTracingIncludes: {
+      '/api/admin/data-intelligence': ['./ml/notebooks/mubawab_listings_clean.csv'],
+    },
+  },
 };
 
 export default nextConfig;

@@ -43,6 +43,13 @@ export interface PredictResponse {
     same_neighborhood: boolean;
     area_difference_m2: number;
   }>;
+  market_context?: {
+    neighborhood: string;
+    listing_count: number;
+    median_listing_price_per_m2: number;
+    minimum_observations: number;
+    benchmark_eligible: boolean;
+  };
 }
 
 export interface CitiesResponse {
@@ -84,5 +91,6 @@ export interface CasablancaMetadata {
 export interface CasablancaContextResponse {
   explanation?: PredictResponse['explanation'];
   comparables?: PredictResponse['comparables'];
-  unavailable?: Array<'explanation' | 'comparables'>;
+  market_context?: PredictResponse['market_context'];
+  unavailable?: Array<'explanation' | 'comparables' | 'market_context'>;
 }

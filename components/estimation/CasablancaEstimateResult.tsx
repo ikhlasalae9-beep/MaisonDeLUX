@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { getCityBySlug, cityMarketPath } from '@/lib/cities/registry';
 import { ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, Building2, CheckCircle2, GitCompareArrows } from 'lucide-react';
 import { predictCasablanca } from '@/lib/api/client';
 import type { CasablancaMetadata, CasablancaPredictPayload, PredictResponse } from '@/lib/api/types';
@@ -32,6 +34,7 @@ export function CasablancaEstimateResult({ completed, supported, contextLoading,
         <div className="flex items-center justify-between gap-3"><CheckCircle2 className="h-6 w-6 text-emerald-400" /><span className="rounded-full border border-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[.16em] text-white/60">{copy.passportTitle}</span></div>
         <p className="mt-5 text-sm text-white/60">{copy.resultTitle}</p>
         <p className="mt-2 break-words text-3xl font-bold tabular-nums sm:text-4xl">{money(amount)} <span className="text-base font-medium text-white/60">MAD</span></p>
+        {inputFeatures.area > 0 ? <p className="mt-2 text-sm font-semibold tabular-nums text-blue-200">≈ {money(prediction.estimated_price_mad / inputFeatures.area)} MAD/m²</p> : null}
         <p className="mt-4 text-xs text-white/55">{copy.modelLabel} · {prediction.model_version}</p>
       </div>
       <section className="p-5 sm:p-6" aria-labelledby="property-summary-title">
@@ -48,6 +51,8 @@ export function CasablancaEstimateResult({ completed, supported, contextLoading,
       <Explainability prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
       <Comparables prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
     </div>
+    <MarketContext prediction={prediction} area={inputFeatures.area} loading={contextLoading} copy={copy} money={money} />
+    {getCityBySlug('casablanca')?.market.publicEnabled ? <Link href={cityMarketPath(locale, 'casablanca')} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-blue"><BarChart3 className="h-4 w-4"/>{locale === 'ar' ? 'عرض سياق السوق' : 'Voir le contexte du marché'}<ArrowRight className="h-4 w-4 rtl:rotate-180"/></Link> : null}
     <Simulator input={inputFeatures} supported={supported} original={prediction.estimated_price_mad} copy={copy} money={money} />
     <button type="button" onClick={onEdit} className="min-h-11 text-sm font-semibold text-brand-blue lg:hidden">← {copy.newEstimate}</button>
   </div>;
@@ -69,11 +74,22 @@ function Explainability({ prediction, loading, locale, copy, money }: { predicti
 function Comparables({ prediction, loading, locale, copy, money }: { prediction: PredictResponse; loading: boolean; locale: string; copy: any; money: (value: number) => string }) {
   const comparables = prediction.comparables || [];
   return <CardSurface className="h-full p-5 sm:p-6"><div className="flex items-center gap-3"><Building2 className="h-5 w-5 text-brand-blue" /><h2 className="text-lg font-bold">{copy.comparablesTitle}</h2></div>
-    <p className="mt-2 text-sm leading-6 text-text-secondary">{copy.comparablesDisclaimer}</p>
+    <p className="mt-2 text-sm leading-6 text-text-secondary">{copy.comparablesDisclaimer}</p><p className="mt-1 text-xs leading-5 text-text-muted">{copy.comparableSimilarity}</p>
     {loading && !comparables.length ? <AnalysisLoading copy={copy} /> : !comparables.length ? <p className="mt-4 text-sm text-text-secondary">{copy.analysisUnavailable}</p> : <div className="mt-5 grid gap-3">{comparables.map((item, index) => <article key={`${item.neighborhood}-${item.area}-${item.listing_price_mad}-${index}`} className="rounded-control border border-border-medium p-4">
       <div className="flex flex-wrap items-start justify-between gap-2"><div><p className="font-semibold">{item.neighborhood} · {item.property_type}</p><p className="mt-1 text-xs text-text-secondary">{item.area} m² · {item.rooms} {copy.rooms.toLocaleLowerCase(locale)} · {item.bedrooms} {copy.bedrooms.toLocaleLowerCase(locale)}</p></div><p className="font-bold tabular-nums">{money(item.listing_price_mad)} MAD</p></div>
       <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-text-secondary">{index === 0 ? <span className="rounded-full bg-brand-blue/10 px-2.5 py-1 font-semibold text-brand-blue">{copy.closestComparable}</span> : null}{item.same_neighborhood ? <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-emerald-800">{copy.sameNeighborhood}</span> : null}<span className="rounded-full bg-slate-100 px-2.5 py-1">{copy.areaDifference}: {money(item.area_difference_m2)} m²</span></div>
     </article>)}</div>}
+  </CardSurface>;
+}
+
+function MarketContext({ prediction, area, loading, copy, money }: { prediction: PredictResponse; area: number; loading: boolean; copy: any; money: (value: number) => string }) {
+  const market = prediction.market_context;
+  if (loading && !market) return <CardSurface className="p-5 sm:p-6"><AnalysisLoading copy={copy}/></CardSurface>;
+  if (!market) return null;
+  const estimatePerM2 = area > 0 ? prediction.estimated_price_mad / area : 0;
+  const difference = market.median_listing_price_per_m2 > 0 ? (estimatePerM2 / market.median_listing_price_per_m2 - 1) * 100 : null;
+  return <CardSurface className="p-5 sm:p-6"><div className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-brand-blue"/><h2 className="text-lg font-bold">{copy.marketContextTitle}</h2></div><p className="mt-2 text-sm leading-6 text-text-secondary">{copy.marketContextIntro}</p>
+    {market.benchmark_eligible ? <div className="mt-5 grid gap-3 sm:grid-cols-3"><div className="rounded-control bg-brand-blue/5 p-4"><p className="text-xs text-text-muted">{copy.pricePerM2}</p><p className="mt-1 font-bold tabular-nums">≈ {money(estimatePerM2)} MAD/m²</p><p className="mt-1 text-[11px] text-text-muted">MaisonDeLUX</p></div><div className="rounded-control bg-surface-subtle p-4"><p className="text-xs text-text-muted">{copy.neighborhoodMedian}</p><p className="mt-1 font-bold tabular-nums">{money(market.median_listing_price_per_m2)} MAD/m²</p><p className="mt-1 text-[11px] text-text-muted">{market.listing_count} {copy.referenceListings}</p></div><div className="rounded-control bg-surface-subtle p-4"><p className="text-xs text-text-muted">{copy.marketDifference}</p><p className="mt-1 font-bold tabular-nums">{difference === null ? '—' : `${difference >= 0 ? '+' : '−'}${Math.abs(difference).toFixed(1)} %`}</p><p className="mt-1 text-[11px] text-text-muted">{market.neighborhood}</p></div></div> : <p className="mt-4 rounded-control bg-amber-50 p-4 text-sm text-amber-900">{copy.insufficientNeighborhoodData} ({market.listing_count}/{market.minimum_observations})</p>}
   </CardSurface>;
 }
 

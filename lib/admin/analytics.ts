@@ -134,3 +134,11 @@ export async function getEstimations(period: Period, page = 1, search = '', city
     JOIN public.model_versions mv ON mv.id=e.model_version_id AND mv.city_id=e.city_id ${where} ORDER BY e.created_at DESC LIMIT $${values.length - 1} OFFSET $${values.length}`, values);
   return { configured: true, rows: rows.rows, total: Number(count.rows[0]?.total || 0), includeTests };
 }
+
+export async function getProductionInputFeatures(city = 'Casablanca', modelVersion = 'casablanca-catboost-v1') {
+  if (!databaseConfigured()) return [];
+  const result = await analyticsQuery('drift.inputs', `SELECT e.input_features FROM public.estimation_events e
+    JOIN public.cities c ON c.id=e.city_id JOIN public.model_versions mv ON mv.id=e.model_version_id AND mv.city_id=e.city_id
+    WHERE e.is_test=false AND LOWER(c.name)=LOWER($1) AND mv.version=$2 ORDER BY e.created_at DESC LIMIT 5000`, [city, modelVersion]);
+  return result.rows.map((row: any) => row.input_features).filter((features: unknown) => features && typeof features === 'object' && !Array.isArray(features));
+}

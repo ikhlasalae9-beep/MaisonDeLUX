@@ -52,6 +52,7 @@ export interface VerifiedCity extends LegacyVerifiedCity {
     backendStatusKey: string | null;
   };
   contentRef: CityContentKey | null;
+  market: { publicEnabled: boolean; analyticsRef: string | null };
   mediaRef: CityMediaKey | null;
   /** Backend registry key only; never an artifact path or a public-enabled signal. */
   modelRef: string | null;
@@ -239,13 +240,14 @@ const LEGACY_VERIFIED_CITIES: LegacyVerifiedCity[] = [
 
 type CityFoundation = Pick<
   VerifiedCity,
-  'searchAliases' | 'cityPage' | 'estimation' | 'contentRef' | 'mediaRef' | 'modelRef' | 'seoRef'
+  'searchAliases' | 'cityPage' | 'estimation' | 'market' | 'contentRef' | 'mediaRef' | 'modelRef' | 'seoRef'
 >;
 
 const unavailable = (aliases: readonly string[], mediaRef: CityMediaKey | null = null): CityFoundation => ({
   searchAliases: aliases,
   cityPage: { status: 'hidden', publicVisible: false },
   estimation: { status: 'unavailable', publicEnabled: false, backendStatusKey: null },
+  market: { publicEnabled: false, analyticsRef: null },
   contentRef: null,
   mediaRef,
   modelRef: null,
@@ -257,6 +259,7 @@ const CITY_FOUNDATION: Record<CitySlug, CityFoundation> = {
     searchAliases: ['Casablanca', 'Casa', 'الدار البيضاء'],
     cityPage: { status: 'published', publicVisible: true },
     estimation: { status: 'available', publicEnabled: true, backendStatusKey: 'casablanca' },
+    market: { publicEnabled: true, analyticsRef: 'casablanca' },
     contentRef: 'casablanca',
     mediaRef: 'casablanca',
     modelRef: 'casablanca',

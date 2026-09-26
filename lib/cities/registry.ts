@@ -48,6 +48,18 @@ export function cityEstimatePath(locale: Locale, slug: CitySlug): string {
   return `/${locale}/cities/${slug}/estimate`;
 }
 
+export function cityMarketPath(locale: string, slug: CitySlug): string {
+  return `/${locale}/cities/${slug}/market`;
+}
+
+export function cityCapabilityActions(locale: string, city: VerifiedCity) {
+  if (!city.cityPage.publicVisible) return [];
+  const actions: Array<{ kind: 'estimate' | 'market'; href: string; label: string }> = [];
+  if (city.estimation.publicEnabled) actions.push({ kind: 'estimate', href: `/${locale}/cities/${city.slug}/estimate`, label: locale === 'ar' ? 'تقدير العقار' : 'Estimer un bien' });
+  if (city.market.publicEnabled && city.market.analyticsRef) actions.push({ kind: 'market', href: cityMarketPath(locale, city.slug), label: locale === 'ar' ? 'استكشاف السوق' : 'Explorer le marché' });
+  return actions;
+}
+
 export function publicCityPath(locale: Locale, city: VerifiedCity): string | null {
   return city.cityPage.publicVisible ? cityDetailPath(locale, city.slug) : null;
 }

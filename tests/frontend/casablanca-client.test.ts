@@ -14,7 +14,7 @@ const payload = {
   floor: 4,
   current_state: 'Bon état',
   age: '10-20 ans',
-};
+} as const;
 
 test('each Casablanca prediction uses one fresh active abort signal', async (context) => {
   const originalFetch = globalThis.fetch;

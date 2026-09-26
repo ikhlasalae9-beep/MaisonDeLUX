@@ -7,12 +7,13 @@ import {
   Activity, ArrowLeft, ArrowRight, BarChart3, BrainCircuit, Building2, Check,
   ChevronLeft, ChevronRight, CircleDollarSign, Database, Download, ExternalLink,
   Gauge, LayoutDashboard, LogOut, MapPinned, Menu, RefreshCw, Search, ServerCog, ShieldCheck,
-  Sparkles, X,
+  Sparkles, X, ScanSearch,
 } from 'lucide-react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { formatArea, formatCurrency, formatDate, formatInteger, formatNumber } from '@/lib/utils';
+import { DataQualityPanel, InputDriftPanel } from '@/components/admin/DataIntelligencePanels';
 
-type Tab = 'overview' | 'cities' | 'models' | 'estimations';
+type Tab = 'overview' | 'cities' | 'models' | 'estimations' | 'quality' | 'drift';
 type City = any;
 type Model = any;
 
@@ -44,8 +45,10 @@ export function AdminDashboard() {
   const [includeTests,setIncludeTests]=useState(false); const [data,setData]=useState<any>(null); const [rows,setRows]=useState<any>(null);
   const [loading,setLoading]=useState(true); const [error,setError]=useState(''); const [page,setPage]=useState(1); const [search,setSearch]=useState('');
   const [menu,setMenu]=useState(false); const [selectedCityId,setSelectedCityId]=useState<string|null>(null); const [selectedModelId,setSelectedModelId]=useState<string|null>(null);
+  const [intelligence,setIntelligence]=useState<any>(null); const [intelligenceLoading,setIntelligenceLoading]=useState(false);
   const load=useCallback(async()=>{setLoading(true);setError('');const q=`period=${period}&cityId=${encodeURIComponent(cityId)}&modelId=${encodeURIComponent(modelId)}&includeTests=${includeTests}`;try{const [o,e]=await Promise.all([fetch(`/api/admin/overview?${q}`),fetch(`/api/admin/estimations?${q}&page=${page}&search=${encodeURIComponent(search)}`)]);if(!o.ok||!e.ok)throw new Error();setData(await o.json());setRows(await e.json())}catch{setError('Impossible de charger les données administratives.')}finally{setLoading(false)}},[period,cityId,modelId,includeTests,page,search]);
   useEffect(()=>{const timer=setTimeout(load,search?250:0);return()=>clearTimeout(timer)},[load,search]);
+  useEffect(()=>{if((tab==='quality'||tab==='drift')&&!intelligence&&!intelligenceLoading){setIntelligenceLoading(true);fetch('/api/admin/data-intelligence').then(async response=>{if(!response.ok)throw new Error();setIntelligence(await response.json())}).catch(()=>{setIntelligence({});setError('Impossible de charger les analyses de données.')}).finally(()=>setIntelligenceLoading(false))}},[tab,intelligence,intelligenceLoading]);
   const cities:City[]=useMemo(()=>data?.cities||[],[data?.cities]);
   const models:Model[]=useMemo(()=>data?.models||[],[data?.models]);
   const selectedCity=useMemo(()=>cities.find(c=>String(c.id)===selectedCityId)||null,[cities,selectedCityId]);
@@ -55,7 +58,7 @@ export function AdminDashboard() {
   const openModel=(id:unknown)=>{setSelectedModelId(String(id));setSelectedCityId(null);setTab('models')};
   const openEstimates=(id?:unknown)=>{setCityId(id==null?'':String(id));setPage(1);setTab('estimations');setSelectedCityId(null);setSelectedModelId(null)};
   async function logout(){await fetch('/api/admin/logout',{method:'POST'});router.replace('/admin/login');router.refresh()}
-  const nav=[['overview','Vue d’ensemble',LayoutDashboard],['cities','Villes & Territoires',MapPinned],['models','Modèles IA',BrainCircuit],['estimations','Estimations',BarChart3]] as const;
+  const nav=[['overview','Vue d’ensemble',LayoutDashboard],['cities','Villes & Territoires',MapPinned],['models','Modèles IA',BrainCircuit],['estimations','Estimations',BarChart3],['quality','Données & Qualité',Database],['drift','Surveillance des entrées',ScanSearch]] as const;
 
   return <div className="min-h-screen bg-[#f6f8fc] font-sans text-slate-700 dark:bg-[#080f1d] dark:text-slate-200">
     {menu&&<button aria-label="Fermer le menu" onClick={()=>setMenu(false)} className="fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-sm lg:hidden"/>}
@@ -72,6 +75,8 @@ export function AdminDashboard() {
         {tab==='cities'&&(selectedCity?<CityDetail city={selectedCity} models={models} onBack={()=>setSelectedCityId(null)} onModel={openModel} onEstimates={openEstimates}/>:<Cities cities={cities} onOpen={openCity}/>)}
         {tab==='models'&&(selectedModel?<ModelDetail model={selectedModel} models={models} onBack={()=>setSelectedModelId(null)} onCity={openCity} onEstimates={openEstimates}/>:<Models models={models} onOpen={openModel} onCity={openCity}/>)}
         {tab==='estimations'&&<Estimations data={data} rows={rows} search={search} setSearch={setSearch} page={page} setPage={setPage} includeTests={includeTests} setIncludeTests={(v:boolean)=>{setIncludeTests(v);setPage(1)}} onCity={openCity}/>}
+        {tab==='quality'&&<DataQualityPanel data={intelligence} loading={intelligenceLoading}/>}
+        {tab==='drift'&&<InputDriftPanel data={intelligence} loading={intelligenceLoading}/>}
       </div>
     </main>
   </div>;

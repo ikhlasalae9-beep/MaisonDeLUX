@@ -16,6 +16,14 @@ const CasablancaEstimateResult = dynamic(
 const initialForm = { property_type: '', neighborhood: '', area: '', rooms: '', bedrooms: '', bathrooms: '', floor: '', current_state: '', age: '' };
 export type CompletedCasablancaEstimation = { prediction: PredictResponse; inputFeatures: CasablancaPredictPayload; estimatedAt: string };
 
+function scrollBelowNavbar(target: HTMLElement | null) {
+  if (!target) return;
+  const navbar = document.querySelector<HTMLElement>('[data-site-navbar]');
+  const offset = (navbar?.getBoundingClientRect().height || 0) + 16;
+  const top = target.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
+
 export function CasablancaEstimator({ locale, copy, metadata }: { locale: string; copy: any; metadata: CasablancaMetadata }) {
   const [form, setForm] = useState(initialForm);
   const [result, setResult] = useState<CompletedCasablancaEstimation | null>(null);
@@ -49,7 +57,7 @@ export function CasablancaEstimator({ locale, copy, metadata }: { locale: string
       setContextLoading(true);
       void fetchCasablancaContext(inputFeatures).then((context) => {
         setResult((current) => current?.estimatedAt === estimatedAt
-          ? { ...current, prediction: { ...current.prediction, explanation: context.explanation, comparables: context.comparables } }
+          ? { ...current, prediction: { ...current.prediction, explanation: context.explanation, comparables: context.comparables, market_context: context.market_context } }
           : current);
       }).catch((contextError) => console.warn('Optional estimation context unavailable:', contextError)).finally(() => {
         if (contextKeyRef.current === estimatedAt) setContextLoading(false);
@@ -70,7 +78,7 @@ export function CasablancaEstimator({ locale, copy, metadata }: { locale: string
   const resultTimestamp = result?.estimatedAt;
   useEffect(() => {
     if (!resultTimestamp || !resultRef.current || editing) return;
-    requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    requestAnimationFrame(() => scrollBelowNavbar(resultRef.current));
   }, [resultTimestamp, editing]);
 
   const fields = [
@@ -80,14 +88,14 @@ export function CasablancaEstimator({ locale, copy, metadata }: { locale: string
   ] as const;
 
   const formCard = <EstimatorForm form={form} fields={fields} metadata={metadata} copy={copy} loading={loading} error={error} labelFor={labelFor} update={update} submit={submit} />;
-  const edit = () => { setEditing(true); requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })); };
+  const edit = () => { setEditing(true); requestAnimationFrame(() => scrollBelowNavbar(formRef.current)); };
 
   if (result) return <div className="space-y-5 sm:space-y-6">
-    <div ref={formRef} className="scroll-mt-28">{editing ? formCard : <CardSurface className="hidden items-center justify-between gap-4 p-4 lg:flex"><div><p className="text-sm font-bold">{result.inputFeatures.neighborhood} · {labelFor(result.inputFeatures.property_type)}</p><p className="mt-1 text-xs text-text-secondary">{result.inputFeatures.area} m² · {result.inputFeatures.rooms} {copy.rooms.toLocaleLowerCase(locale)}</p></div><button type="button" onClick={edit} className="min-h-11 rounded-control border border-border-medium px-4 text-sm font-semibold text-brand-blue transition hover:border-brand-blue">← {copy.newEstimate}</button></CardSurface>}</div>
-    <div ref={resultRef} className="scroll-mt-32"><CasablancaEstimateResult completed={result} supported={metadata.supported} contextLoading={contextLoading} locale={locale} copy={copy} onEdit={edit} /></div>
+    <div ref={formRef} className="scroll-target-offset">{editing ? formCard : <CardSurface className="hidden items-center justify-between gap-4 p-4 lg:flex"><div><p className="text-sm font-bold">{result.inputFeatures.neighborhood} · {labelFor(result.inputFeatures.property_type)}</p><p className="mt-1 text-xs text-text-secondary">{result.inputFeatures.area} m² · {result.inputFeatures.rooms} {copy.rooms.toLocaleLowerCase(locale)}</p></div><button type="button" onClick={edit} className="min-h-11 rounded-control border border-border-medium px-4 text-sm font-semibold text-brand-blue transition hover:border-brand-blue">← {copy.newEstimate}</button></CardSurface>}</div>
+    <div ref={resultRef} className="scroll-target-offset"><CasablancaEstimateResult completed={result} supported={metadata.supported} contextLoading={contextLoading} locale={locale} copy={copy} onEdit={edit} /></div>
   </div>;
 
-  return <div className="grid gap-5 sm:gap-6 lg:grid-cols-[1.45fr_.85fr] lg:items-start"><div ref={formRef} className="scroll-mt-28">{formCard}</div><div ref={resultRef} className="scroll-mt-32">{loading ? <ResultSkeleton copy={copy} /> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div></div>;
+  return <div className="grid gap-5 sm:gap-6 lg:grid-cols-[1.45fr_.85fr] lg:items-start"><div ref={formRef} className="scroll-target-offset">{formCard}</div><div ref={resultRef} className="scroll-target-offset">{loading ? <ResultSkeleton copy={copy} /> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div></div>;
 }
 
 function EstimatorForm({ form, fields, metadata, copy, loading, error, labelFor, update, submit }: { form: typeof initialForm; fields: ReadonlyArray<{ key: keyof typeof initialForm; label: string; min: number; step: string }>; metadata: CasablancaMetadata; copy: any; loading: boolean; error: string; labelFor: (value: string) => string; update: (field: keyof typeof initialForm, value: string) => void; submit: (event: FormEvent) => void }) {
