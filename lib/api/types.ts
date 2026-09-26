@@ -14,6 +14,7 @@ export interface PredictPayload {
 
 export interface PredictResponse {
   estimated_price_mad: number;
+  currency?: string;
   prix_min?: number;
   prix_max?: number;
   prix_par_m2?: number;
@@ -21,6 +22,27 @@ export interface PredictResponse {
   quartier?: string;
   error?: string;
   model_version?: string;
+  explanation?: {
+    method: 'catboost_shap_values';
+    baseline_mad: number;
+    factors: Array<{
+      key: string;
+      contribution_mad: number;
+    }>;
+  };
+  comparables?: Array<{
+    property_type: string;
+    neighborhood: string;
+    listing_price_mad: number;
+    area: number;
+    rooms: number;
+    bedrooms: number;
+    bathrooms: number;
+    floor: number;
+    tags: string[];
+    same_neighborhood: boolean;
+    area_difference_m2: number;
+  }>;
 }
 
 export interface CitiesResponse {

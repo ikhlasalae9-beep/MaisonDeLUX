@@ -49,6 +49,19 @@ def test_valid_casablanca_request_uses_catboost(client, payload):
     assert math.isfinite(body["estimated_price_mad"])
     assert body["estimated_price_mad"] > 0
     assert body["model_version"] == "casablanca-catboost-v1"
+    assert body["explanation"]["method"] == "catboost_shap_values"
+    assert body["comparables"]
+
+
+def test_simulation_mode_uses_same_model_without_heavy_context(client, payload):
+    normal = client.post("/api/ml/estimate", json=payload).get_json()
+    response = client.post("/api/ml/estimate?context=0", json=payload)
+    assert response.status_code == 200
+    body = response.get_json()
+    assert body["estimated_price_mad"] == normal["estimated_price_mad"]
+    assert body["model_version"] == "casablanca-catboost-v1"
+    assert "explanation" not in body
+    assert "comparables" not in body
 
 
 @pytest.mark.parametrize(

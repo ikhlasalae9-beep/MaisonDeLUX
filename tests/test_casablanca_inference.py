@@ -1,5 +1,6 @@
 """Targeted verification for the protected Casablanca inference package."""
 
+import csv
 import hashlib
 import math
 from pathlib import Path
@@ -85,6 +86,18 @@ def test_missing_state_and_age_use_training_all_zero_encoding(valid_payload):
     assert np.count_nonzero(matrix[0, state_age_indices]) == 0
 
 
+def test_every_supported_casablanca_category_is_transformable(valid_payload):
+    categorical = load_manifest()["categorical"]
+    for property_type in categorical["Type"]["accepted"]:
+        assert transform({**valid_payload, "property_type": property_type}).shape == (1, 117)
+    for neighborhood in categorical["Localisation"]["accepted"]:
+        assert transform({**valid_payload, "neighborhood": neighborhood}).shape == (1, 117)
+    for current_state in categorical["Current_state"]["accepted"]:
+        assert transform({**valid_payload, "current_state": current_state}).shape == (1, 117)
+    for age in categorical["Age"]["accepted"]:
+        assert transform({**valid_payload, "age": age}).shape == (1, 117)
+
+
 def test_valid_property_reaches_model_without_price_inverse_transform(valid_payload):
     matrix = transform(valid_payload)
     raw_price = float(load_model().predict(matrix)[0])
@@ -93,6 +106,41 @@ def test_valid_property_reaches_model_without_price_inverse_transform(valid_payl
     assert response["estimated_price_mad"] == round(raw_price)
     assert response["currency"] == "MAD"
     assert response["model_version"] == "casablanca-catboost-v1"
+
+
+def test_prediction_context_uses_native_shap_and_real_reference_rows(valid_payload):
+    response = predict(valid_payload)
+    explanation = response["explanation"]
+    assert explanation["method"] == "catboost_shap_values"
+    assert {factor["key"] for factor in explanation["factors"]} == {
+        "property_type", "neighborhood", "area", "rooms", "bedrooms",
+        "bathrooms", "floor", "current_state", "age",
+    }
+    reconstructed = explanation["baseline_mad"] + sum(
+        factor["contribution_mad"] for factor in explanation["factors"]
+    )
+    assert reconstructed == pytest.approx(response["estimated_price_mad"], abs=6)
+
+    comparables = response["comparables"]
+    assert 1 <= len(comparables) <= 4
+    assert all(item["property_type"] == "Appartements" for item in comparables)
+    with (ROOT / "ml/notebooks/mubawab_listings_clean.csv").open(encoding="utf-8", newline="") as stream:
+        source_rows = list(csv.DictReader(stream))
+    assert all(any(
+        row["Localisation"] == item["neighborhood"]
+        and round(float(row["Price"])) == item["listing_price_mad"]
+        and float(row["Area"]) == item["area"]
+        for row in source_rows
+    ) for item in comparables)
+
+
+def test_context_can_be_skipped_without_changing_prediction(valid_payload):
+    enriched = predict(valid_payload)
+    lightweight = predict(valid_payload, include_context=False)
+    assert lightweight["estimated_price_mad"] == enriched["estimated_price_mad"]
+    assert lightweight["model_version"] == enriched["model_version"]
+    assert "explanation" not in lightweight
+    assert "comparables" not in lightweight
 
 
 def test_unsupported_city_and_property_type_are_rejected(valid_payload):

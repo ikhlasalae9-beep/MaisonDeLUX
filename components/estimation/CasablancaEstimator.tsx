@@ -1,36 +1,43 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import { AlertCircle } from 'lucide-react';
 import { fetchCasablancaMetadata, predictCasablanca } from '@/lib/api/client';
-import type { CasablancaMetadata, PredictResponse } from '@/lib/api/types';
+import type { CasablancaMetadata, CasablancaPredictPayload, PredictResponse } from '@/lib/api/types';
 import { Button } from '@/components/common/Button';
 import { CardSurface, StatePanel } from '@/components/city/CityFoundation';
+import { CasablancaEstimateResult } from '@/components/estimation/CasablancaEstimateResult';
 
 const initialForm = { property_type: '', neighborhood: '', area: '', rooms: '', bedrooms: '', bathrooms: '', floor: '', current_state: '', age: '' };
+export type CompletedCasablancaEstimation = { prediction: PredictResponse; inputFeatures: CasablancaPredictPayload; estimatedAt: string };
 
 export function CasablancaEstimator({ locale, copy }: { locale: string; copy: any }) {
   const [metadata, setMetadata] = useState<CasablancaMetadata | null>(null);
   const [form, setForm] = useState(initialForm);
-  const [result, setResult] = useState<PredictResponse | null>(null);
+  const [result, setResult] = useState<CompletedCasablancaEstimation | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [metadataLoading, setMetadataLoading] = useState(true);
+  const submittingRef = useRef(false);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { fetchCasablancaMetadata().then((value) => { if (value.public_enabled && value.status === 'available') setMetadata(value); }).catch(() => undefined).finally(() => setMetadataLoading(false)); }, []);
   const update = (field: keyof typeof initialForm, value: string) => setForm((current) => ({ ...current, [field]: value }));
   const labelFor = (value: string) => locale !== 'ar' ? (value === 'appartement' ? 'Appartement' : value === 'villa' ? 'Villa' : value) : value === 'appartement' ? 'شقة' : value === 'villa' ? 'فيلا' : value;
 
   async function submit(event: FormEvent) {
-    event.preventDefault(); setError(''); setResult(null);
+    event.preventDefault();
+    if (submittingRef.current) return;
+    setError(''); setResult(null);
     const required = ['property_type', 'neighborhood', 'area', 'rooms', 'bedrooms', 'bathrooms', 'floor'] as const;
     if (required.some((field) => form[field] === '') || Number(form.area) <= 0 || [form.rooms, form.bedrooms, form.bathrooms].some((value) => Number(value) < 1) || Number(form.floor) < 0) { setError(copy.requiredError); return; }
     if (!metadata) { setError(copy.unavailable); return; }
+    submittingRef.current = true;
     setLoading(true);
     try {
-      const inputFeatures = { city: 'Casablanca', property_type: form.property_type, neighborhood: form.neighborhood, area: Number(form.area), rooms: Number(form.rooms), bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms), floor: Number(form.floor), current_state: form.current_state || null, age: form.age || null } as const;
+      const inputFeatures: CasablancaPredictPayload = { city: 'Casablanca', property_type: form.property_type, neighborhood: form.neighborhood, area: Number(form.area), rooms: Number(form.rooms), bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms), floor: Number(form.floor), current_state: form.current_state || null, age: form.age || null };
       const prediction = await predictCasablanca(inputFeatures);
-      setResult(prediction);
+      setResult({ prediction, inputFeatures, estimatedAt: new Date().toISOString() });
       void fetch('/api/analytics/events', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ event_key: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : undefined,
@@ -39,8 +46,13 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
       }).catch((loggingError) => console.error('Analytics logging failed:', loggingError));
     }
     catch (reason) { setError(reason instanceof Error ? reason.message : copy.unavailable); }
-    finally { setLoading(false); }
+    finally { submittingRef.current = false; setLoading(false); }
   }
+
+  useEffect(() => {
+    if (!result || !resultRef.current || !window.matchMedia('(max-width: 1023px)').matches) return;
+    requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }, [result]);
 
   if (metadataLoading) return <StatePanel title={copy.metadataLoading} busy />;
   if (!metadata) return <StatePanel title={copy.unavailable} description={copy.disclaimer} />;
@@ -52,7 +64,7 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
   ] as const;
 
   return <div className="grid gap-5 sm:gap-6 lg:grid-cols-[1.45fr_.85fr] lg:items-start">
-    <CardSurface className="p-4 min-[360px]:p-5 sm:p-8"><form onSubmit={submit} noValidate>
+    <CardSurface className="p-4 min-[360px]:p-5 sm:p-8"><form onSubmit={submit} noValidate><fieldset disabled={loading} className="disabled:opacity-70">
       <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
         <SelectField label={copy.propertyType} value={form.property_type} onChange={(value) => update('property_type', value)} options={metadata.supported.property_types} placeholder={copy.select} labelFor={labelFor} />
         <SelectField label={copy.neighborhood} value={form.neighborhood} onChange={(value) => update('neighborhood', value)} options={metadata.supported.neighborhoods} placeholder={copy.select} />
@@ -62,9 +74,16 @@ export function CasablancaEstimator({ locale, copy }: { locale: string; copy: an
       </div>
       {error ? <div role="alert" className="mt-5 flex items-start gap-2 rounded-control border border-status-danger/25 bg-status-danger/10 p-4 text-sm text-status-danger"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div> : null}
       <Button type="submit" size="lg" loading={loading} className="mt-6 min-h-12 w-full sm:w-auto">{loading ? copy.loading : copy.submit}</Button>
-    </form></CardSurface>
-    <div className="lg:sticky lg:top-28">{result ? <CardSurface className="overflow-hidden"><div className="bg-[#101b2d] p-5 text-white sm:p-7"><CheckCircle2 className="h-6 w-6 text-emerald-400" /><p className="mt-5 text-sm text-white/60">{copy.resultTitle}</p><p className="mt-2 break-words text-3xl font-bold sm:text-4xl">{new Intl.NumberFormat(locale === 'ar' ? 'ar-MA' : 'fr-MA').format(result.estimated_price_mad)} <span className="text-base font-medium text-white/60">MAD</span></p><p className="mt-4 text-xs text-white/55">{copy.modelLabel} · {result.model_version}</p></div><div className="p-5 sm:p-6"><p className="text-sm leading-6 text-text-secondary">{copy.disclaimer}</p><button type="button" onClick={() => setResult(null)} className="mt-4 min-h-11 text-sm font-semibold text-brand-blue sm:mt-5">{copy.newEstimate}</button></div></CardSurface> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div>
+    </fieldset></form></CardSurface>
+    <div ref={resultRef} className="scroll-mt-24">{loading ? <ResultSkeleton copy={copy} /> : result ? <CasablancaEstimateResult completed={result} supported={metadata.supported} locale={locale} copy={copy} onReset={() => setResult(null)} /> : <StatePanel title={copy.resultTitle} description={copy.disclaimer} />}</div>
   </div>;
+}
+
+function ResultSkeleton({ copy }: { copy: any }) {
+  return <CardSurface className="overflow-hidden" aria-live="polite" aria-busy="true">
+    <div className="bg-[#101b2d] p-5 text-white sm:p-7"><p className="text-sm text-white/70">{copy.processing}</p><div className="mt-5 h-10 w-3/4 animate-pulse rounded bg-white/15" /><div className="mt-4 h-3 w-1/2 animate-pulse rounded bg-white/10" /></div>
+    <div className="space-y-4 p-5 sm:p-6"><div className="h-4 w-full animate-pulse rounded bg-slate-200" /><div className="h-4 w-5/6 animate-pulse rounded bg-slate-200" /><div className="h-20 w-full animate-pulse rounded-control bg-slate-100" /></div>
+  </CardSurface>;
 }
 
 function SelectField({ label, value, onChange, options, placeholder, labelFor = (item: string) => item }: { label: string; value: string; onChange: (value: string) => void; options: string[]; placeholder: string; labelFor?: (value: string) => string }) {

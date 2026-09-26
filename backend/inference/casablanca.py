@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import ast
+import csv
 import hashlib
 import json
 import math
@@ -11,6 +13,7 @@ from typing import Any, Mapping
 
 import joblib
 import numpy as np
+from catboost import Pool
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -18,6 +21,7 @@ PACKAGE_DIR = ROOT / "models" / "casablanca" / "v1"
 MODEL_PATH = PACKAGE_DIR / "model.pkl"
 MANIFEST_PATH = PACKAGE_DIR / "preprocessing.json"
 METADATA_PATH = PACKAGE_DIR / "metadata.json"
+REFERENCE_DATASET_PATH = ROOT / "ml" / "notebooks" / "mubawab_listings_clean.csv"
 
 
 class CasablancaInferenceError(ValueError):
@@ -150,14 +154,104 @@ def transform(payload: Mapping[str, Any]) -> np.ndarray:
     return vector.reshape(1, -1)
 
 
-def predict(payload: Mapping[str, Any]) -> dict[str, Any]:
+def _local_contributions(matrix: np.ndarray) -> dict[str, Any]:
+    names = load_manifest()["model_feature_names"]
+    shap = load_model().get_feature_importance(
+        Pool(matrix, feature_names=names), type="ShapValues"
+    )[0]
+    feature_values = dict(zip(names, shap[:-1], strict=True))
+    groups = {
+        "property_type": sum(value for name, value in feature_values.items() if name.startswith("Type_")),
+        "neighborhood": sum(value for name, value in feature_values.items() if name.startswith("Localisation_")),
+        "area": feature_values["Area"],
+        "rooms": feature_values["Rooms"],
+        "bedrooms": feature_values["Bedrooms"],
+        "bathrooms": feature_values["Bathrooms"],
+        "floor": feature_values["Floor"],
+        "current_state": sum(value for name, value in feature_values.items() if name.startswith("Current_state_")),
+        "age": sum(value for name, value in feature_values.items() if name.startswith("Age_")),
+    }
+    factors = [
+        {"key": key, "contribution_mad": round(float(value))}
+        for key, value in sorted(groups.items(), key=lambda item: abs(item[1]), reverse=True)
+    ]
+    return {
+        "method": "catboost_shap_values",
+        "baseline_mad": round(float(shap[-1])),
+        "factors": factors,
+    }
+
+
+@lru_cache(maxsize=1)
+def _reference_rows() -> tuple[dict[str, Any], ...]:
+    rows: list[dict[str, Any]] = []
+    with REFERENCE_DATASET_PATH.open(encoding="utf-8", newline="") as stream:
+        for source in csv.DictReader(stream):
+            try:
+                tags = ast.literal_eval(source["Other_tags"])
+                row = {
+                    "property_type": source["Type"],
+                    "neighborhood": source["Localisation"],
+                    "listing_price_mad": round(float(source["Price"])),
+                    "area": float(source["Area"]),
+                    "rooms": int(float(source["Rooms"])),
+                    "bedrooms": int(float(source["Bedrooms"])),
+                    "bathrooms": int(float(source["Bathrooms"])),
+                    "floor": int(float(source["Floor"])),
+                    "tags": [str(tag) for tag in tags] if isinstance(tags, list) else [],
+                }
+            except (KeyError, TypeError, ValueError, SyntaxError):
+                continue
+            if row["listing_price_mad"] > 0 and row["area"] > 0:
+                rows.append(row)
+    return tuple(rows)
+
+
+def _comparables(payload: Mapping[str, Any], *, limit: int = 4) -> list[dict[str, Any]]:
+    type_value = load_manifest()["categorical"]["Type"]["accepted"][payload["property_type"]]
+    target_area = float(payload["area"])
+
+    def score(row: Mapping[str, Any]) -> float:
+        neighborhood_penalty = 0 if row["neighborhood"] == payload["neighborhood"] else 12
+        area_penalty = min(abs(float(row["area"]) - target_area) / max(target_area, 1), 2) * 6
+        structure_penalty = (
+            abs(int(row["rooms"]) - int(payload["rooms"])) * 0.8
+            + abs(int(row["bedrooms"]) - int(payload["bedrooms"])) * 0.8
+            + abs(int(row["bathrooms"]) - int(payload["bathrooms"])) * 0.8
+            + abs(int(row["floor"]) - int(payload["floor"])) * 0.25
+        )
+        tag_penalty = 0.0
+        for key in ("current_state", "age"):
+            requested = payload.get(key)
+            if requested and requested not in row["tags"]:
+                tag_penalty += 0.6
+        return neighborhood_penalty + area_penalty + structure_penalty + tag_penalty
+
+    candidates = [row for row in _reference_rows() if row["property_type"] == type_value]
+    nearest = sorted(candidates, key=score)[:limit]
+    return [
+        {
+            **row,
+            "area": round(float(row["area"]), 1),
+            "same_neighborhood": row["neighborhood"] == payload["neighborhood"],
+            "area_difference_m2": round(abs(float(row["area"]) - target_area), 1),
+        }
+        for row in nearest
+    ]
+
+
+def predict(payload: Mapping[str, Any], *, include_context: bool = True) -> dict[str, Any]:
     matrix = transform(payload)
     raw_price = float(load_model().predict(matrix)[0])
     if not math.isfinite(raw_price) or raw_price <= 0:
         raise RuntimeError("Casablanca model returned an invalid price")
     metadata = load_metadata()
-    return {
+    response = {
         "estimated_price_mad": round(raw_price),
         "currency": "MAD",
         "model_version": metadata["model_version"],
     }
+    if include_context:
+        response["explanation"] = _local_contributions(matrix)
+        response["comparables"] = _comparables(payload)
+    return response

@@ -53,11 +53,11 @@ export async function fetchCasablancaMetadata(): Promise<CasablancaMetadata> {
   return response.json();
 }
 
-export async function predictCasablanca(payload: CasablancaPredictPayload): Promise<PredictResponse> {
+export async function predictCasablanca(payload: CasablancaPredictPayload, options?: { includeContext?: boolean }): Promise<PredictResponse> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch('/api/ml/estimate', {
+    const response = await fetch(`/api/ml/estimate${options?.includeContext === false ? '?context=0' : ''}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

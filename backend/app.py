@@ -207,7 +207,8 @@ def city_estimate():
     if not isinstance(payload, dict):
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
     try:
-        return jsonify(**predict_for_city(payload))
+        include_context = request.args.get('context', '1') != '0'
+        return jsonify(**predict_for_city(payload, include_context=include_context))
     except (CasablancaInferenceError, ModelRegistryError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:

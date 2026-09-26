@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.py": {
-      "includeFiles": "models/**"
+      "includeFiles": "{models/**,ml/notebooks/mubawab_listings_clean.csv}"
     }
   },
   "rewrites": [
