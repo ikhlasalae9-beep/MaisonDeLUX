@@ -61,7 +61,7 @@ export const CITY_MEDIA_CONFIG: Record<string, CityMediaConfig> = {
     hero: {
       src: '/media/cities/casablanca/Casablanca-hero-web.mp4',
       type: 'video/mp4',
-      poster: '/media/cities/casablanca/Casablanca-hero-poster.jpg',
+      poster: '/media/cities/casablanca/Casablanca-hero-web-poster.jpg',
       ariaLabel: { fr: 'Présentation vidéo de Casablanca', ar: 'عرض مرئي لمدينة الدار البيضاء' },
     },
     gallery: casablancaGallery,

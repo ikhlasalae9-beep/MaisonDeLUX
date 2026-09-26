@@ -13,6 +13,7 @@ export function ThemeVideoBackground({
   className,
   imageClassName,
   videoClassName,
+  imageUnoptimized = false,
 }: {
   darkSrc: string;
   lightSrc?: string;
@@ -22,6 +23,7 @@ export function ThemeVideoBackground({
   className?: string;
   imageClassName?: string;
   videoClassName?: string;
+  imageUnoptimized?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const autoplayAttemptRef = useRef('');
@@ -44,7 +46,7 @@ export function ThemeVideoBackground({
 
   const src = dark || !lightSrc ? darkSrc : lightSrc;
   const activePoster = dark && lightFallbackSrc ? fallbackSrc : lightFallbackSrc ?? fallbackSrc;
-  const activeSrc = mediaInitialized && readyPosters.includes(activePoster) ? src : '';
+  const activeSrc = !lightSrc ? darkSrc : mediaInitialized && readyPosters.includes(activePoster) ? src : '';
   const videoVisible = Boolean(activeSrc) && playingSrc === activeSrc;
 
   const posterLoaded = (poster: string) => {
@@ -78,9 +80,9 @@ export function ThemeVideoBackground({
     {lightFallbackSrc ? <>
       <Image src={lightFallbackSrc} alt="" fill priority sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(lightFallbackSrc)} className={cn('object-cover dark:hidden', imageClassName)} />
       <Image src={fallbackSrc} alt="" fill loading="eager" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('hidden object-cover dark:block', imageClassName)} />
-    </> : <Image src={fallbackSrc} alt="" fill priority sizes="100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('object-cover', imageClassName)} />}
+    </> : <Image src={fallbackSrc} alt="" fill priority unoptimized={imageUnoptimized} sizes="100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('object-cover', imageClassName)} />}
     <video
-      key={sourceType ? activeSrc || 'inactive' : undefined}
+      key={sourceType && lightSrc ? activeSrc || 'inactive' : undefined}
       ref={videoRef}
       aria-hidden="true"
       src={sourceType ? undefined : activeSrc || undefined}
@@ -88,7 +90,7 @@ export function ThemeVideoBackground({
       muted
       loop
       playsInline
-      preload="none"
+      preload={lightSrc ? 'none' : 'metadata'}
       onCanPlay={attemptPlayback}
       onPlaying={() => setPlayingSrc(activeSrc)}
       onPause={() => setPlayingSrc('')}

@@ -37,7 +37,7 @@ export default function CityPage({ params }: { params: { locale: string; citySlu
 
   return <div className="pb-10">
     <section className="relative isolate flex min-h-[clamp(34rem,78svh,46rem)] items-end overflow-hidden bg-[#08111f] pb-10 pt-28 text-white sm:pb-14 sm:pt-36 lg:min-h-[76svh]">
-      {media?.hero ? <ThemeVideoBackground darkSrc={media.hero.src} sourceType={media.hero.type} fallbackSrc={media.hero.poster ?? media.fallback} className="z-0" videoClassName="object-cover object-center" /> : media?.gallery[0] ? <Image src={media.gallery[0].src} alt={localizedMediaText(media.gallery[0].alt, locale)} fill priority sizes="100vw" className="z-0 object-cover" /> : null}
+      {media?.hero ? <ThemeVideoBackground darkSrc={media.hero.src} sourceType={media.hero.type} fallbackSrc={media.hero.poster ?? media.fallback} imageUnoptimized className="z-0" videoClassName="object-cover object-center" /> : media?.gallery[0] ? <Image src={media.gallery[0].src} alt={localizedMediaText(media.gallery[0].alt, locale)} fill priority sizes="100vw" className="z-0 object-cover" /> : null}
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#08111f] via-[#08111f]/55 to-[#08111f]/10" />
       <ZelligePattern className="z-10 opacity-15" />
       <PageContainer className="relative z-20">
