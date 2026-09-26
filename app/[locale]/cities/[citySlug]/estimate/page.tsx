@@ -21,6 +21,10 @@ const casablancaFormScope: CasablancaMetadata = {
   },
 };
 
+export function generateStaticParams() {
+  return [{ citySlug: 'casablanca' }];
+}
+
 export function generateMetadata({ params }: { params: { locale: string; citySlug: string } }): Metadata {
   const copy = getDictionary(params.locale).phase3.estimate;
   return { title: `${copy.title} — MaisonDeLUX`, description: copy.subtitle };

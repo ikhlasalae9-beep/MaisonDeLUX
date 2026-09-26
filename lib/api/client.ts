@@ -48,8 +48,15 @@ export async function predictProperty(
 }
 
 export async function predictCasablanca(payload: CasablancaPredictPayload): Promise<PredictResponse> {
+  // A Python/CatBoost serverless instance can legitimately take longer than 15s
+  // to cold-start. Keep a finite guard, but do not cancel healthy cold inference.
+  const predictionTimeoutMs = 60_000;
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, predictionTimeoutMs);
   try {
     const response = await fetch('/api/ml/estimate', {
       method: 'POST',
@@ -61,6 +68,11 @@ export async function predictCasablanca(payload: CasablancaPredictPayload): Prom
     if (!response.ok) throw new Error(body.error || `Erreur serveur (${response.status})`);
     if (!Number.isFinite(body.estimated_price_mad) || body.estimated_price_mad <= 0) throw new Error('Réponse invalide du service.');
     return body;
+  } catch (error) {
+    if (timedOut) {
+      throw new Error("Le délai d'estimation a été dépassé. Veuillez réessayer.");
+    }
+    throw error;
   } finally {
     clearTimeout(timeout);
   }

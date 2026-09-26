@@ -6,9 +6,11 @@ import ast
 import csv
 import hashlib
 import json
+import logging
 import math
 from functools import lru_cache
 from pathlib import Path
+from time import perf_counter
 from typing import Any, Mapping
 
 import joblib
@@ -21,6 +23,7 @@ MODEL_PATH = PACKAGE_DIR / "model.pkl"
 MANIFEST_PATH = PACKAGE_DIR / "preprocessing.json"
 METADATA_PATH = PACKAGE_DIR / "metadata.json"
 REFERENCE_DATASET_PATH = ROOT / "ml" / "notebooks" / "mubawab_listings_clean.csv"
+LOGGER = logging.getLogger(__name__)
 
 
 class CasablancaInferenceError(ValueError):
@@ -262,11 +265,26 @@ def prediction_context(payload: Mapping[str, Any]) -> dict[str, Any]:
 
 def predict(payload: Mapping[str, Any]) -> dict[str, Any]:
     """Run only the approved preprocessing -> CatBoost prediction path."""
+    started_at = perf_counter()
     matrix = transform(payload)
-    raw_price = float(load_model().predict(matrix)[0])
+    preprocessed_at = perf_counter()
+    model_was_cached = load_model.cache_info().currsize > 0
+    model = load_model()
+    model_ready_at = perf_counter()
+    raw_price = float(model.predict(matrix)[0])
+    predicted_at = perf_counter()
     if not math.isfinite(raw_price) or raw_price <= 0:
         raise RuntimeError("Casablanca model returned an invalid price")
     metadata = load_metadata()
+    LOGGER.info(
+        "casablanca_inference_complete model_cache_hit=%s preprocessing_ms=%.2f "
+        "model_resolution_ms=%.2f prediction_ms=%.2f total_ms=%.2f",
+        model_was_cached,
+        (preprocessed_at - started_at) * 1000,
+        (model_ready_at - preprocessed_at) * 1000,
+        (predicted_at - model_ready_at) * 1000,
+        (predicted_at - started_at) * 1000,
+    )
     return {
         "estimated_price_mad": round(raw_price),
         "currency": "MAD",
