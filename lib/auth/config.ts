@@ -19,6 +19,6 @@ export function safeDestination(value: unknown, locale: string) {
 }
 
 export function siteOrigin() {
-  const url = process.env.SITE_URL || (process.env.NODE_ENV === 'production' ? 'https://www.maison-delux.com' : 'http://localhost:3000');
+  const url = process.env.SITE_URL || (process.env.NODE_ENV === 'production' ? 'https://maison-delux.com' : 'http://localhost:3000');
   return new URL(url).origin;
 }

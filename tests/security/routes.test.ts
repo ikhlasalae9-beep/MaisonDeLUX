@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server';
 
 // Mock external session/model/database adapters, not route authorization logic.
 // Database role/ownership enforcement is separately exercised in real PGlite.
-let user:any=null,role='user',decision='ALLOWED',modelCalls=0,contextCalls=0,phaseReady=true,persistenceFails=false,passport:any=null,queries:{sql:string;values:any[]}[]=[];
+let user:any=null,role='user',decision='ALLOWED',modelCalls=0,contextCalls=0,phaseReady=true,persistenceFails=false,verifyError=false,verifiedType='',passport:any=null,queries:{sql:string;values:any[]}[]=[];
 const cookieJar=new Map<string,string>();
 const userId='11111111-1111-4111-8111-111111111111';
 const prediction={estimated_price_mad:1500000,model_version:'casablanca-catboost-v1'};
@@ -13,7 +13,7 @@ const replace=(path:string,exports:any)=>{const filename=require.resolve(path);r
 replace('next/headers',{cookies:()=>({get:(key:string)=>cookieJar.has(key)?{value:cookieJar.get(key)}:undefined,set:(key:string,value:string)=>cookieJar.set(key,value),getAll:()=>[]})});
 replace('../../lib/auth/server',{
   currentUser:async()=>user,
-  authClient:()=>({from:(table:string)=>{assert.equal(table,'user_roles');return {select:()=>({eq:(column:string,id:string)=>{assert.equal(column,'user_id');assert.equal(id,userId);return {single:async()=>({data:{role},error:null})};}})};},auth:{exchangeCodeForSession:async()=>({data:{user},error:null})}}),
+  authClient:()=>({from:(table:string)=>{assert.equal(table,'user_roles');return {select:()=>({eq:(column:string,id:string)=>{assert.equal(column,'user_id');assert.equal(id,userId);return {single:async()=>({data:{role},error:null})};}})};},auth:{exchangeCodeForSession:async()=>({data:{user},error:null}),verifyOtp:async({type}:{type:string})=>{verifiedType=type;return verifyError?{data:{user:null},error:new Error('INVALID')}:{data:{user:{id:userId}},error:null};}}}),
 });
 replace('../../lib/admin/db',{query:async(sql:string,values:any[]=[])=>{
   queries.push({sql,values});
@@ -28,12 +28,13 @@ replace('../../lib/estimations/gateway',{invokeInference:async(kind:string)=>{if
 const main=require('../../app/api/estimations/route');
 const {requireAdmin}=require('../../lib/admin/require');
 const callback=require('../../app/[locale]/auth/callback/route');
+const confirm=require('../../app/auth/confirm/route');
 const simulation=require('../../app/api/estimations/[id]/[action]/route');
 const input={city:'Casablanca',property_type:'appartement',neighborhood:'Maârif',area:100,rooms:3,bedrooms:2,bathrooms:2,floor:4,current_state:'Bon état',age:'10-20 ans'};
 const request=(body:any)=>new NextRequest('http://localhost:3000/api/estimations',{method:'POST',headers:{origin:'http://localhost:3000','content-type':'application/json'},body:JSON.stringify(body)});
 test.beforeEach(()=>{
   process.env.SITE_URL='http://localhost:3000';process.env.ADMIN_AUTH_MODE='supabase-only';process.env.GUEST_TRIAL_HMAC_SECRET='test-only-guest-hmac-secret-32-characters';
-  user=null;role='user';decision='ALLOWED';modelCalls=0;contextCalls=0;phaseReady=true;persistenceFails=false;passport=null;queries=[];cookieJar.clear();
+  user=null;role='user';decision='ALLOWED';modelCalls=0;contextCalls=0;phaseReady=true;persistenceFails=false;verifyError=false;verifiedType='';passport=null;queries=[];cookieJar.clear();
 });
 test('actual main route checks entitlement before inference, persists success and refuses forged ownership',async()=>{
   const first=await main.POST(request({input,request_id:randomUUID()}));
@@ -93,4 +94,21 @@ test('recovery callback preserves Arabic and invalid links return to localized r
   assert.equal(good.headers.get('location'),'http://localhost:3000/ar/auth/reset-password');
   const invalid=await callback.GET(new NextRequest('http://localhost:3000/ar/auth/callback?flow=recovery'),{params:{locale:'ar'}});
   assert.equal(invalid.headers.get('location'),'http://localhost:3000/ar/auth/forgot-password?error=link');
+});
+test('first-party token-hash confirmation establishes the session and preserves a safe localized continuation',async()=>{
+  const nested=encodeURIComponent('http://localhost:3000/ar/auth/callback?next=%2Far%2Fcities%2Fcasablanca%2Festimate%3Fresume%3D1');
+  const response=await confirm.GET(new NextRequest(`http://localhost:3000/auth/confirm?token_hash=valid-token-hash&type=email&locale=ar&redirect_to=${nested}`));
+  assert.equal(response.status,307);assert.equal(verifiedType,'email');
+  const location=new URL(response.headers.get('location')!);
+  assert.equal(location.pathname,'/ar/auth/confirmed');assert.equal(location.searchParams.get('status'),'success');
+  assert.equal(location.searchParams.get('next'),'/ar/cities/casablanca/estimate?resume=1');
+});
+test('confirmation rejects invalid tokens and never follows an external continuation',async()=>{
+  verifyError=true;
+  const invalid=await confirm.GET(new NextRequest('http://localhost:3000/auth/confirm?token_hash=expired&type=email&locale=fr&next=https://evil.test'));
+  const location=new URL(invalid.headers.get('location')!);
+  assert.equal(location.pathname,'/fr/auth/confirmed');assert.equal(location.searchParams.get('status'),'error');assert.equal(location.searchParams.has('token_hash'),false);
+  verifiedType='';
+  const malformed=await confirm.GET(new NextRequest('http://localhost:3000/auth/confirm?token_hash=bad%20token&type=email&locale=ar'));
+  assert.equal(verifiedType,'');assert.match(malformed.headers.get('location')!,/\/ar\/auth\/confirmed\?status=error/);
 });
