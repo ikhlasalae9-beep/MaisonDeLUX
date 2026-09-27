@@ -25,9 +25,9 @@ export function CompactHeader({ locale, variant }: { locale: string; variant: 'a
     : (ar ? 'العودة إلى الموقع' : 'Retour au site');
 
   return <header className="relative z-40 border-b border-border-subtle bg-surface/90 backdrop-blur-xl">
-    <div className="mx-auto flex min-h-[4.5rem] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto flex min-h-[4.5rem] max-w-7xl items-center justify-between gap-1 px-2 min-[360px]:gap-3 min-[360px]:px-4 sm:px-6 lg:px-8">
       <BrandLogo locale={locale} size="compact" />
-      <div className="flex items-center gap-1 sm:gap-3">
+      <div className="flex items-center gap-0.5 min-[360px]:gap-1 sm:gap-3">
         <LanguageSwitcher currentLocale={locale} showIcon={false} />
         <ThemeToggle />
         {variant === 'product' ? <Link href={authenticated ? `/${locale}/account` : `/${locale}/auth/login`} aria-label={authenticated ? (ar ? 'فضائي' : 'Mon espace') : (ar ? 'تسجيل الدخول' : 'Connexion')} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-medium text-text-secondary transition-colors hover:bg-surface-subtle hover:text-text-primary"><UserRound className="h-4 w-4" /></Link> : null}

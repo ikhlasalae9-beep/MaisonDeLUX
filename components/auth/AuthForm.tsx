@@ -17,24 +17,34 @@ export function AuthForm({ locale, mode }: { locale: string; mode: string }) {
   const subtitle=mode==='signup'?(ar?'تقديراتك وجوازاتك وعقاراتك في مكان واحد.':'Vos estimations, Passeports et biens réunis au même endroit.'):mode==='login'?(ar?'واصل تقديراتك واسترجع محفوظاتك بأمان.':'Continuez vos estimations et retrouvez votre historique en toute sécurité.'):(ar?'سنرشدك خلال الخطوات التالية بأمان.':'Nous vous guidons simplement pour sécuriser votre accès.');
   const submitLabel=mode==='signup'?(ar?'إنشاء فضائي':'Créer mon espace'):mode==='login'?(ar?'تسجيل الدخول':'Se connecter'):title;
   const benefits=ar?['واصل تقديراتك','احفظ جوازاتك العقارية','استرجع سجلّك','سجّل عقاراتك وقارنها']:['Continuez vos estimations','Sauvegardez vos Passeports','Retrouvez votre historique','Enregistrez et comparez vos biens'];
+  const errorMessage=(code:string)=>({
+    INVALID_EMAIL:ar?'عنوان البريد الإلكتروني غير صالح.':'L’adresse e-mail n’est pas valide.',
+    WEAK_PASSWORD:ar?'اختر كلمة مرور أقوى تتكون من 12 حرفاً على الأقل.':'Choisissez un mot de passe plus robuste d’au moins 12 caractères.',
+    INVALID_CREDENTIALS:ar?'البريد الإلكتروني أو كلمة المرور غير صحيحة.':'Adresse e-mail ou mot de passe incorrect.',
+    EMAIL_NOT_CONFIRMED:ar?'يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول.':'Confirmez votre adresse e-mail avant de vous connecter.',
+    RATE_LIMITED:ar?'محاولات كثيرة. حاول لاحقاً.':'Trop de tentatives. Réessayez plus tard.',
+    SERVICE_UNAVAILABLE:ar?'الخدمة غير متاحة مؤقتاً. حاول لاحقاً.':'Service momentanément indisponible. Réessayez plus tard.',
+  } as Record<string,string>)[code]||(ar?'تعذر إتمام الطلب بأمان. تحقق من المعلومات وحاول مجدداً.':'Impossible de terminer la demande en toute sécurité. Vérifiez vos informations et réessayez.');
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setMessage('');
     const fields = new FormData(event.currentTarget);
     try {
       const response = await fetch(`/api/auth/${mode}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ locale, next, email: fields.get('email') || undefined, password: fields.get('password') || undefined, display_name: fields.get('display_name') || undefined }) });
       const result = await response.json();
-      if (!response.ok) { setMessage(result.code === 'RATE_LIMITED' ? (ar ? 'محاولات كثيرة. حاول لاحقاً.' : 'Trop de tentatives. Réessayez plus tard.') : (ar ? 'تعذر إتمام الطلب. تحقق من المعلومات وحاول مجدداً.' : 'Impossible de terminer la demande. Vérifiez vos informations et réessayez.')); return; }
+      if (!response.ok) { setMessage(errorMessage(result.code)); return; }
       if (result.redirect) { window.location.assign(result.redirect); return; }
-      setMessage(ar ? 'إذا كانت المعلومات صالحة، ستتلقى رسالة لمتابعة العملية. تحقق من بريدك الإلكتروني.' : 'Si les informations le permettent, un e-mail vous sera envoyé pour continuer. Consultez votre messagerie.');
+      setMessage(mode==='signup'
+        ? (ar ? 'تحقق من بريدك الإلكتروني لتأكيد فضائك، ثم ستعود إلى مسار التقدير.' : 'Consultez votre messagerie pour confirmer votre espace. Vous reprendrez ensuite votre parcours d’estimation.')
+        : (ar ? 'إذا كان الحساب موجوداً، ستتلقى رسالة آمنة لمتابعة العملية.' : 'Si ce compte existe, un e-mail sécurisé vous permettra de continuer.'));
     } catch { setMessage(ar ? 'الخدمة غير متاحة مؤقتاً.' : 'Service momentanément indisponible.'); }
     finally { setBusy(false); }
   }
   const form=<div className="p-6 sm:p-9 lg:p-10">
     <div className="mb-7"><span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-blue/10 text-brand-blue"><LockKeyhole className="h-5 w-5" /></span><h1 className="mt-5 text-2xl font-black tracking-tight text-text-primary sm:text-3xl">{title}</h1><p className="mt-2 text-sm leading-6 text-text-secondary">{subtitle}</p></div>
     <form onSubmit={submit}><fieldset disabled={busy} className="space-y-5 disabled:opacity-60">
-      {mode === 'signup' ? <Field label={ar?'الاسم المعروض':'Nom affiché'}><input name="display_name" maxLength={80} autoComplete="name" className="auth-input" /></Field> : null}
-      {mode !== 'reset-password' ? <Field label={ar?'البريد الإلكتروني':'Adresse e-mail'}><input name="email" type="email" required maxLength={254} autoComplete="email" inputMode="email" dir="ltr" className="auth-input" /></Field> : null}
-      {mode !== 'forgot-password' ? <Field label={ar?'كلمة المرور':'Mot de passe'} hint={mode!=='login'?(ar?'12 حرفاً على الأقل':'12 caractères minimum'):undefined}><div className="relative"><input name="password" type={showPassword?'text':'password'} required minLength={mode==='login'?1:12} maxLength={128} autoComplete={mode==='login'?'current-password':'new-password'} dir="ltr" className="auth-input pe-12" /><button type="button" onClick={()=>setShowPassword(value=>!value)} className="absolute inset-y-0 end-1 flex min-h-11 w-11 items-center justify-center text-text-muted" aria-label={showPassword?(ar?'إخفاء كلمة المرور':'Masquer le mot de passe'):(ar?'إظهار كلمة المرور':'Afficher le mot de passe')}>{showPassword?<EyeOff className="h-5 w-5"/>:<Eye className="h-5 w-5"/>}</button></div></Field> : null}
+      {mode === 'signup' ? <Field id="display-name" label={ar?'الاسم المعروض':'Nom affiché'}><input id="display-name" name="display_name" maxLength={80} autoComplete="name" className="auth-input" /></Field> : null}
+      {mode !== 'reset-password' ? <Field id="auth-email" label={ar?'البريد الإلكتروني':'Adresse e-mail'}><input id="auth-email" name="email" type="email" required maxLength={254} autoComplete="email" inputMode="email" dir="ltr" className="auth-input" /></Field> : null}
+      {mode !== 'forgot-password' ? <Field id="auth-password" label={ar?'كلمة المرور':'Mot de passe'} hint={mode!=='login'?(ar?'12 حرفاً على الأقل، وتجنب المعلومات سهلة التخمين.':'12 caractères minimum, sans information facile à deviner.'):undefined}><div className="relative"><input id="auth-password" name="password" type={showPassword?'text':'password'} required minLength={mode==='login'?1:12} maxLength={128} autoComplete={mode==='login'?'current-password':'new-password'} dir="ltr" aria-describedby={mode!=='login'?'auth-password-hint':undefined} className={`auth-input ${ar?'auth-input--icon-start':'auth-input--icon-end'}`} /><button type="button" onClick={()=>setShowPassword(value=>!value)} className="absolute inset-y-0 end-1 flex min-h-11 w-11 items-center justify-center rounded-lg text-text-muted hover:text-text-primary" aria-controls="auth-password" aria-pressed={showPassword} aria-label={showPassword?(ar?'إخفاء كلمة المرور':'Masquer le mot de passe'):(ar?'إظهار كلمة المرور':'Afficher le mot de passe')}>{showPassword?<EyeOff className="h-5 w-5"/>:<Eye className="h-5 w-5"/>}</button></div></Field> : null}
       {mode==='login'?<div className="text-end"><Link className="text-sm font-semibold text-brand-blue hover:underline" href={`/${locale}/auth/forgot-password`}>{ar?'نسيت كلمة المرور؟':'Mot de passe oublié ?'}</Link></div>:null}
       <Button type="submit" loading={busy} className="min-h-12 w-full">{busy?(ar?'جارٍ المعالجة…':'Traitement en cours…'):submitLabel}</Button>
     </fieldset></form>
@@ -48,4 +58,4 @@ export function AuthForm({ locale, mode }: { locale: string; mode: string }) {
   </CardSurface>;
 }
 
-function Field({label,hint,children}:{label:string;hint?:string;children:React.ReactNode}) { return <label className="block"><span className="mb-2 block text-sm font-bold text-text-primary">{label}</span>{children}{hint?<span className="mt-2 block text-xs text-text-muted">{hint}</span>:null}</label>; }
+function Field({id,label,hint,children}:{id:string;label:string;hint?:string;children:React.ReactNode}) { return <div className="block"><label htmlFor={id} className="mb-2 block text-sm font-bold text-text-primary">{label}</label>{children}{hint?<span id={`${id}-hint`} className="mt-2 block text-xs leading-5 text-text-muted">{hint}</span>:null}</div>; }

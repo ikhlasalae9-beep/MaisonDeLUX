@@ -7,6 +7,7 @@ test('write boundaries reject cross-origin requests and oversized/unexpected JSO
   process.env.SITE_URL='http://localhost:3000';
   const request=(body:string,headers:Record<string,string>={})=>new NextRequest('http://localhost:3000/api/estimations',{method:'POST',body,headers:{'content-type':'application/json',origin:'http://localhost:3000',...headers}});
   assert.doesNotThrow(()=>sameOrigin(request('{}')));
+  assert.doesNotThrow(()=>sameOrigin(new NextRequest('https://preview.example/api/auth/signup',{method:'POST',body:'{}',headers:{'content-type':'application/json',origin:'https://preview.example','sec-fetch-site':'same-origin'}})));
   assert.throws(()=>sameOrigin(request('{}',{origin:'https://evil.test'})));
   assert.throws(()=>sameOrigin(request('{}',{'sec-fetch-site':'cross-site'})));
   assert.deepEqual(await jsonBody(request('{"input":1}'),['input']),{input:1});

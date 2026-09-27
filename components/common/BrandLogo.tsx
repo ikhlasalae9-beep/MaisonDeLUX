@@ -21,7 +21,7 @@ export function BrandLogo({
   // Light mode: native deep navy & primary blue
   // Dark mode: crisp luminous pure white inversion for luxury dark backgrounds
   const sizeClasses = {
-    compact: 'h-8 w-28 sm:h-9 sm:w-44',
+    compact: 'h-7 w-20 min-[360px]:h-8 min-[360px]:w-28 sm:h-9 sm:w-44',
     default: 'h-10 sm:h-11 md:h-12 w-48 sm:w-56 md:w-64',
     large: 'h-12 sm:h-14 w-56 sm:w-64 md:w-72',
   };

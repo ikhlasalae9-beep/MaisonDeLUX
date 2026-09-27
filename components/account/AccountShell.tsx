@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeft, ArrowRight, BarChart3, Building2, LayoutDashboard, Scale, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BarChart3, Building2, FileBadge2, LayoutDashboard, Scale, UserRound } from 'lucide-react';
 import { BrandLogo } from '@/components/common/BrandLogo';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
@@ -15,8 +15,9 @@ export function AccountShell({ children, locale }: { children: React.ReactNode; 
     ['', ar ? 'نظرة عامة' : 'Vue d’ensemble', LayoutDashboard],
     ['estimations', ar ? 'تقديراتي' : 'Mes estimations', BarChart3],
     ['properties', ar ? 'عقاراتي' : 'Mes biens', Building2],
+    ['passports', ar ? 'جوازاتي' : 'Mes Passeports', FileBadge2],
     ['compare', ar ? 'المقارنة' : 'Comparaison', Scale],
-    ['security', ar ? 'الأمان' : 'Sécurité', ShieldCheck],
+    ['profile', ar ? 'الملف والإعدادات' : 'Profil et réglages', UserRound],
   ] as const;
   const active = (path: string) => path ? pathname.includes(`/account/${path}`) : pathname === `/${locale}/account`;
   const linkClass = (path: string) => `flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors ${active(path) ? 'bg-brand-blue text-white shadow-sm' : 'text-text-secondary hover:bg-surface-subtle hover:text-text-primary'}`;

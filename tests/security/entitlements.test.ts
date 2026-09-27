@@ -59,3 +59,19 @@ test('privacy heuristic ignores browser brand and uses normalized network prefix
   assert.equal(hashIdentity('token','secret').includes('secret'),false);
   delete process.env.TRUSTED_CLIENT_IP_HEADER;
 });
+
+test('local development creates a process-local guest key but production requires the dedicated variable', () => {
+  const originalNodeEnv=process.env.NODE_ENV, originalGuest=process.env.GUEST_TRIAL_HMAC_SECRET;
+  try {
+    delete process.env.GUEST_TRIAL_HMAC_SECRET;
+    (process.env as Record<string,string|undefined>).NODE_ENV='development';
+    const first=hashIdentity('token','guest');
+    assert.equal(first.length,64);
+    assert.equal(first,hashIdentity('token','guest'));
+    (process.env as Record<string,string|undefined>).NODE_ENV='production';
+    assert.throws(()=>hashIdentity('token','guest'),/GUEST_SECRET_UNAVAILABLE/);
+  } finally {
+    if(originalNodeEnv===undefined)delete (process.env as Record<string,string|undefined>).NODE_ENV;else (process.env as Record<string,string|undefined>).NODE_ENV=originalNodeEnv;
+    if(originalGuest===undefined)delete process.env.GUEST_TRIAL_HMAC_SECRET;else process.env.GUEST_TRIAL_HMAC_SECRET=originalGuest;
+  }
+});

@@ -9,7 +9,7 @@ import { requireAdmin } from '../../lib/admin/require';
 const original = { ...process.env };
 
 test.beforeEach(() => {
-  process.env.NODE_ENV = 'test';
+  (process.env as Record<string,string|undefined>).NODE_ENV = 'test';
   process.env.SITE_URL = 'http://localhost:3000';
   process.env.ADMIN_EMAIL = 'admin@example.test';
   process.env.ADMIN_PASSWORD = 'local-test-password';

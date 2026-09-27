@@ -50,30 +50,30 @@ test('authenticated main route uses verified identity and does not reserve guest
   assert.equal(modelCalls,2);assert.ok(!queries.some(q=>q.sql.includes('SELECT public.phase_c_reserve_guest')));
   assert.ok(queries.filter(q=>q.sql.includes('SELECT public.phase_c_complete_estimation')).every(q=>q.values[2]===userId));
 });
-test('missing Phase C schema and optional persistence failures never erase a valid prediction',async()=>{
+test('missing Phase C schema and persistence failures fail closed without reporting a successful estimate',async()=>{
   phaseReady=false;
   const compatibility=await main.POST(request({input,request_id:randomUUID()}));
-  assert.equal(compatibility.status,200);assert.equal((await compatibility.json()).phase_c_degraded,true);
-  assert.equal(modelCalls,1);assert.equal(contextCalls,1);assert.ok(!queries.some(q=>q.sql.includes('SELECT public.phase_c_reserve_guest')));
+  assert.equal(compatibility.status,503);assert.equal((await compatibility.json()).code,'SERVICE_UNAVAILABLE');
+  assert.equal(modelCalls,0);assert.equal(contextCalls,0);assert.ok(!queries.some(q=>q.sql.includes('SELECT public.phase_c_reserve_guest')));
   phaseReady=true;persistenceFails=true;modelCalls=0;contextCalls=0;queries=[];
   const degraded=await main.POST(request({input,request_id:randomUUID()}));const body=await degraded.json();
-  assert.equal(degraded.status,200);assert.equal(body.estimated_price_mad,1500000);assert.equal(body.phase_c_degraded,true);
-  assert.equal(modelCalls,1);assert.equal(contextCalls,1);
+  assert.equal(degraded.status,503);assert.equal(body.code,'SERVICE_UNAVAILABLE');
+  assert.equal(modelCalls,1);assert.equal(contextCalls,0);
   assert.ok(queries.some(q=>q.sql.includes('phase_c_release_guest')));
 });
-test('server Admin authority rejects normal users and accepts only database admin role',async()=>{
+test('customer identity and metadata never grant access to the separate admin session',async()=>{
   const req=new NextRequest('http://localhost:3000/api/admin/overview',{headers:{'x-role':'admin'}});
   await assert.rejects(requireAdmin(req));
   user={id:userId,email_confirmed_at:'2026-01-01',user_metadata:{role:'admin'}};
   await assert.rejects(requireAdmin(req));
-  role='admin';assert.deepEqual(await requireAdmin(req),{userId,source:'supabase'});
+  role='admin';await assert.rejects(requireAdmin(req));
 });
-test('every privileged Admin read endpoint rejects a normal verified user',async()=>{
+test('every privileged Admin read endpoint rejects a verified customer without an admin session',async()=>{
   user={id:userId,email_confirmed_at:'2026-01-01'};
   for(const name of ['overview','estimations','model','db-health','data-intelligence','report','users-security']){
     const route=require(`../../app/api/admin/${name}/route`);
     const response=await route.GET(new NextRequest(`http://localhost:3000/api/admin/${name}`));
-    assert.equal(response.status,403,name);
+    assert.equal(response.status,401,name);
   }
 });
 test('actual what-if route checks ownership and never creates or consumes a main trial',async()=>{

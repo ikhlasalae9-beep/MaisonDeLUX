@@ -10,11 +10,6 @@ import { invokeInference } from '@/lib/estimations/gateway';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-async function addOptionalContext(input:ReturnType<typeof validateModelInput>,prediction:Record<string,unknown>) {
-  try { return {...prediction,...await invokeInference('context',input)}; }
-  catch { return prediction; }
-}
-
 export async function POST(request: NextRequest) {
   try {
     sameOrigin(request);
@@ -23,9 +18,9 @@ export async function POST(request: NextRequest) {
     let input; try { input=validateModelInput(body.input); } catch { throw new PublicError('INVALID_INPUT'); }
     const user = await currentUser();
     if (!await phaseCReady()) {
-      console.warn('PHASE_C_COMPATIBILITY_ESTIMATION', { reason: 'schema_or_guest_secret_unavailable' });
-      const prediction=await invokeInference('estimate',input);
-      return safeResponse({...await addOptionalContext(input,prediction),guest:!user,phase_c_degraded:true});
+      // Never bypass the server-authoritative guest entitlement or return an
+      // unowned "successful" estimate when Phase C persistence is unavailable.
+      throw new PublicError('SERVICE_UNAVAILABLE',503);
     }
     const identity = coarseIdentity(request.headers);
     let token = cookies().get(GUEST_COOKIE)?.value;
@@ -55,7 +50,7 @@ export async function POST(request: NextRequest) {
     } catch {
       if (!user) await query('SELECT public.phase_c_release_guest($1,$2)',[tokenHash,body.request_id]).catch(()=>{});
       console.error('PHASE_C_PERSISTENCE_DEGRADED');
-      return safeResponse({...await addOptionalContext(input,prediction),guest:!user,phase_c_degraded:true});
+      throw new PublicError('SERVICE_UNAVAILABLE',503);
     }
   } catch(error) { return errorResponse(error); }
 }

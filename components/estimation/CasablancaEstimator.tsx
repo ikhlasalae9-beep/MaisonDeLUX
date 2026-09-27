@@ -15,6 +15,7 @@ const CasablancaEstimateResult = dynamic(
 );
 
 const initialForm = { property_type: '', neighborhood: '', area: '', rooms: '', bedrooms: '', bathrooms: '', floor: '', current_state: '', age: '' };
+const resumeKey = 'mdl:casablanca-estimate:resume';
 export type CompletedCasablancaEstimation = { prediction: PredictResponse; inputFeatures: CasablancaPredictPayload; estimatedAt: string };
 
 function scrollBelowNavbar(target: HTMLElement | null) {
@@ -40,6 +41,13 @@ export function CasablancaEstimator({ locale, copy, metadata }: { locale: string
   const formRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search), property = params.get('property'), estimation = params.get('estimation');
+    if (params.get('resume') === '1') {
+      try {
+        const resumed=JSON.parse(sessionStorage.getItem(resumeKey)||'null');
+        if (resumed && typeof resumed==='object') setForm(Object.fromEntries(Object.keys(initialForm).map(key=>[key,typeof resumed[key]==='string'?resumed[key]:''])) as typeof initialForm);
+        sessionStorage.removeItem(resumeKey);
+      } catch { sessionStorage.removeItem(resumeKey); }
+    }
     const url = property && /^[0-9a-f-]{36}$/i.test(property) ? `/api/account/properties/${property}` : estimation && /^[1-9][0-9]{0,17}$/.test(estimation) ? `/api/account/estimations/${estimation}` : null;
     if (!url) return;
     let active = true;
@@ -79,7 +87,7 @@ export function CasablancaEstimator({ locale, copy, metadata }: { locale: string
         if (contextKeyRef.current === estimatedAt) setContextLoading(false);
       });
     }
-    catch (reason) { if (reason instanceof EstimationError && reason.code === 'GUEST_TRIAL_CONSUMED') setAuthRequired(true); else setError(reason instanceof Error ? reason.message : copy.unavailable); }
+    catch (reason) { if (reason instanceof EstimationError && reason.code === 'GUEST_TRIAL_CONSUMED') { try { sessionStorage.setItem(resumeKey,JSON.stringify(form)); } catch {} setAuthRequired(true); } else setError(reason instanceof Error ? reason.message : copy.unavailable); }
     finally { submittingRef.current = false; setLoading(false); }
   }
 
@@ -95,7 +103,7 @@ export function CasablancaEstimator({ locale, copy, metadata }: { locale: string
     { key: 'floor', label: copy.floor, min: 0, step: '1' },
   ] as const;
 
-  const formCard = authRequired ? <PassportAccountCTA locale={locale} gated /> : <EstimatorForm form={form} fields={fields} metadata={metadata} copy={copy} loading={loading} error={error} labelFor={labelFor} update={update} submit={submit} />;
+  const formCard = authRequired ? <PassportAccountCTA locale={locale} gated next={`/${locale}/cities/casablanca/estimate?resume=1`} /> : <EstimatorForm form={form} fields={fields} metadata={metadata} copy={copy} loading={loading} error={error} labelFor={labelFor} update={update} submit={submit} />;
   const edit = () => { setEditing(true); requestAnimationFrame(() => scrollBelowNavbar(formRef.current)); };
 
   if (result) return <div className="space-y-5 sm:space-y-6">

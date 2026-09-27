@@ -1,12 +1,25 @@
 import { createHmac, randomBytes } from 'node:crypto';
 import { isIP } from 'node:net';
 export const GUEST_COOKIE = 'mdl_guest';
+function guestHmacSecret() {
+  const configured = process.env.GUEST_TRIAL_HMAC_SECRET;
+  if (configured && configured.length >= 32) return configured;
+  // Keep local development usable without coupling guest identity to Admin or
+  // customer-auth credentials. The process-local key survives dev HMR, is
+  // never logged or persisted, and is never available in production.
+  if (process.env.NODE_ENV !== 'production') {
+    const runtime=globalThis as typeof globalThis & {__mdlPhaseCDevGuestSecret?:string};
+    return runtime.__mdlPhaseCDevGuestSecret ||= randomBytes(32).toString('hex');
+  }
+  return null;
+}
+export const guestHmacAvailable = () => guestHmacSecret() !== null;
 export function boundedSetting(name: string, fallback: number, maximum = 10000) {
   const n = Number(process.env[name]); return Number.isInteger(n) && n > 0 && n <= maximum ? n : fallback;
 }
 export function hashIdentity(purpose: string, value: string) {
-  const secret = process.env.GUEST_TRIAL_HMAC_SECRET;
-  if (!secret || secret.length < 32) throw new Error('GUEST_SECRET_UNAVAILABLE');
+  const secret = guestHmacSecret();
+  if (!secret) throw new Error('GUEST_SECRET_UNAVAILABLE');
   return createHmac('sha256', secret).update(`${purpose}:${value}`).digest('hex');
 }
 export const newGuestToken = () => randomBytes(32).toString('base64url');

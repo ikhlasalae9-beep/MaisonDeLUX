@@ -42,13 +42,24 @@ export async function POST(request: NextRequest, { params }: { params: { action:
     }
     if (action === 'signup') {
       if (body.display_name !== undefined && (typeof body.display_name !== 'string' || body.display_name.length > 80)) throw new PublicError('INVALID_REQUEST');
-      const { error } = await client.auth.signUp({ email: body.email, password: body.password, options: { data: { display_name: body.display_name || '', preferred_locale: locale }, emailRedirectTo: `${siteOrigin()}/${locale}/auth/callback?next=${encodeURIComponent(next)}` } });
-      if (error && error.status && error.status >= 500) throw new PublicError('SERVICE_UNAVAILABLE', 503);
+      const { data, error } = await client.auth.signUp({ email: body.email, password: body.password, options: { data: { display_name: body.display_name?.trim() || '', preferred_locale: locale }, emailRedirectTo: `${siteOrigin()}/${locale}/auth/callback?next=${encodeURIComponent(next)}` } });
+      if (error) {
+        if (error.code === 'weak_password') throw new PublicError('WEAK_PASSWORD');
+        if (error.code === 'email_address_invalid') throw new PublicError('INVALID_EMAIL');
+        if (error.code === 'over_email_send_rate_limit' || error.status === 429) throw new PublicError('RATE_LIMITED', 429);
+        if (error.status && error.status >= 500) throw new PublicError('SERVICE_UNAVAILABLE', 503);
+        // Do not disclose whether a valid address already belongs to a user.
+        if (error.code !== 'user_already_exists' && error.code !== 'email_exists') throw new PublicError('AUTH_FAILED');
+      }
+      if (data.session && data.user?.email_confirmed_at) {
+        await claimGuest(data.user.id);
+        return safeResponse({ redirect: next });
+      }
       // Generic response also covers an already registered email.
-      return safeResponse({ ok: true });
+      return safeResponse({ ok: true, confirmationRequired: true });
     }
     const { data, error } = await client.auth.signInWithPassword({ email: body.email, password: body.password });
-    if (error || !data.user?.email_confirmed_at) throw new PublicError('AUTH_FAILED', 401);
+    if (error || !data.user?.email_confirmed_at) throw new PublicError(error?.code === 'email_not_confirmed' ? 'EMAIL_NOT_CONFIRMED' : 'INVALID_CREDENTIALS', 401);
     await audit('login_completed',data.user.id);
     await claimGuest(data.user.id);
     return safeResponse({ redirect: next });

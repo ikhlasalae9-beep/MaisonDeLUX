@@ -1,7 +1,7 @@
 import 'server-only';
 import { cookies } from 'next/headers';
 import { query } from '@/lib/admin/db';
-import { boundedSetting, coarseIdentity, GUEST_COOKIE, hashIdentity, validGuestToken } from './identity';
+import { boundedSetting, coarseIdentity, GUEST_COOKIE, guestHmacAvailable, hashIdentity, validGuestToken } from './identity';
 import { PublicError } from './http';
 export async function rateLimit(scope: string, identity: string, limit: number, seconds = 60) {
   const result = await query('SELECT public.phase_c_rate_limit($1,$2,$3) AS allowed', [hashIdentity('rate', `${scope}:${identity}`),limit,seconds]);
@@ -21,7 +21,7 @@ export async function claimGuest(userId: string) {
 }
 
 export async function phaseCReady() {
-  if (!process.env.GUEST_TRIAL_HMAC_SECRET || process.env.GUEST_TRIAL_HMAC_SECRET.length < 32) return false;
+  if (!guestHmacAvailable()) return false;
   try {
     const result = await query(`SELECT
       to_regclass('public.guest_trials') IS NOT NULL

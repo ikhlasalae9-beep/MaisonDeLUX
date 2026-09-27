@@ -198,6 +198,14 @@ html[dir="rtl"] h4 {
   outline: none;
 }
 
+.auth-input--icon-start {
+  padding-left: 3.25rem;
+}
+
+.auth-input--icon-end {
+  padding-right: 3.25rem;
+}
+
 /* Restrained geometric texture for future city surfaces. */
 .zellige-pattern {
   position: absolute;

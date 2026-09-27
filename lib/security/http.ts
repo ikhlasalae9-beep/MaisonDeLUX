@@ -7,9 +7,15 @@ export class PublicError extends Error {
 }
 export function sameOrigin(request: NextRequest) {
   const origin = request.headers.get('origin');
-  const allowed = [siteOrigin()];
-  if (process.env.NODE_ENV !== 'production') allowed.push('http://localhost:3000', 'http://127.0.0.1:3000');
-  if (!origin || !allowed.includes(origin) || request.headers.get('sec-fetch-site') === 'cross-site') throw new PublicError('INVALID_ORIGIN', 403);
+  // The request URL is supplied by the trusted Next.js runtime and lets valid
+  // custom/preview hosts pass the CSRF check without accepting a foreign
+  // browser Origin. SITE_URL remains accepted for canonical-host transitions.
+  const allowed = new Set([siteOrigin(), request.nextUrl.origin]);
+  if (process.env.NODE_ENV !== 'production') {
+    allowed.add('http://localhost:3000');
+    allowed.add('http://127.0.0.1:3000');
+  }
+  if (!origin || !allowed.has(origin) || request.headers.get('sec-fetch-site') === 'cross-site') throw new PublicError('INVALID_ORIGIN', 403);
 }
 export async function jsonBody(request: NextRequest, allowed: string[]) {
   if (!request.headers.get('content-type')?.startsWith('application/json')) throw new PublicError('INVALID_REQUEST');
