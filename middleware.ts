@@ -4,7 +4,7 @@ import { authConfig, authCookieOptions } from '@/lib/auth/config';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (/^\/(fr|ar)\/(auth|account)(\/|$)/.test(pathname) || pathname.startsWith('/api/auth/') || pathname.startsWith('/admin') || pathname.startsWith('/api/admin/')) {
+  if (/^\/(fr|ar)\/(auth|account)(\/|$)/.test(pathname) || pathname.startsWith('/api/auth/')) {
     let response = NextResponse.next({ request });
     try {
       const { url, key } = authConfig();
@@ -36,4 +36,4 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = { matcher: ['/admin/:path*', '/api/admin/:path*', '/fr/admin/:path*', '/ar/admin/:path*', '/fr/account/:path*', '/ar/account/:path*', '/fr/auth/:path*', '/ar/auth/:path*', '/api/auth/:path*'] };
+export const config = { matcher: ['/fr/admin/:path*', '/ar/admin/:path*', '/fr/account/:path*', '/ar/account/:path*', '/fr/auth/:path*', '/ar/auth/:path*', '/api/auth/:path*'] };
