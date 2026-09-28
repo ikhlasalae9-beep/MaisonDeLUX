@@ -10,7 +10,7 @@ export function RouteShell({ children, locale, dict }: { children: React.ReactNo
   const auth = pathname.includes('/auth/');
   const account = pathname === `/${locale}/account` || pathname.startsWith(`/${locale}/account/`);
   // Account estimation details own their application shell. Without these guards,
-  // `/account/estimations/:id` also matched the public product header.
+  // Legacy `/account/estimations/:id` routes also matched the public product header.
   const product = !auth && !account && (pathname.endsWith('/estimate') || pathname.includes('/estimation'));
   const publicShell = !auth && !account && !product;
 

@@ -16,9 +16,8 @@ test('account routes own one application shell, including estimation detail',()=
 test('account overview is real-data driven and exposes intentional journeys',()=>{
   const workspace=readFileSync('components/account/AccountWorkspace.tsx','utf8');
   assert.match(workspace,/data\.events\.slice\(0,3\)/);
-  assert.match(workspace,/Vous n’avez encore aucune estimation enregistrée/);
+  assert.match(workspace,/Vous n’avez encore aucun Passeport immobilier/);
   assert.match(workspace,/Vous n’avez encore enregistré aucun bien/);
-  assert.match(workspace,/Aucun Passeport immobilier disponible pour le moment/);
   assert.match(workspace,/cities\/casablanca\/estimate/);
   assert.doesNotMatch(workspace,/fake|fixture|placeholder/i);
 });
@@ -26,10 +25,10 @@ test('account overview is real-data driven and exposes intentional journeys',()=
 test('authenticated result and report keep customer follow-up actions',()=>{
   const result=readFileSync('components/estimation/CasablancaEstimateResult.tsx','utf8');
   const report=readFileSync('components/account/SavedPassport.tsx','utf8');
-  assert.match(result,/Voir dans mon espace/);
+  assert.match(result,/Voir mon Passeport/);
   assert.match(result,/SavePropertyButton/);
-  assert.match(report,/Nouvelle estimation/);
-  assert.match(report,/Mes estimations/);
+  assert.match(report,/Passeport Immobilier MaisonDeLUX/);
+  assert.match(report,/Tous mes Passeports/);
 });
 
 test('confirmed signup continues to its validated destination',()=>{

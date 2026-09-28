@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ArrowLeft, ArrowRight, BarChart3, Building2, FileBadge2, Home, LayoutDashboard, LogOut, Menu, Plus, Scale, Settings, UserRound, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Building2, FileBadge2, Home, LayoutDashboard, LogOut, Menu, Plus, Scale, Settings, UserRound, X } from 'lucide-react';
 import { BrandLogo } from '@/components/common/BrandLogo';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
@@ -16,9 +16,8 @@ export function AccountShell({children,locale,identity}:{children:React.ReactNod
   const userMenu=useRef<HTMLDivElement>(null),BackIcon=ar?ArrowRight:ArrowLeft;
   const items=[
     ['',ar?'نظرة عامة':'Vue d’ensemble',LayoutDashboard],
-    ['estimations',ar?'تقديراتي':'Mes estimations',BarChart3],
+    ['passports',ar?'جوازاتي العقارية':'Mes Passeports',FileBadge2],
     ['properties',ar?'عقاراتي':'Mes biens',Building2],
-    ['passports',ar?'جوازاتي':'Mes Passeports',FileBadge2],
     ['compare',ar?'المقارنة':'Comparaison',Scale],
   ] as const;
   const active=(path:string)=>path?pathname===`/${locale}/account/${path}`||pathname.startsWith(`/${locale}/account/${path}/`):pathname===`/${locale}/account`;
@@ -35,7 +34,7 @@ export function AccountShell({children,locale,identity}:{children:React.ReactNod
     <Link href={`/${locale}/account/profile`} aria-current={active('profile')?'page':undefined} className={linkClass('profile')}><Settings className="h-4 w-4"/>{ar?'الملف والإعدادات':'Profil et réglages'}</Link>
   </>;
   return <div className="min-h-screen bg-background">
-    <header className="sticky top-0 z-40 border-b border-border-subtle bg-surface/95 backdrop-blur-xl">
+    <header className="account-app-header sticky top-0 z-40 border-b border-border-subtle bg-surface/95 backdrop-blur-xl">
       <div className="mx-auto flex min-h-16 max-w-[90rem] items-center justify-between gap-3 px-3 sm:min-h-[4.5rem] sm:px-6 lg:px-8">
         <BrandLogo locale={locale} size="compact"/>
         <div className="flex items-center gap-1.5 sm:gap-2">
@@ -50,9 +49,9 @@ export function AccountShell({children,locale,identity}:{children:React.ReactNod
       </div>
     </header>
     {mobileOpen?<div id="account-mobile-menu" role="dialog" aria-modal="true" aria-label={ar?'التنقل في الحساب':'Navigation du compte'} className="fixed inset-x-0 bottom-0 top-16 z-30 overflow-y-auto border-t border-border-subtle bg-background p-4 md:hidden"><div className="mx-auto max-w-md"><div className="mb-4 rounded-card border border-border-subtle bg-surface p-4"><p className="font-bold">{identity.displayName||(ar?'فضائي MaisonDeLUX':'Mon espace MaisonDeLUX')}</p><p className="mt-1 truncate text-xs text-text-muted" dir="ltr">{identity.email}</p></div><nav className="space-y-1">{navigation}</nav><div className="mt-5 flex items-center justify-between border-t border-border-subtle pt-4"><LanguageSwitcher currentLocale={locale} showIcon={false}/><Link href={`/${locale}`} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-text-secondary"><BackIcon className="h-4 w-4"/>{ar?'العودة إلى الموقع':'Retour au site'}</Link></div><button disabled={loggingOut} onClick={logout} className="mt-2 flex min-h-11 items-center gap-2 text-sm font-semibold text-status-danger"><LogOut className="h-4 w-4"/>{ar?'تسجيل الخروج':'Se déconnecter'}</button></div></div>:null}
-    <div className="mx-auto grid w-full max-w-[90rem] gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[15.5rem_minmax(0,1fr)] lg:px-8 lg:py-10">
-      <aside className="hidden lg:block"><div className="sticky top-28"><p className="mb-4 px-3 text-xs font-bold uppercase tracking-[.16em] text-text-muted">{ar?'فضائي العقاري':'Espace immobilier'}</p><nav className="space-y-1">{navigation}</nav></div></aside>
-      <section aria-label={ar?'محتوى الحساب':'Contenu du compte'} className="min-w-0">{children}</section>
+    <div className="account-shell-grid mx-auto grid w-full max-w-[90rem] gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[15.5rem_minmax(0,1fr)] lg:px-8 lg:py-10">
+      <aside className="account-sidebar hidden lg:block"><div className="sticky top-28"><p className="mb-4 px-3 text-xs font-bold uppercase tracking-[.16em] text-text-muted">{ar?'فضائي العقاري':'Espace immobilier'}</p><nav className="space-y-1">{navigation}</nav></div></aside>
+      <section aria-label={ar?'محتوى الحساب':'Contenu du compte'} className="account-content min-w-0">{children}</section>
     </div>
   </div>;
 }

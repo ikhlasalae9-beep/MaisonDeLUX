@@ -1,140 +1,64 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect,useMemo,useState } from 'react';
 import Link from 'next/link';
-import { getCityBySlug, cityMarketPath } from '@/lib/cities/registry';
-import { ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, Building2, CheckCircle2, GitCompareArrows } from 'lucide-react';
-import { predictCasablanca } from '@/lib/api/client';
-import type { CasablancaMetadata, CasablancaPredictPayload, PredictResponse } from '@/lib/api/types';
+import { ArrowDownRight,ArrowRight,ArrowUpRight,BarChart3,Building2,CheckCircle2,FileBadge2,MapPin } from 'lucide-react';
+import type { CasablancaMetadata,PredictResponse } from '@/lib/api/types';
 import type { CompletedCasablancaEstimation } from '@/components/estimation/CasablancaEstimator';
-import { Button } from '@/components/common/Button';
 import { CardSurface } from '@/components/city/CityFoundation';
 import { PassportAccountCTA } from '@/components/auth/PassportAccountCTA';
 import { SavePropertyButton } from '@/components/account/SavePropertyButton';
+import { ageLabel,conditionLabel,propertyTypeLabel } from '@/lib/account/presentation';
+import { formatArea,formatCurrency,formatDate,formatInteger,formatPricePerSquareMeter } from '@/lib/utils';
 
-const FACTOR_LABELS: Record<string, { fr: string; ar: string }> = {
-  property_type: { fr: 'Type de bien', ar: 'نوع العقار' }, neighborhood: { fr: 'Quartier', ar: 'الحي' },
-  area: { fr: 'Surface', ar: 'المساحة' }, rooms: { fr: 'Pièces', ar: 'الغرف' }, bedrooms: { fr: 'Chambres', ar: 'غرف النوم' },
-  bathrooms: { fr: 'Salles de bain', ar: 'الحمامات' }, floor: { fr: 'Étage', ar: 'الطابق' },
-  current_state: { fr: 'État du bien', ar: 'حالة العقار' }, age: { fr: 'Ancienneté', ar: 'عمر العقار' },
-};
+const FACTOR_LABELS:Record<string,{fr:string;ar:string}>={property_type:{fr:'Type de bien',ar:'نوع العقار'},neighborhood:{fr:'Quartier',ar:'الحي'},area:{fr:'Surface',ar:'المساحة'},rooms:{fr:'Pièces',ar:'الغرف'},bedrooms:{fr:'Chambres',ar:'غرف النوم'},bathrooms:{fr:'Salles de bain',ar:'الحمامات'},floor:{fr:'Étage',ar:'الطابق'},current_state:{fr:'État du bien',ar:'حالة العقار'},age:{fr:'Âge du bien',ar:'عمر العقار'}};
 
-export function CasablancaEstimateResult({ completed, supported, contextLoading, locale, copy, onEdit, inAccount=false }: { completed: CompletedCasablancaEstimation; supported: CasablancaMetadata['supported']; contextLoading: boolean; locale: string; copy: any; onEdit: () => void; inAccount?: boolean }) {
-  const { prediction, inputFeatures, estimatedAt } = completed;
-  const amount = useCountUp(prediction.estimated_price_mad);
-  const money = (value: number) => new Intl.NumberFormat(locale === 'ar' ? 'ar-MA' : 'fr-MA', { maximumFractionDigits: 0 }).format(Math.round(value));
-  const details = [
-    [copy.cityLabel, 'Casablanca'], [copy.neighborhood, inputFeatures.neighborhood], [copy.propertyType, inputFeatures.property_type],
-    [copy.area, `${inputFeatures.area} m²`], [copy.rooms, inputFeatures.rooms], [copy.bedrooms, inputFeatures.bedrooms],
-    [copy.bathrooms, inputFeatures.bathrooms], [copy.floor, inputFeatures.floor],
-    [copy.condition, inputFeatures.current_state || '—'], [copy.age, inputFeatures.age || '—'],
+export function CasablancaEstimateResult({completed,supported:_supported,contextLoading,locale,copy,onEdit,inAccount=false}:{completed:CompletedCasablancaEstimation;supported:CasablancaMetadata['supported'];contextLoading:boolean;locale:string;copy:any;onEdit:()=>void;inAccount?:boolean}){
+  const {prediction,inputFeatures,estimatedAt}=completed,ar=locale==='ar',amount=useCountUp(prediction.estimated_price_mad),perM2=inputFeatures.area>0?prediction.estimated_price_mad/inputFeatures.area:null;
+  const details:[string,React.ReactNode][]=[
+    [ar?'المدينة':'Ville','Casablanca'],
+    [ar?'الحي':'Quartier',<Bidi key="neighborhood">{inputFeatures.neighborhood}</Bidi>],
+    [ar?'نوع العقار':'Type de bien',propertyTypeLabel(inputFeatures.property_type,locale)],
+    [ar?'المساحة':'Surface',<Bidi key="area">{formatArea(inputFeatures.area,locale)}</Bidi>],
+    [ar?'الغرف':'Pièces',<Bidi key="rooms">{formatInteger(inputFeatures.rooms,locale)}</Bidi>],
+    [ar?'غرف النوم':'Chambres',<Bidi key="bedrooms">{formatInteger(inputFeatures.bedrooms,locale)}</Bidi>],
+    [ar?'الحمامات':'Salles de bain',<Bidi key="bathrooms">{formatInteger(inputFeatures.bathrooms,locale)}</Bidi>],
+    [ar?'الطابق':'Étage',<Bidi key="floor">{formatInteger(inputFeatures.floor,locale)}</Bidi>],
+    ...(inputFeatures.current_state?[[ar?'الحالة':'État',conditionLabel(inputFeatures.current_state,locale)] as [string,React.ReactNode]]:[]),
+    ...(inputFeatures.age?[[ar?'العمر':'Âge',ageLabel(inputFeatures.age,locale)] as [string,React.ReactNode]]:[]),
   ];
-
-  return <div className="space-y-5">
-    <CardSurface className="overflow-hidden">
-      <div className="bg-[#101b2d] p-5 text-white sm:p-7">
-        <div className="flex items-center justify-between gap-3"><CheckCircle2 className="h-6 w-6 text-emerald-400" /><span className="rounded-full border border-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[.16em] text-white/60">{copy.passportTitle}</span></div>
-        <p className="mt-5 text-sm text-white/60">{copy.resultTitle}</p>
-        <p className="mt-2 break-words text-3xl font-bold tabular-nums sm:text-4xl">{money(amount)} <span className="text-base font-medium text-white/60">MAD</span></p>
-        {inputFeatures.area > 0 ? <p className="mt-2 text-sm font-semibold tabular-nums text-blue-200">≈ {money(prediction.estimated_price_mad / inputFeatures.area)} MAD/m²</p> : null}
-        <p className="mt-4 text-xs text-white/55">{copy.modelLabel} · {prediction.model_version}</p>
-      </div>
-      <section className="p-5 sm:p-6" aria-labelledby="property-summary-title">
-        <h2 id="property-summary-title" className="text-lg font-bold text-text-primary">{copy.propertySummary}</h2>
-        <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
-          {details.map(([label, value]) => <div key={String(label)}><dt className="text-xs text-text-secondary">{label}</dt><dd className="mt-1 break-words font-semibold text-text-primary">{value}</dd></div>)}
-        </dl>
-        <p className="mt-5 text-xs text-text-secondary">{copy.estimatedAt} {new Intl.DateTimeFormat(locale === 'ar' ? 'ar-MA' : 'fr-MA', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(estimatedAt))}</p>
-        <p className="mt-3 text-sm leading-6 text-text-secondary">{copy.disclaimer}</p>
-      </section>
-    </CardSurface>
-
-    {prediction.guest ? <PassportAccountCTA locale={locale} /> : null}
-    {prediction.guest === false ? <div className="flex flex-wrap items-center gap-x-5 gap-y-2"><SavePropertyButton input={inputFeatures} locale={locale}/>{!inAccount&&prediction.estimation_event_id?<Link href={`/${locale}/account/estimations/${prediction.estimation_event_id}`} className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-blue">{locale==='ar'?'عرضه في فضائي':'Voir dans mon espace'}</Link>:null}</div> : null}
-    <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
-      <Explainability prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
-      <Comparables prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
-    </div>
-    <MarketContext prediction={prediction} area={inputFeatures.area} loading={contextLoading} copy={copy} money={money} />
-    {getCityBySlug('casablanca')?.market.publicEnabled ? <Link href={cityMarketPath(locale, 'casablanca')} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-blue"><BarChart3 className="h-4 w-4"/>{locale === 'ar' ? 'عرض سياق السوق' : 'Voir le contexte du marché'}<ArrowRight className="h-4 w-4 rtl:rotate-180"/></Link> : null}
-    <Simulator input={inputFeatures} supported={supported} original={prediction.estimated_price_mad} copy={copy} money={money} eventId={prediction.estimation_event_id} locale={locale} />
-    <button type="button" onClick={onEdit} className="min-h-11 text-sm font-semibold text-brand-blue lg:hidden">← {copy.newEstimate}</button>
+  return <div className="space-y-6">
+    <CardSurface className="avoid-print-break overflow-hidden"><div className="bg-[#101b2d] p-5 text-white sm:p-8"><div className="flex items-center justify-between gap-3"><CheckCircle2 className="h-6 w-6 text-emerald-400"/><span className="rounded-full border border-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[.14em] text-white/70">{ar?'جواز عقاري':'Passeport immobilier'}</span></div><p className="mt-6 text-sm font-semibold text-white/65">{ar?'تقدير إرشادي':'Estimation indicative'}</p><p className="mt-2 break-words text-3xl font-black tabular-nums !text-white sm:text-5xl"><Bidi>{formatCurrency(amount,locale)}</Bidi></p>{perM2!==null?<p className="mt-3 text-sm font-bold text-blue-200"><Bidi>≈ {formatPricePerSquareMeter(perM2,locale)}</Bidi></p>:null}<p className="mt-5 max-w-2xl text-xs leading-5 text-white/55">{ar?'قيمة إرشادية ينتجها نموذج MaisonDeLUX وليست تقييماً رسمياً أو سعر معاملة.':'Valeur indicative produite par le modèle MaisonDeLUX. Elle ne constitue ni une expertise officielle ni un prix de transaction.'}</p></div></CardSurface>
+    {prediction.guest?<PassportAccountCTA locale={locale}/>:null}
+    {prediction.guest===false?<div className="no-print flex flex-wrap items-center gap-x-5 gap-y-2"><SavePropertyButton input={inputFeatures} locale={locale}/>{!inAccount&&prediction.estimation_event_id?<Link href={`/${locale}/account/passports/${prediction.estimation_event_id}`} className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-brand-blue"><FileBadge2 className="h-4 w-4"/>{ar?'عرض جوازي العقاري':'Voir mon Passeport'}</Link>:null}</div>:null}
+    <CardSurface className="avoid-print-break p-5 sm:p-7"><h2 className="text-lg font-black">{ar?'بيانات العقار':'Caractéristiques du bien'}</h2><dl className="mt-5 grid gap-x-8 gap-y-5 sm:grid-cols-2 xl:grid-cols-3">{details.map(([label,value])=><div key={label}><dt className="text-xs font-semibold text-text-muted">{label}</dt><dd className="mt-1 break-words font-bold text-text-primary">{value}</dd></div>)}</dl><p className="mt-6 border-t border-border-subtle pt-4 text-xs text-text-secondary">{ar?'تاريخ إنشاء الجواز:':'Passeport créé le'} <Bidi>{formatDate(estimatedAt,locale,true)}</Bidi></p></CardSurface>
+    <CardSurface className="avoid-print-break p-5 sm:p-7"><div className="flex items-center gap-3"><MapPin className="h-5 w-5 text-brand-blue"/><h2 className="text-lg font-black">{ar?'الموقع':'Localisation'}</h2></div><p className="mt-3 text-sm leading-6 text-text-secondary">Casablanca · <Bidi>{inputFeatures.neighborhood}</Bidi></p></CardSurface>
+    <MarketContext prediction={prediction} area={inputFeatures.area} loading={contextLoading} locale={locale}/>
+    <div className="grid gap-5 xl:grid-cols-2"><Comparables prediction={prediction} loading={contextLoading} locale={locale}/><ModelTransparency prediction={prediction} loading={contextLoading} locale={locale}/></div>
+    <button type="button" onClick={onEdit} className="no-print min-h-11 text-sm font-bold text-brand-blue">{ar?'تقدير جديد':'Nouvelle estimation'} <span aria-hidden="true">→</span></button>
   </div>;
 }
 
-function Explainability({ prediction, loading, locale, copy, money }: { prediction: PredictResponse; loading: boolean; locale: string; copy: any; money: (value: number) => string }) {
-  const factors = useMemo(() => [...(prediction.explanation?.factors || [])].sort((a, b) => Math.abs(b.contribution_mad) - Math.abs(a.contribution_mad)).slice(0, 6), [prediction]);
-  const max = Math.max(...factors.map((factor) => Math.abs(factor.contribution_mad)), 1);
-  return <CardSurface className="h-full p-5 sm:p-6"><div className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-brand-blue" /><h2 className="text-lg font-bold">{copy.understandTitle}</h2></div>
-    <p className="mt-2 text-sm font-medium text-text-primary">{copy.influenceSubtitle}</p><p className="mt-1 text-xs leading-5 text-text-secondary">{copy.understandIntro}</p>
-    <div className="mt-4 flex flex-wrap gap-4 text-xs text-text-secondary"><span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />{copy.upwardInfluence}</span><span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-rose-500" />{copy.downwardInfluence}</span></div>
-    {loading && !factors.length ? <AnalysisLoading copy={copy} /> : !factors.length ? <p className="mt-4 text-sm text-text-secondary">{copy.analysisUnavailable}</p> : <div className="mt-5 space-y-4">{factors.map((factor) => {
-      const positive = factor.contribution_mad >= 0; const label = FACTOR_LABELS[factor.key]?.[locale === 'ar' ? 'ar' : 'fr'] || factor.key;
-      return <div key={factor.key}><div className="flex items-center justify-between gap-3 text-sm"><span className="font-semibold">{label}</span><span className={`flex items-center gap-1 tabular-nums ${positive ? 'text-emerald-700' : 'text-rose-700'}`}>{positive ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}{positive ? '+' : '−'}{money(Math.abs(factor.contribution_mad))} MAD</span></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100"><div className={`h-full rounded-full ${positive ? 'bg-emerald-500' : 'bg-rose-500'}`} style={{ width: `${Math.max(4, Math.abs(factor.contribution_mad) / max * 100)}%` }} /></div></div>;
-    })}</div>}
-  </CardSurface>;
+function Comparables({prediction,loading,locale}:{prediction:PredictResponse;loading:boolean;locale:string}){
+  const ar=locale==='ar',items=prediction.comparables||[];
+  return <CardSurface className="avoid-print-break h-full p-5 sm:p-6"><div className="flex items-center gap-3"><Building2 className="h-5 w-5 text-brand-blue"/><h2 className="text-lg font-black">{ar?'إعلانات عقارية مشابهة':'Annonces comparables'}</h2></div><p className="mt-2 text-sm leading-6 text-text-secondary">{ar?'أسعار معروضة في إعلانات وليست أسعار معاملات.':'Prix affichés dans des annonces, et non prix de transaction.'}</p>{loading&&!items.length?<Loading locale={locale}/>:!items.length?<p className="mt-4 text-sm text-text-secondary">{ar?'لا تتوفر إعلانات مشابهة حالياً.':'Aucune annonce comparable disponible actuellement.'}</p>:<div className="mt-5 grid gap-3">{items.map((item,index)=><article key={`${item.neighborhood}-${item.area}-${item.listing_price_mad}-${index}`} className="rounded-control border border-border-medium p-4"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-bold"><Bidi>{item.neighborhood}</Bidi> · {propertyTypeLabel(item.property_type,locale)}</p><p className="mt-1 text-xs text-text-secondary"><Bidi>{formatArea(item.area,locale)}</Bidi> · <Bidi>{formatInteger(item.rooms,locale)}</Bidi> {ar?'غرف':'pièces'}{item.bedrooms!=null?<> · <Bidi>{formatInteger(item.bedrooms,locale)}</Bidi> {ar?'غرف نوم':'chambres'}</>:null}</p></div><p className="font-black tabular-nums"><Bidi>{formatCurrency(item.listing_price_mad,locale)}</Bidi></p></div><div className="mt-3 flex flex-wrap gap-2 text-[11px] text-text-secondary">{item.same_neighborhood?<span className="rounded-full bg-brand-blue/10 px-2.5 py-1 font-semibold text-brand-blue">{ar?'نفس الحي':'Même quartier'}</span>:null}<span className="rounded-full bg-surface-subtle px-2.5 py-1">{ar?'مساحة متقاربة':'Surface proche'} · <Bidi>{formatArea(item.area_difference_m2,locale)}</Bidi></span></div></article>)}</div>}</CardSurface>;
 }
 
-function Comparables({ prediction, loading, locale, copy, money }: { prediction: PredictResponse; loading: boolean; locale: string; copy: any; money: (value: number) => string }) {
-  const comparables = prediction.comparables || [];
-  return <CardSurface className="h-full p-5 sm:p-6"><div className="flex items-center gap-3"><Building2 className="h-5 w-5 text-brand-blue" /><h2 className="text-lg font-bold">{copy.comparablesTitle}</h2></div>
-    <p className="mt-2 text-sm leading-6 text-text-secondary">{copy.comparablesDisclaimer}</p><p className="mt-1 text-xs leading-5 text-text-muted">{copy.comparableSimilarity}</p>
-    {loading && !comparables.length ? <AnalysisLoading copy={copy} /> : !comparables.length ? <p className="mt-4 text-sm text-text-secondary">{copy.analysisUnavailable}</p> : <div className="mt-5 grid gap-3">{comparables.map((item, index) => <article key={`${item.neighborhood}-${item.area}-${item.listing_price_mad}-${index}`} className="rounded-control border border-border-medium p-4">
-      <div className="flex flex-wrap items-start justify-between gap-2"><div><p className="font-semibold">{item.neighborhood} · {item.property_type}</p><p className="mt-1 text-xs text-text-secondary">{item.area} m² · {item.rooms} {copy.rooms.toLocaleLowerCase(locale)} · {item.bedrooms} {copy.bedrooms.toLocaleLowerCase(locale)}</p></div><p className="font-bold tabular-nums">{money(item.listing_price_mad)} MAD</p></div>
-      <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-text-secondary">{index === 0 ? <span className="rounded-full bg-brand-blue/10 px-2.5 py-1 font-semibold text-brand-blue">{copy.closestComparable}</span> : null}{item.same_neighborhood ? <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-emerald-800">{copy.sameNeighborhood}</span> : null}<span className="rounded-full bg-slate-100 px-2.5 py-1">{copy.areaDifference}: {money(item.area_difference_m2)} m²</span></div>
-    </article>)}</div>}
-  </CardSurface>;
+function MarketContext({prediction,area,loading,locale}:{prediction:PredictResponse;area:number;loading:boolean;locale:string}){
+  const ar=locale==='ar',market=prediction.market_context;
+  if(loading&&!market)return <CardSurface className="avoid-print-break p-5 sm:p-6"><Loading locale={locale}/></CardSurface>;
+  if(!market)return null;
+  if(!market.benchmark_eligible)return <p className="text-sm text-text-muted">{ar?'سياق السوق غير متاح لهذا الحي حالياً.':'Contexte du marché indisponible pour ce quartier actuellement.'}</p>;
+  const estimatePerM2=area>0?prediction.estimated_price_mad/area:0,difference=market.median_listing_price_per_m2>0?(estimatePerM2/market.median_listing_price_per_m2-1)*100:null;
+  return <CardSurface className="avoid-print-break p-5 sm:p-7"><div className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-brand-blue"/><h2 className="text-lg font-black">{ar?<>سياق السوق في <Bidi>{market.neighborhood}</Bidi></>:<>Contexte du marché à <Bidi>{market.neighborhood}</Bidi></>}</h2></div><p className="mt-2 text-sm leading-6 text-text-secondary">{ar?'مؤشرات وصفية مستمدة من الأسعار المعروضة في الإعلانات.':'Repères descriptifs issus de prix affichés dans les annonces.'}</p><div className="mt-5 grid gap-3 sm:grid-cols-3"><Metric label={ar?'متوسط السعر المعروض/م²':'Médiane affichée/m²'} value={formatPricePerSquareMeter(market.median_listing_price_per_m2,locale)}/><Metric label={ar?'الإعلانات المحللة':'Annonces analysées'} value={formatInteger(market.listing_count,locale)}/><Metric label={ar?'الفرق الحسابي':'Écart arithmétique'} value={difference===null?'—':new Intl.NumberFormat(ar?'ar-MA':'fr-FR',{maximumFractionDigits:1,signDisplay:'always'}).format(difference)+' %'}/></div><div className="mt-5 space-y-1 border-t border-border-subtle pt-4 text-xs leading-5 text-text-muted"><p>{ar?'هذه أسعار معروضة في الإعلانات وليست أسعار معاملات.':'Prix affichés dans les annonces, et non prix de transaction.'}</p><p>{ar?'هذه البيانات لا تؤثر في التقدير المعروض.':'Ces données n’influencent pas l’estimation affichée.'}</p></div></CardSurface>;
 }
 
-function MarketContext({ prediction, area, loading, copy, money }: { prediction: PredictResponse; area: number; loading: boolean; copy: any; money: (value: number) => string }) {
-  const market = prediction.market_context;
-  if (loading && !market) return <CardSurface className="p-5 sm:p-6"><AnalysisLoading copy={copy}/></CardSurface>;
-  if (!market) return null;
-  const estimatePerM2 = area > 0 ? prediction.estimated_price_mad / area : 0;
-  const difference = market.median_listing_price_per_m2 > 0 ? (estimatePerM2 / market.median_listing_price_per_m2 - 1) * 100 : null;
-  return <CardSurface className="p-5 sm:p-6"><div className="flex items-center gap-3"><BarChart3 className="h-5 w-5 text-brand-blue"/><h2 className="text-lg font-bold">{copy.marketContextTitle}</h2></div><p className="mt-2 text-sm leading-6 text-text-secondary">{copy.marketContextIntro}</p>
-    {market.benchmark_eligible ? <div className="mt-5 grid gap-3 sm:grid-cols-3"><div className="rounded-control bg-brand-blue/5 p-4"><p className="text-xs text-text-muted">{copy.pricePerM2}</p><p className="mt-1 font-bold tabular-nums">≈ {money(estimatePerM2)} MAD/m²</p><p className="mt-1 text-[11px] text-text-muted">MaisonDeLUX</p></div><div className="rounded-control bg-surface-subtle p-4"><p className="text-xs text-text-muted">{copy.neighborhoodMedian}</p><p className="mt-1 font-bold tabular-nums">{money(market.median_listing_price_per_m2)} MAD/m²</p><p className="mt-1 text-[11px] text-text-muted">{market.listing_count} {copy.referenceListings}</p></div><div className="rounded-control bg-surface-subtle p-4"><p className="text-xs text-text-muted">{copy.marketDifference}</p><p className="mt-1 font-bold tabular-nums">{difference === null ? '—' : `${difference >= 0 ? '+' : '−'}${Math.abs(difference).toFixed(1)} %`}</p><p className="mt-1 text-[11px] text-text-muted">{market.neighborhood}</p></div></div> : <p className="mt-4 rounded-control bg-amber-50 p-4 text-sm text-amber-900">{copy.insufficientNeighborhoodData} ({market.listing_count}/{market.minimum_observations})</p>}
-  </CardSurface>;
+function ModelTransparency({prediction,loading,locale}:{prediction:PredictResponse;loading:boolean;locale:string}){
+  const ar=locale==='ar',factors=useMemo(()=>[...(prediction.explanation?.factors||[])].sort((a,b)=>Math.abs(b.contribution_mad)-Math.abs(a.contribution_mad)).slice(0,5),[prediction]),max=Math.max(...factors.map(item=>Math.abs(item.contribution_mad)),1);
+  return <CardSurface className="avoid-print-break h-full p-5 sm:p-6"><h2 className="text-lg font-black">{ar?'شفافية النموذج':'Transparence du modèle'}</h2><p className="mt-2 text-sm leading-6 text-text-secondary">{ar?'تقدير إرشادي صادر عن نموذج خاص بمدينة الدار البيضاء. بيانات السوق المعروضة منفصلة عنه.':'Estimation indicative produite par un modèle spécifique à Casablanca. Le contexte d’annonces affiché est distinct du calcul du modèle.'}</p><p className="mt-4 text-xs text-text-muted">{ar?'إصدار النموذج':'Version du modèle'} · <Bidi>{prediction.model_version||'—'}</Bidi></p>{loading&&!factors.length?<Loading locale={locale}/>:factors.length?<div className="mt-5 space-y-3"><p className="text-xs font-bold uppercase tracking-[.12em] text-text-muted">{ar?'أهم عوامل النموذج':'Principaux facteurs du modèle'}</p>{factors.map(factor=>{const positive=factor.contribution_mad>=0,label=FACTOR_LABELS[factor.key]?.[ar?'ar':'fr']||factor.key;return <div key={factor.key}><div className="flex items-center justify-between gap-3 text-sm"><span className="font-semibold">{label}</span><span className={positive?'text-emerald-700 dark:text-emerald-400':'text-rose-700 dark:text-rose-400'}>{positive?<ArrowUpRight className="inline h-4 w-4"/>:<ArrowDownRight className="inline h-4 w-4"/>}<Bidi>{formatCurrency(Math.abs(factor.contribution_mad),locale)}</Bidi></span></div><div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-surface-subtle"><div className={positive?'h-full rounded-full bg-emerald-500':'h-full rounded-full bg-rose-500'} style={{width:`${Math.max(4,Math.abs(factor.contribution_mad)/max*100)}%`}}/></div></div>;})}</div>:null}</CardSurface>;
 }
 
-function Simulator({ input, supported, original, copy, money, eventId, locale }: { input: CasablancaPredictPayload; supported: CasablancaMetadata['supported']; original: number; copy: any; money: (value: number) => string; eventId?: string; locale: string }) {
-  const [scenario, setScenario] = useState({ area: String(input.area), floor: String(input.floor), current_state: input.current_state || '', age: input.age || '' });
-  const [simulated, setSimulated] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const update = (key: keyof typeof scenario, value: string) => setScenario((current) => ({ ...current, [key]: value }));
-  async function run() {
-    if (loading || Number(scenario.area) <= 0 || Number(scenario.floor) < 0) return;
-    setLoading(true); setError('');
-    try {
-      if (!eventId) throw new Error(locale === 'ar' ? 'هذا الجواز غير متاح للمحاكاة.' : 'Ce Passeport ne peut pas être simulé.');
-      const result = await predictCasablanca({ ...input, area: Number(scenario.area), floor: Number(scenario.floor), current_state: scenario.current_state || null, age: scenario.age || null }, { eventId, locale });
-      setSimulated(result.estimated_price_mad);
-    } catch (reason) { setError(reason instanceof Error ? reason.message : copy.unavailable); }
-    finally { setLoading(false); }
-  }
-  const difference = simulated === null ? null : simulated - original;
-  const percentage = difference === null || original === 0 ? null : difference / original * 100;
-  return <CardSurface className="p-5 sm:p-7"><div className="flex items-center gap-3"><GitCompareArrows className="h-5 w-5 text-brand-blue" /><h2 className="text-lg font-bold">{copy.simulatorTitle}</h2></div><p className="mt-2 text-sm leading-6 text-text-secondary">{copy.simulatorIntro}</p>
-    <div className="mt-5 grid gap-4 sm:grid-cols-2"><SmallInput label={copy.area} type="number" value={scenario.area} onChange={(value) => update('area', value)} /><SmallInput label={copy.floor} type="number" value={scenario.floor} onChange={(value) => update('floor', value)} /><SmallSelect label={copy.condition} value={scenario.current_state} onChange={(value) => update('current_state', value)} options={supported.current_states} /><SmallSelect label={copy.age} value={scenario.age} onChange={(value) => update('age', value)} options={supported.ages} /></div>
-    {error ? <p role="alert" className="mt-4 text-sm text-status-danger">{error}</p> : null}<Button type="button" onClick={run} loading={loading} className="mt-5 w-full sm:w-auto">{loading ? copy.simulationLoading : copy.simulate}</Button>
-    {simulated !== null && difference !== null ? <div className="mt-6 rounded-card border border-border-subtle bg-slate-50 p-4 sm:p-5"><p className="text-sm text-text-secondary">{copy.simulationSentence}</p>{difference === 0 ? <p className="mt-4 font-semibold text-text-primary">{copy.noVariation}</p> : <div className="mt-4 grid items-center gap-3 sm:grid-cols-[1fr_auto_1fr_auto_1fr]"><Value label={copy.currentEstimate} value={`${money(original)} MAD`} /><ArrowRight className="hidden h-5 w-5 text-text-muted sm:block" /><Value label={copy.simulatedScenario} value={`${money(simulated)} MAD`} /><ArrowRight className="hidden h-5 w-5 text-text-muted sm:block" /><Value label={copy.variation} value={`${difference > 0 ? '+' : '−'}${money(Math.abs(difference))} MAD${percentage === null ? '' : ` (${difference > 0 ? '+' : '−'}${Math.abs(percentage).toFixed(1)} %)`}`} tone={difference > 0 ? 'up' : 'down'} /></div>}</div> : null}
-  </CardSurface>;
-}
-
-function SmallInput({ label, type, value, onChange }: { label: string; type: string; value: string; onChange: (value: string) => void }) { return <label><span className="mb-2 block text-xs font-semibold">{label}</span><input type={type} min="0" value={value} onChange={(event) => onChange(event.target.value)} className="h-11 w-full rounded-control border border-border-medium bg-background px-3 outline-none focus:border-brand-blue focus:shadow-focus" /></label>; }
-function SmallSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (value: string) => void; options: string[] }) { return <label><span className="mb-2 block text-xs font-semibold">{label}</span><select value={value} onChange={(event) => onChange(event.target.value)} className="h-11 w-full rounded-control border border-border-medium bg-background px-3 outline-none focus:border-brand-blue focus:shadow-focus"><option value="">—</option>{options.map((option) => <option key={option}>{option}</option>)}</select></label>; }
-function Value({ label, value, tone }: { label: string; value: string; tone?: 'up' | 'down' }) { return <div><dt className="text-xs text-text-secondary">{label}</dt><dd className={`mt-1 font-bold tabular-nums ${tone === 'up' ? 'text-emerald-700' : tone === 'down' ? 'text-rose-700' : ''}`}>{value}</dd></div>; }
-function AnalysisLoading({ copy }: { copy: any }) { return <div className="mt-4 flex items-center gap-3 text-sm text-text-secondary" aria-live="polite"><span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-blue/20 border-t-brand-blue" />{copy.analysisLoading}</div>; }
-
-function useCountUp(target: number) {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setValue(target); return; }
-    const started = performance.now(); const duration = 700;
-    let frame = 0;
-    const tick = (now: number) => { const progress = Math.min((now - started) / duration, 1); setValue(progress === 1 ? target : Math.round(target * (1 - Math.pow(1 - progress, 3)))); if (progress < 1) frame = requestAnimationFrame(tick); };
-    frame = requestAnimationFrame(tick); return () => cancelAnimationFrame(frame);
-  }, [target]);
-  return value;
-}
+function Metric({label,value}:{label:string;value:string}){return <div className="rounded-control bg-surface-subtle p-4"><p className="text-xs text-text-muted">{label}</p><p className="mt-1 break-words font-black tabular-nums"><Bidi>{value}</Bidi></p></div>;}
+function Bidi({children}:{children:React.ReactNode}){return <bdi dir="ltr">{children}</bdi>;}
+function Loading({locale}:{locale:string}){return <div className="mt-4 flex items-center gap-3 text-sm text-text-secondary" aria-live="polite"><span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-blue/20 border-t-brand-blue"/>{locale==='ar'?'جارٍ تحميل البيانات الموثوقة…':'Chargement des données vérifiées…'}</div>;}
+function useCountUp(target:number){const [value,setValue]=useState(0);useEffect(()=>{if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){setValue(target);return;}const started=performance.now(),duration=700;let frame=0;const tick=(now:number)=>{const progress=Math.min((now-started)/duration,1);setValue(progress===1?target:Math.round(target*(1-Math.pow(1-progress,3))));if(progress<1)frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);return()=>cancelAnimationFrame(frame);},[target]);return value;}

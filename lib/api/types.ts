@@ -50,7 +50,6 @@ export interface PredictResponse {
     neighborhood: string;
     listing_count: number;
     median_listing_price_per_m2: number;
-    minimum_observations: number;
     benchmark_eligible: boolean;
   };
 }
