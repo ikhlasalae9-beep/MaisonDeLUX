@@ -18,13 +18,17 @@ interface NavbarProps {
 export function Navbar({ locale, dict }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
+  const [session, setSession] = useState<{authenticated:boolean;displayName?:string;email?:string}>({authenticated:false});
+  const [accountOpen,setAccountOpen]=useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const accountMenuRef=useRef<HTMLDivElement>(null);
   const pathname = usePathname() || `/${locale}`;
-  useEffect(() => { let active=true;void fetch('/api/auth/session',{cache:'no-store'}).then(response=>response.json()).then(data=>{if(active)setAuthenticated(data.authenticated===true);}).catch(()=>{});return()=>{active=false;}; },[pathname]);
+  useEffect(() => { let active=true;void fetch('/api/auth/session',{cache:'no-store'}).then(response=>response.json()).then(data=>{if(active)setSession({authenticated:data.authenticated===true,displayName:data.displayName,email:data.email});}).catch(()=>{});return()=>{active=false;}; },[pathname]);
+  useEffect(()=>{if(!accountOpen)return;const close=(event:MouseEvent)=>{if(!accountMenuRef.current?.contains(event.target as Node))setAccountOpen(false);};document.addEventListener('mousedown',close);return()=>document.removeEventListener('mousedown',close);},[accountOpen]);
   async function logout(){const response=await fetch('/api/auth/logout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({locale})});if(response.ok)window.location.assign(`/${locale}`);}
-  const accountLabel=authenticated?(locale==='ar'?'فضائي':'Mon espace'):(locale==='ar'?'تسجيل الدخول':'Connexion');
+  const authenticated=session.authenticated;
+  const accountLabel=authenticated?(session.displayName||(locale==='ar'?'فضائي':'Mon espace')):(locale==='ar'?'تسجيل الدخول':'Connexion');
   const accountHref=authenticated?`/${locale}/account`:`/${locale}/auth/login`;
   const isEstimationPage = pathname.includes('/estimation') || pathname.endsWith('/estimate');
   const rtl = isRTL(locale);
@@ -111,8 +115,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
           {/* Glass Tactile Theme Toggle */}
           <ThemeToggle />
 
-          <Link href={accountHref} aria-label={accountLabel} title={accountLabel} className="inline-flex h-11 w-9 items-center justify-center text-text-secondary"><UserRound className="h-4 w-4"/></Link>
-          {authenticated?<button onClick={logout} aria-label={locale==='ar'?'تسجيل الخروج':'Déconnexion'} title={locale==='ar'?'تسجيل الخروج':'Déconnexion'} className="inline-flex h-11 w-8 items-center justify-center text-text-secondary"><LogOut className="h-4 w-4"/></button>:null}
+          {authenticated?<div className="relative" ref={accountMenuRef}><button type="button" onClick={()=>setAccountOpen(value=>!value)} aria-expanded={accountOpen} aria-haspopup="menu" aria-label={locale==='ar'?'قائمة الحساب':'Menu du compte'} title={accountLabel} className="inline-flex h-11 items-center gap-2 rounded-full px-2 text-text-secondary"><UserRound className="h-4 w-4"/><span className="max-w-24 truncate text-xs font-semibold">{accountLabel}</span></button>{accountOpen?<div role="menu" className="absolute end-0 mt-2 w-72 rounded-card border border-border-subtle bg-surface p-2 shadow-elevated"><div className="border-b border-border-subtle px-3 py-3"><p className="truncate text-sm font-bold text-text-primary">{session.displayName||(locale==='ar'?'فضائي MaisonDeLUX':'Mon espace MaisonDeLUX')}</p><p className="mt-1 truncate text-xs text-text-muted" dir="ltr">{session.email}</p></div><Link role="menuitem" href={`/${locale}/account`} className="mt-2 flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm text-text-primary hover:bg-surface-subtle"><UserRound className="h-4 w-4"/>{locale==='ar'?'فضائي':'Mon espace'}</Link><Link role="menuitem" href={`/${locale}/account/profile`} className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm text-text-primary hover:bg-surface-subtle">{locale==='ar'?'الملف والإعدادات':'Profil et réglages'}</Link><button role="menuitem" onClick={logout} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-start text-sm text-status-danger hover:bg-surface-subtle"><LogOut className="h-4 w-4"/>{locale==='ar'?'تسجيل الخروج':'Se déconnecter'}</button></div>:null}</div>:<Link href={accountHref} aria-label={accountLabel} title={accountLabel} className="inline-flex h-11 w-9 items-center justify-center text-text-secondary"><UserRound className="h-4 w-4"/></Link>}
 
           {/* Subtle Hairline Divider */}
           <div className="h-4.5 w-px bg-slate-200/80 dark:bg-white/10 mx-0.5" />
@@ -187,7 +190,7 @@ export function Navbar({ locale, dict }: NavbarProps) {
           </div>
 
           <div className="pt-2">
-            <div className="mb-3 flex items-center justify-between gap-3 text-sm"><Link className="inline-flex min-h-11 items-center text-brand-blue" href={accountHref}>{accountLabel}</Link>{authenticated?<button className="min-h-11" onClick={logout}>{locale==='ar'?'تسجيل الخروج':'Déconnexion'}</button>:null}</div>
+            <div className="mb-3 text-sm">{authenticated?<div className="rounded-xl border border-border-subtle p-3"><p className="font-bold text-text-primary">{session.displayName||(locale==='ar'?'فضائي MaisonDeLUX':'Mon espace MaisonDeLUX')}</p><p className="mt-1 truncate text-xs text-text-muted" dir="ltr">{session.email}</p><div className="mt-2 flex items-center justify-between gap-3"><Link className="inline-flex min-h-11 items-center text-brand-blue" href={accountHref}>{locale==='ar'?'فضائي':'Mon espace'}</Link><button className="min-h-11" onClick={logout}>{locale==='ar'?'تسجيل الخروج':'Déconnexion'}</button></div></div>:<Link className="inline-flex min-h-11 items-center text-brand-blue" href={accountHref}>{accountLabel}</Link>}</div>
             {!isEstimationPage ? (
               <Link
                 href={`/${locale}/cities/casablanca/estimate`}

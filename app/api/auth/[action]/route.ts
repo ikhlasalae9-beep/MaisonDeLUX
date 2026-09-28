@@ -7,7 +7,12 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(_request: NextRequest, { params }: { params: { action: string } }) {
   if (params.action !== 'session') return safeResponse({ code: 'NOT_FOUND' }, 404);
-  try { const user = await currentUser(); return safeResponse({ authenticated: Boolean(user) }); }
+  try {
+    const user = await currentUser();
+    if (!user) return safeResponse({ authenticated: false });
+    const profile=await authClient().from('profiles').select('display_name').eq('user_id',user.id).maybeSingle();
+    return safeResponse({ authenticated:true,displayName:profile.data?.display_name||'',email:user.email||'' });
+  }
   catch { return safeResponse({ authenticated: false }); }
 }
 export async function POST(request: NextRequest, { params }: { params: { action: string } }) {

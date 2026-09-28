@@ -19,7 +19,7 @@ replace('../../lib/auth/server',{
     signOut:async()=>{signedOut=true;return {error:null};},
     resetPasswordForEmail:async()=>({error:null}),
     updateUser:async()=>({error:null}),
-  }}),
+  },from:()=>({select:()=>({eq:()=>({maybeSingle:async()=>({data:{display_name:'Client'},error:null})})})})}),
 });
 replace('../../lib/admin/db',{query:async(sql:string,values:any[]=[])=>{
   queries.push({sql,values});
@@ -66,10 +66,29 @@ test('login rejects invalid credentials and a valid session claims only its gues
   assert.ok(queries.some(item=>item.sql.includes('phase_c_claim_guest')&&item.values[1]===userId));
 });
 
+test('post-auth routing defaults to account and preserves only safe internal destinations',async()=>{
+  login={data:{user:{id:userId,email_confirmed_at:'2026-01-01'},session:{}},error:null};
+  const generic=await route.POST(request('login',{locale:'fr',email:'client@example.test',password:'correct'}),{params:{action:'login'}});
+  assert.equal((await generic.json()).redirect,'/fr/account');
+  const deepLink=await route.POST(request('login',{locale:'fr',email:'client@example.test',password:'correct',next:'/fr/account/estimations'}),{params:{action:'login'}});
+  assert.equal((await deepLink.json()).redirect,'/fr/account/estimations');
+  const resume=await route.POST(request('login',{locale:'fr',email:'client@example.test',password:'correct',next:'/fr/cities/casablanca/estimate?resume=1'}),{params:{action:'login'}});
+  assert.equal((await resume.json()).redirect,'/fr/cities/casablanca/estimate?resume=1');
+  const rejected=await route.POST(request('login',{locale:'fr',email:'client@example.test',password:'correct',next:'https://evil.example/account'}),{params:{action:'login'}});
+  assert.equal((await rejected.json()).redirect,'/fr/account');
+});
+
 test('customer logout is local to the customer provider session',async()=>{
   current={id:userId,email_confirmed_at:'2026-01-01'};
   const response=await route.POST(request('logout',{locale:'fr'}),{params:{action:'logout'}});
   assert.equal(response.status,200);assert.equal(signedOut,true);assert.equal((await response.json()).redirect,'/fr');
+});
+
+test('authenticated public navigation receives the customer menu identity',async()=>{
+  current={id:userId,email:'client@example.test',email_confirmed_at:'2026-01-01'};
+  const response=await route.GET(new NextRequest('http://localhost:3000/api/auth/session'),{params:{action:'session'}});
+  assert.equal(response.status,200);
+  assert.deepEqual(await response.json(),{authenticated:true,displayName:'Client',email:'client@example.test'});
 });
 
 test('password recovery stays enumeration-safe and account data rejects anonymous callers',async()=>{

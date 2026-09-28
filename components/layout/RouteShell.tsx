@@ -9,7 +9,9 @@ export function RouteShell({ children, locale, dict }: { children: React.ReactNo
   const pathname = usePathname() || `/${locale}`;
   const auth = pathname.includes('/auth/');
   const account = pathname === `/${locale}/account` || pathname.startsWith(`/${locale}/account/`);
-  const product = pathname.endsWith('/estimate') || pathname.includes('/estimation');
+  // Account estimation details own their application shell. Without these guards,
+  // `/account/estimations/:id` also matched the public product header.
+  const product = !auth && !account && (pathname.endsWith('/estimate') || pathname.includes('/estimation'));
   const publicShell = !auth && !account && !product;
 
   return <>

@@ -34,7 +34,9 @@ export function AuthForm({ locale, mode }: { locale: string; mode: string }) {
       if (!response.ok) { setMessage(errorMessage(result.code)); return; }
       if (result.redirect) { window.location.assign(result.redirect); return; }
       setMessage(mode==='signup'
-        ? (ar ? 'تحقق من بريدك الإلكتروني لتأكيد فضائك، ثم ستعود إلى مسار التقدير.' : 'Consultez votre messagerie pour confirmer votre espace. Vous reprendrez ensuite votre parcours d’estimation.')
+        ? (next===`/${locale}/account`
+          ? (ar?'تحقق من بريدك الإلكتروني لتأكيد فضائك، ثم ستنتقل إلى حسابك.':'Consultez votre messagerie pour confirmer votre espace. Vous accéderez ensuite à votre compte.')
+          : (ar ? 'تحقق من بريدك الإلكتروني لتأكيد فضائك، ثم ستعود إلى مسار التقدير.' : 'Consultez votre messagerie pour confirmer votre espace. Vous reprendrez ensuite votre parcours d’estimation.'))
         : (ar ? 'إذا كان الحساب موجوداً، ستتلقى رسالة آمنة لمتابعة العملية.' : 'Si ce compte existe, un e-mail sécurisé vous permettra de continuer.'));
     } catch { setMessage(ar ? 'الخدمة غير متاحة مؤقتاً.' : 'Service momentanément indisponible.'); }
     finally { setBusy(false); }

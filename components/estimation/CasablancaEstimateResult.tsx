@@ -19,7 +19,7 @@ const FACTOR_LABELS: Record<string, { fr: string; ar: string }> = {
   current_state: { fr: 'État du bien', ar: 'حالة العقار' }, age: { fr: 'Ancienneté', ar: 'عمر العقار' },
 };
 
-export function CasablancaEstimateResult({ completed, supported, contextLoading, locale, copy, onEdit }: { completed: CompletedCasablancaEstimation; supported: CasablancaMetadata['supported']; contextLoading: boolean; locale: string; copy: any; onEdit: () => void }) {
+export function CasablancaEstimateResult({ completed, supported, contextLoading, locale, copy, onEdit, inAccount=false }: { completed: CompletedCasablancaEstimation; supported: CasablancaMetadata['supported']; contextLoading: boolean; locale: string; copy: any; onEdit: () => void; inAccount?: boolean }) {
   const { prediction, inputFeatures, estimatedAt } = completed;
   const amount = useCountUp(prediction.estimated_price_mad);
   const money = (value: number) => new Intl.NumberFormat(locale === 'ar' ? 'ar-MA' : 'fr-MA', { maximumFractionDigits: 0 }).format(Math.round(value));
@@ -50,7 +50,7 @@ export function CasablancaEstimateResult({ completed, supported, contextLoading,
     </CardSurface>
 
     {prediction.guest ? <PassportAccountCTA locale={locale} /> : null}
-    {prediction.guest === false ? <SavePropertyButton input={inputFeatures} locale={locale} /> : null}
+    {prediction.guest === false ? <div className="flex flex-wrap items-center gap-x-5 gap-y-2"><SavePropertyButton input={inputFeatures} locale={locale}/>{!inAccount&&prediction.estimation_event_id?<Link href={`/${locale}/account/estimations/${prediction.estimation_event_id}`} className="inline-flex min-h-11 items-center text-sm font-semibold text-brand-blue">{locale==='ar'?'عرضه في فضائي':'Voir dans mon espace'}</Link>:null}</div> : null}
     <div className="grid gap-5 lg:grid-cols-2 lg:items-stretch">
       <Explainability prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
       <Comparables prediction={prediction} loading={contextLoading} locale={locale} copy={copy} money={money} />
