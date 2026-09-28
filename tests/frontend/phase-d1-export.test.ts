@@ -48,3 +48,10 @@ test('PDF and PNG renderers enforce the approved safe areas and readable hierarc
   assert.match(renderer,/PANEL_INNER_PADDING=42/);assert.match(renderer,/panelRight-PANEL_INNER_PADDING/);assert.match(renderer,/PAGE_CONTENT_WIDTH/);
   assert.match(renderer,/pdfFooter\(ctx,data,1\)/);assert.match(renderer,/pdfFooter\(ctx,data,2\)/);assert.match(renderer,/maxWidth\?:number/);
 });
+
+test('Arabic PNG is a deliberate RTL mirror with a stable customer-facing date',()=>{
+  const renderer=readFileSync('lib/account/passport-export.ts','utf8');
+  assert.match(renderer,/if\(data\.rtl\)/);assert.match(renderer,/text\(ctx,'جواز عقاري',x,390,40/);assert.match(renderer,/text\(ctx,'تقدير إرشادي',x,1140,34/);
+  assert.match(renderer,/arabicCardDate\(ctx,data,x,1204,32/);assert.match(renderer,/formatToParts\(date\)/);assert.match(renderer,/tokens=\[value\('day'\),value\('month'\),value\('year'\)\]/);
+  assert.match(renderer,/text\(ctx,'PASSEPORT IMMOBILIER',x,360,36/);assert.match(renderer,/text\(ctx,'Estimation indicative',x,1110,31/);
+});
