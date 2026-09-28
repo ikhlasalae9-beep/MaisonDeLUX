@@ -19,6 +19,9 @@ test('Passport report removes the causal simulator and hides internal market thr
   assert.match(result,/Ces données n’influencent pas l’estimation affichée/);
   assert.match(result,/Prix affichés dans les annonces, et non prix de transaction/);
   assert.match(result,/Transparence du modèle/);
+  assert.match(result,/Estimation indicative produite par un modèle immobilier spécifique à Casablanca\. Le contexte des annonces est présenté séparément et n’influence pas directement l’estimation affichée\./);
+  assert.match(result,/تقدير إرشادي ناتج عن نموذج عقاري مخصص لمدينة الدار البيضاء\. يتم عرض سياق الإعلانات بشكل منفصل ولا يؤثر مباشرة على القيمة التقديرية المعروضة\./);
+  assert.doesNotMatch(result,/Version du modèle|إصدار النموذج|casablanca-catboost-v1/);
   const context=customerContext({market_context:{benchmark_eligible:false,listing_count:6,minimum_observations:8}}) as any;
   assert.equal('minimum_observations' in context.market_context,false);
 });

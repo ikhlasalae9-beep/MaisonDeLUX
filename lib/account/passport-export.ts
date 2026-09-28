@@ -12,7 +12,7 @@ export type PassportExportSource={
 
 export type PassportExportData={
   locale:string;rtl:boolean;city:string;neighborhood:string;propertyType:string;area:number;rooms?:number;bedrooms?:number;bathrooms?:number;floor?:number;condition?:string;age?:string;
-  estimatedValue:number;pricePerM2:number|null;date:string;isoDate:string;modelVersion:string;
+  estimatedValue:number;pricePerM2:number|null;date:string;isoDate:string;
   market:null|{neighborhood:string;listingCount:number;medianPerM2:number};
   comparables:Array<{neighborhood:string;propertyType:string;area:number;rooms?:number;bedrooms?:number;price:number;sameNeighborhood:boolean;areaDifference:number}>;
 };
@@ -20,6 +20,14 @@ export type PassportExportData={
 const COLORS={navy:'#101b2d',blue:'#1e3a8a',lightBlue:'#dbeafe',ink:'#1c1917',muted:'#57534e',soft:'#f5f5f4',border:'#dedbd7',white:'#ffffff'};
 const CARD={width:1080,height:1350};
 const A4={width:1240,height:1754};
+const CARD_MARGIN=70;
+const PAGE_MARGIN_X=112;
+const PAGE_MARGIN_TOP=100;
+const PAGE_MARGIN_BOTTOM=100;
+const PAGE_LEFT=PAGE_MARGIN_X;
+const PAGE_RIGHT=A4.width-PAGE_MARGIN_X;
+const PAGE_CONTENT_WIDTH=PAGE_RIGHT-PAGE_LEFT;
+const PANEL_INNER_PADDING=42;
 
 export function createPassportExportData(source:PassportExportSource,locale:string):PassportExportData{
   const ar=locale==='ar',input=source.input_features,price=Number(source.estimated_price_mad),area=Number(input.area),context=source.context||{},prediction=source.prediction||{};
@@ -29,7 +37,7 @@ export function createPassportExportData(source:PassportExportSource,locale:stri
   const date=new Date(source.created_at),validDate=!Number.isNaN(date.getTime());
   return {locale,rtl:ar,city:ar?'الدار البيضاء':'Casablanca',neighborhood:String(input.neighborhood||''),propertyType:propertyTypeLabel(input.property_type,locale),area,
     rooms:finite(input.rooms),bedrooms:finite(input.bedrooms),bathrooms:finite(input.bathrooms),floor:finite(input.floor),condition:input.current_state?conditionLabel(input.current_state,locale):undefined,age:input.age?ageLabel(input.age,locale):undefined,
-    estimatedValue:Number.isFinite(price)?price:0,pricePerM2:area>0&&Number.isFinite(price)?price/area:null,date:formatDate(source.created_at,locale),isoDate:validDate?date.toISOString().slice(0,10):'date',modelVersion:String(source.model_version||prediction.model_version||'—'),market,
+    estimatedValue:Number.isFinite(price)?price:0,pricePerM2:area>0&&Number.isFinite(price)?price/area:null,date:formatDate(source.created_at,locale),isoDate:validDate?date.toISOString().slice(0,10):'date',market,
     comparables:rawComparables.slice(0,3).map((item:any)=>({neighborhood:String(item.neighborhood||''),propertyType:propertyTypeLabel(item.property_type,locale),area:Number(item.area)||0,rooms:finite(item.rooms),bedrooms:finite(item.bedrooms),price:Number(item.listing_price_mad)||0,sameNeighborhood:item.same_neighborhood===true,areaDifference:Number(item.area_difference_m2)||0}))};
 }
 
@@ -58,13 +66,13 @@ export async function downloadPassportPdf(source:PassportExportSource,locale:str
 
 export function renderCard(data:PassportExportData,logo:HTMLImageElement){
   const canvas=createCanvas(CARD.width,CARD.height),ctx=canvas.getContext('2d')!;ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.fillStyle=COLORS.navy;ctx.fillRect(0,0,CARD.width,CARD.height);
-  ctx.globalAlpha=.55;ctx.fillStyle=COLORS.blue;ctx.beginPath();ctx.arc(930,130,300,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;containImage(ctx,logo,70,65,440,110);
-  const x=data.rtl?1010:70,align=data.rtl?'right':'left',dir=data.rtl?'rtl':'ltr';
-  text(ctx,data.rtl?'جواز عقاري':'PASSEPORT IMMOBILIER',x,285,32,COLORS.white,700,align,dir);line(ctx,70,365,1010,365,'rgba(255,255,255,.18)');
-  text(ctx,data.city,x,465,34,'rgba(255,255,255,.78)',600,align,dir);text(ctx,data.neighborhood,x,520,34,COLORS.white,700,align,'ltr');
-  text(ctx,data.propertyType,x,600,30,'rgba(255,255,255,.76)',600,align,dir);text(ctx,formatArea(data.area,data.locale),x,650,28,'rgba(255,255,255,.62)',500,align,'ltr');
-  text(ctx,mad(data.estimatedValue,data.locale),x,800,64,COLORS.white,800,align,'ltr');if(data.pricePerM2!==null)text(ctx,`${formatInteger(data.pricePerM2,data.locale)} MAD/m²`,x,865,30,COLORS.lightBlue,700,align,'ltr');
-  line(ctx,70,955,1010,955,'rgba(255,255,255,.18)');text(ctx,data.rtl?'تقدير إرشادي':'Estimation indicative',x,1050,28,'rgba(255,255,255,.76)',600,align,dir);text(ctx,data.date,x,1105,26,'rgba(255,255,255,.58)',500,align,dir);text(ctx,'maison-delux.com',x,1240,22,'rgba(255,255,255,.42)',500,align,'ltr');
+  const cardRight=CARD.width-CARD_MARGIN,contentWidth=cardRight-CARD_MARGIN,x=data.rtl?cardRight:CARD_MARGIN,align=data.rtl?'right':'left',dir=data.rtl?'rtl':'ltr';
+  ctx.globalAlpha=.55;ctx.fillStyle=COLORS.blue;ctx.beginPath();ctx.arc(950,100,230,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;containImage(ctx,logo,CARD_MARGIN,62,495,124);
+  text(ctx,data.rtl?'جواز عقاري':'PASSEPORT IMMOBILIER',x,360,36,COLORS.white,700,align,dir,contentWidth);line(ctx,CARD_MARGIN,430,cardRight,430,'rgba(255,255,255,.18)');
+  text(ctx,data.city,x,520,38,'rgba(255,255,255,.82)',650,align,dir,contentWidth);text(ctx,data.neighborhood,x,580,36,COLORS.white,700,align,'ltr',contentWidth);
+  text(ctx,data.propertyType,x,665,33,'rgba(255,255,255,.78)',600,align,dir,contentWidth);text(ctx,formatArea(data.area,data.locale),x,720,31,'rgba(255,255,255,.67)',500,align,'ltr',contentWidth);
+  text(ctx,mad(data.estimatedValue,data.locale),x,870,64,COLORS.white,800,align,'ltr',contentWidth);if(data.pricePerM2!==null)text(ctx,`${formatInteger(data.pricePerM2,data.locale)} MAD/m²`,x,940,33,COLORS.lightBlue,700,align,'ltr',contentWidth);
+  line(ctx,CARD_MARGIN,1015,cardRight,1015,'rgba(255,255,255,.18)');text(ctx,data.rtl?'تقدير إرشادي':'Estimation indicative',x,1110,31,'rgba(255,255,255,.8)',600,align,dir,contentWidth);text(ctx,data.date,x,1172,29,'rgba(255,255,255,.64)',500,align,dir,contentWidth);text(ctx,'maison-delux.com',x,1260,24,'rgba(255,255,255,.5)',500,align,'ltr',contentWidth);
   return canvas;
 }
 
@@ -73,22 +81,23 @@ export function renderPdfPages(data:PassportExportData,whiteLogo:HTMLImageElemen
 }
 
 function renderPdfPageOne(data:PassportExportData,logo:HTMLImageElement){
-  const canvas=createCanvas(A4.width,A4.height),ctx=canvas.getContext('2d')!;quality(ctx);ctx.fillStyle=COLORS.white;ctx.fillRect(0,0,A4.width,A4.height);ctx.fillStyle=COLORS.navy;ctx.fillRect(0,0,A4.width,245);containImage(ctx,logo,80,55,430,105);
-  const x=data.rtl?1160:80,align=data.rtl?'right':'left',dir=data.rtl?'rtl':'ltr';text(ctx,data.rtl?'جواز عقاري MaisonDeLUX':'PASSEPORT IMMOBILIER MAISONDELUX',x,190,27,'rgba(255,255,255,.74)',700,align,dir);
-  text(ctx,data.city,x,335,28,COLORS.muted,600,align,dir);text(ctx,data.neighborhood,x,385,42,COLORS.ink,800,align,'ltr');text(ctx,data.propertyType,x,440,30,COLORS.muted,600,align,dir);text(ctx,data.date,x,490,23,COLORS.muted,500,align,dir);
-  rounded(ctx,80,560,1080,300,24,COLORS.navy);text(ctx,data.rtl?'تقدير إرشادي':'ESTIMATION INDICATIVE',x,640,24,'rgba(255,255,255,.65)',700,align,dir);text(ctx,mad(data.estimatedValue,data.locale),x,750,62,COLORS.white,800,align,'ltr');if(data.pricePerM2!==null)text(ctx,`${formatInteger(data.pricePerM2,data.locale)} MAD/m²`,x,810,27,COLORS.lightBlue,700,align,'ltr');
-  text(ctx,data.rtl?'خصائص العقار':'CARACTÉRISTIQUES DU BIEN',x,950,25,COLORS.blue,800,align,dir);const fields=characteristics(data),cellW=510,cellH=105,startY=990;
-  fields.forEach((field,index)=>{const column=index%2,row=Math.floor(index/2),left=80+column*(cellW+60),top=startY+row*cellH;rounded(ctx,left,top,cellW,82,14,COLORS.soft);const fieldX=data.rtl?left+cellW-24:left+24;text(ctx,field[0],fieldX,top+31,18,COLORS.muted,600,data.rtl?'right':'left',dir);text(ctx,field[1],fieldX,top+62,23,COLORS.ink,700,data.rtl?'right':'left',field[2]||dir);});
+  const canvas=createCanvas(A4.width,A4.height),ctx=canvas.getContext('2d')!;quality(ctx);ctx.fillStyle=COLORS.white;ctx.fillRect(0,0,A4.width,A4.height);ctx.fillStyle=COLORS.navy;ctx.fillRect(0,0,A4.width,270);containImage(ctx,logo,PAGE_LEFT,PAGE_MARGIN_TOP-28,400,100);
+  const x=data.rtl?PAGE_RIGHT:PAGE_LEFT,align=data.rtl?'right':'left',dir=data.rtl?'rtl':'ltr';text(ctx,data.rtl?'جواز عقاري MaisonDeLUX':'PASSEPORT IMMOBILIER MAISONDELUX',x,220,29,'rgba(255,255,255,.78)',700,align,dir,PAGE_CONTENT_WIDTH);
+  text(ctx,data.city,x,360,30,COLORS.muted,600,align,dir,PAGE_CONTENT_WIDTH);text(ctx,data.neighborhood,x,416,44,COLORS.ink,800,align,'ltr',PAGE_CONTENT_WIDTH);text(ctx,data.propertyType,x,474,32,COLORS.muted,600,align,dir,PAGE_CONTENT_WIDTH);text(ctx,data.date,x,522,25,COLORS.muted,500,align,dir,PAGE_CONTENT_WIDTH);
+  const panelTop=580,panelHeight=310,panelLeft=PAGE_LEFT,panelRight=PAGE_RIGHT,panelX=data.rtl?panelRight-PANEL_INNER_PADDING:panelLeft+PANEL_INNER_PADDING,panelTextWidth=PAGE_CONTENT_WIDTH-PANEL_INNER_PADDING*2;
+  rounded(ctx,panelLeft,panelTop,PAGE_CONTENT_WIDTH,panelHeight,24,COLORS.navy);text(ctx,data.rtl?'تقدير إرشادي':'ESTIMATION INDICATIVE',panelX,665,26,'rgba(255,255,255,.7)',700,align,dir,panelTextWidth);text(ctx,mad(data.estimatedValue,data.locale),panelX,774,62,COLORS.white,800,align,'ltr',panelTextWidth);if(data.pricePerM2!==null)text(ctx,`${formatInteger(data.pricePerM2,data.locale)} MAD/m²`,panelX,835,29,COLORS.lightBlue,700,align,'ltr',panelTextWidth);
+  text(ctx,data.rtl?'خصائص العقار':'CARACTÉRISTIQUES DU BIEN',x,985,27,COLORS.blue,800,align,dir,PAGE_CONTENT_WIDTH);const fields=characteristics(data),cellGap=48,cellW=(PAGE_CONTENT_WIDTH-cellGap)/2,cellStep=104,startY=1030;
+  fields.forEach((field,index)=>{const column=index%2,row=Math.floor(index/2),left=PAGE_LEFT+column*(cellW+cellGap),top=startY+row*cellStep;rounded(ctx,left,top,cellW,88,14,COLORS.soft);const fieldX=data.rtl?left+cellW-28:left+28;text(ctx,field[0],fieldX,top+34,20,COLORS.muted,600,data.rtl?'right':'left',dir,cellW-56);text(ctx,field[1],fieldX,top+68,24,COLORS.ink,700,data.rtl?'right':'left',field[2]||dir,cellW-56);});
   const disclaimer=data.rtl?'هذا التقدير قيمة إحصائية إرشادية ينتجها نموذج MaisonDeLUX. لا يمثل خبرة رسمية أو سعراً نهائياً أو سعر معاملة.':'Cette estimation est une valeur statistique indicative produite par le modèle MaisonDeLUX. Elle ne constitue ni une expertise officielle, ni un prix définitif, ni un prix de transaction.';
-  line(ctx,80,1585,1160,1585,COLORS.border);wrap(ctx,disclaimer,x,1630,1080,23,34,COLORS.muted,500,data.rtl?'right':'left',dir);text(ctx,'MaisonDeLUX · maison-delux.com',x,1715,18,COLORS.muted,500,align,'ltr');return canvas;
+  line(ctx,PAGE_LEFT,1490,PAGE_RIGHT,1490,COLORS.border);wrap(ctx,disclaimer,x,1535,PAGE_CONTENT_WIDTH,25,36,COLORS.muted,500,align,dir);pdfFooter(ctx,data,1);return canvas;
 }
 
 function renderPdfPageTwo(data:PassportExportData,logo:HTMLImageElement){
-  const canvas=createCanvas(A4.width,A4.height),ctx=canvas.getContext('2d')!;quality(ctx);ctx.fillStyle=COLORS.white;ctx.fillRect(0,0,A4.width,A4.height);containImage(ctx,logo,80,45,360,85);
-  const x=data.rtl?1160:80,align=data.rtl?'right':'left',dir=data.rtl?'rtl':'ltr';text(ctx,data.rtl?'الأدلة والشفافية':'CONTEXTE ET TRANSPARENCE',x,175,29,COLORS.blue,800,align,dir);let y=245;
-  if(data.market){text(ctx,data.rtl?'سياق السوق':'CONTEXTE DU MARCHÉ',x,y,25,COLORS.ink,800,align,dir);y+=55;text(ctx,data.rtl?data.market.neighborhood:`Quartier · ${data.market.neighborhood}`,x,y,26,COLORS.ink,700,align,data.rtl?'ltr':'ltr');y+=45;text(ctx,`${formatInteger(data.market.medianPerM2,data.locale)} MAD/m²`,x,y,31,COLORS.blue,800,align,'ltr');y+=38;text(ctx,`${formatInteger(data.market.listingCount,data.locale)} ${data.rtl?'إعلاناً محللاً':'annonces analysées'}`,x,y,21,COLORS.muted,600,align,dir);y+=55;wrap(ctx,data.rtl?'أسعار معروضة في الإعلانات وليست أسعار معاملات. هذه البيانات لا تؤثر في تقدير النموذج.':"Prix affichés dans les annonces, et non prix de transaction. Ces données n'influencent pas l'estimation du modèle.",x,y,1080,21,31,COLORS.muted,500,align,dir);y+=105;line(ctx,80,y,1160,y,COLORS.border);y+=65;}
-  if(data.comparables.length){text(ctx,data.rtl?'إعلانات عقارية مشابهة':'ANNONCES COMPARABLES',x,y,25,COLORS.ink,800,align,dir);y+=45;for(const item of data.comparables){rounded(ctx,80,y,1080,128,14,COLORS.soft);const itemX=data.rtl?1128:112;text(ctx,item.neighborhood,itemX,y+37,23,COLORS.ink,700,data.rtl?'right':'left','ltr');text(ctx,`${item.propertyType} · ${formatArea(item.area,data.locale)}`,itemX,y+72,20,COLORS.muted,600,data.rtl?'right':'left',dir);text(ctx,mad(item.price,data.locale),itemX,y+107,24,COLORS.blue,800,data.rtl?'right':'left','ltr');y+=148;}y+=35;line(ctx,80,y,1160,y,COLORS.border);y+=65;}
-  text(ctx,data.rtl?'شفافية النموذج':'TRANSPARENCE DU MODÈLE',x,y,25,COLORS.ink,800,align,dir);y+=48;wrap(ctx,data.rtl?'تقدير إرشادي صادر عن نموذج خاص بمدينة الدار البيضاء. سياق الإعلانات منفصل عن حساب النموذج.':'Estimation indicative produite par un modèle spécifique à Casablanca. Le contexte des annonces est distinct du calcul du modèle.',x,y,1080,22,33,COLORS.muted,500,align,dir);y+=90;text(ctx,`${data.rtl?'إصدار النموذج':'Version du modèle'} · ${data.modelVersion}`,x,y,20,COLORS.muted,600,align,'ltr');text(ctx,'MaisonDeLUX · maison-delux.com',x,1705,18,COLORS.muted,500,align,'ltr');return canvas;
+  const canvas=createCanvas(A4.width,A4.height),ctx=canvas.getContext('2d')!;quality(ctx);ctx.fillStyle=COLORS.white;ctx.fillRect(0,0,A4.width,A4.height);containImage(ctx,logo,PAGE_LEFT,PAGE_MARGIN_TOP-30,360,85);
+  const x=data.rtl?PAGE_RIGHT:PAGE_LEFT,align=data.rtl?'right':'left',dir=data.rtl?'rtl':'ltr';text(ctx,data.rtl?'الأدلة والشفافية':'CONTEXTE ET TRANSPARENCE',x,205,31,COLORS.blue,800,align,dir,PAGE_CONTENT_WIDTH);let y=292;
+  if(data.market){text(ctx,data.rtl?'سياق السوق':'CONTEXTE DU MARCHÉ',x,y,27,COLORS.ink,800,align,dir,PAGE_CONTENT_WIDTH);y+=58;text(ctx,data.rtl?data.market.neighborhood:`Quartier · ${data.market.neighborhood}`,x,y,27,COLORS.ink,700,align,'ltr',PAGE_CONTENT_WIDTH);y+=48;text(ctx,`${formatInteger(data.market.medianPerM2,data.locale)} MAD/m²`,x,y,32,COLORS.blue,800,align,'ltr',PAGE_CONTENT_WIDTH);y+=42;text(ctx,`${formatInteger(data.market.listingCount,data.locale)} ${data.rtl?'إعلاناً محللاً':'annonces analysées'}`,x,y,23,COLORS.muted,600,align,dir,PAGE_CONTENT_WIDTH);y+=58;wrap(ctx,data.rtl?'أسعار معروضة في الإعلانات وليست أسعار معاملات. هذه البيانات لا تؤثر في تقدير النموذج.':"Prix affichés dans les annonces, et non prix de transaction. Ces données n'influencent pas l'estimation du modèle.",x,y,PAGE_CONTENT_WIDTH,23,34,COLORS.muted,500,align,dir);y+=112;line(ctx,PAGE_LEFT,y,PAGE_RIGHT,y,COLORS.border);y+=68;}
+  if(data.comparables.length){text(ctx,data.rtl?'إعلانات عقارية مشابهة':'ANNONCES COMPARABLES',x,y,27,COLORS.ink,800,align,dir,PAGE_CONTENT_WIDTH);y+=50;for(const item of data.comparables){rounded(ctx,PAGE_LEFT,y,PAGE_CONTENT_WIDTH,140,14,COLORS.soft);const itemX=data.rtl?PAGE_RIGHT-32:PAGE_LEFT+32,cardTextWidth=PAGE_CONTENT_WIDTH-64;text(ctx,item.neighborhood,itemX,y+42,25,COLORS.ink,700,data.rtl?'right':'left','ltr',cardTextWidth);text(ctx,`${item.propertyType} · ${formatArea(item.area,data.locale)}`,itemX,y+82,22,COLORS.muted,600,data.rtl?'right':'left',dir,cardTextWidth);text(ctx,mad(item.price,data.locale),itemX,y+120,27,COLORS.blue,800,data.rtl?'right':'left','ltr',cardTextWidth);y+=160;}y+=38;line(ctx,PAGE_LEFT,y,PAGE_RIGHT,y,COLORS.border);y+=68;}
+  text(ctx,data.rtl?'شفافية النموذج':'TRANSPARENCE DU MODÈLE',x,y,27,COLORS.ink,800,align,dir,PAGE_CONTENT_WIDTH);y+=52;wrap(ctx,data.rtl?'تقدير إرشادي ناتج عن نموذج عقاري مخصص لمدينة الدار البيضاء. يتم عرض سياق الإعلانات بشكل منفصل ولا يؤثر مباشرة على القيمة التقديرية المعروضة.':'Estimation indicative produite par un modèle immobilier spécifique à Casablanca. Le contexte des annonces est présenté séparément et n’influence pas directement l’estimation affichée.',x,y,PAGE_CONTENT_WIDTH,24,35,COLORS.muted,500,align,dir);pdfFooter(ctx,data,2);return canvas;
 }
 
 function characteristics(data:PassportExportData):Array<[label:string,value:string,direction?:'ltr'|'rtl']>{
@@ -102,8 +111,9 @@ function createCanvas(width:number,height:number){const canvas=document.createEl
 function quality(ctx:CanvasRenderingContext2D){ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';}
 async function prepare(path:string){await document.fonts.ready;const image=new Image();image.decoding='async';image.src=path;await image.decode();return image;}
 function containImage(ctx:CanvasRenderingContext2D,image:HTMLImageElement,x:number,y:number,width:number,height:number){const scale=Math.min(width/image.naturalWidth,height/image.naturalHeight),w=image.naturalWidth*scale,h=image.naturalHeight*scale;ctx.drawImage(image,x,y+(height-h)/2,w,h);}
-function text(ctx:CanvasRenderingContext2D,value:string,x:number,y:number,size:number,color:string,weight:number,align:CanvasTextAlign,direction:CanvasDirection){ctx.save();ctx.fillStyle=color;ctx.font=`${weight} ${size}px ${direction==='rtl'?'"IBM Plex Sans Arabic", ':''}"Plus Jakarta Sans", Arial, sans-serif`;ctx.textAlign=align;ctx.textBaseline='alphabetic';ctx.direction=direction;ctx.fillText(value,x,y);ctx.restore();}
+function text(ctx:CanvasRenderingContext2D,value:string,x:number,y:number,size:number,color:string,weight:number,align:CanvasTextAlign,direction:CanvasDirection,maxWidth?:number){ctx.save();ctx.fillStyle=color;ctx.font=`${weight} ${size}px ${direction==='rtl'?'"IBM Plex Sans Arabic", ':''}"Plus Jakarta Sans", Arial, sans-serif`;ctx.textAlign=align;ctx.textBaseline='alphabetic';ctx.direction=direction;if(maxWidth)ctx.fillText(value,x,y,maxWidth);else ctx.fillText(value,x,y);ctx.restore();}
 function wrap(ctx:CanvasRenderingContext2D,value:string,x:number,y:number,maxWidth:number,size:number,lineHeight:number,color:string,weight:number,align:CanvasTextAlign,direction:CanvasDirection){ctx.save();ctx.fillStyle=color;ctx.font=`${weight} ${size}px ${direction==='rtl'?'"IBM Plex Sans Arabic", ':''}"Plus Jakarta Sans", Arial, sans-serif`;ctx.textAlign=align;ctx.direction=direction;const words=value.split(/\s+/),lines:string[]=[];let current='';for(const word of words){const test=current?`${current} ${word}`:word;if(ctx.measureText(test).width>maxWidth&&current){lines.push(current);current=word;}else current=test;}if(current)lines.push(current);lines.forEach((item,index)=>ctx.fillText(item,x,y+index*lineHeight));ctx.restore();return lines.length;}
+function pdfFooter(ctx:CanvasRenderingContext2D,data:PassportExportData,page:number){const y=A4.height-PAGE_MARGIN_BOTTOM-8,siteX=data.rtl?PAGE_RIGHT:PAGE_LEFT,pageX=data.rtl?PAGE_LEFT:PAGE_RIGHT;text(ctx,'MaisonDeLUX · maison-delux.com',siteX,y,19,COLORS.muted,500,data.rtl?'right':'left','ltr',PAGE_CONTENT_WIDTH);text(ctx,`${page} / 2`,pageX,y,18,COLORS.muted,500,data.rtl?'left':'right','ltr',120);}
 function line(ctx:CanvasRenderingContext2D,x1:number,y1:number,x2:number,y2:number,color:string){ctx.strokeStyle=color;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
 function rounded(ctx:CanvasRenderingContext2D,x:number,y:number,width:number,height:number,radius:number,color:string){ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x+radius,y);ctx.arcTo(x+width,y,x+width,y+height,radius);ctx.arcTo(x+width,y+height,x,y+height,radius);ctx.arcTo(x,y+height,x,y,radius);ctx.arcTo(x,y,x+width,y,radius);ctx.closePath();ctx.fill();}
 function canvasPngBlob(canvas:HTMLCanvasElement){return new Promise<Blob>((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('EXPORT_FAILED')),'image/png'));}
