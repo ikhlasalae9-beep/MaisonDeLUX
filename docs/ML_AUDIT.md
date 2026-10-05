@@ -1,3 +1,7 @@
+# Historical documentation
+
+Earlier experiments and architecture; model paths and frontend claims are historical. See [current architecture](README.md) and [city handoff](ALAE_MODEL_TRAINING_HANDOFF.md).
+
 > Historical record: model serving is now documented in [MODEL_V1.md](MODEL_V1.md). Earlier runtime/artifact references below are superseded.
 
 # Audit Machine Learning — MaisonDeLUX

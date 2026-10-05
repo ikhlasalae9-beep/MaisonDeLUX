@@ -1,3 +1,7 @@
+# Historical validation of the retired generic architecture
+
+Dated evidence, not current product validation. Obsolete inventory snapshots referenced below were removed.
+
 # Final validation — 2026-09-05
 
 - Branch verified: `codex/work`.

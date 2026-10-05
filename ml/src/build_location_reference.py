@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'data/processed/maisondelux_model_ready_v1.csv'
+SOURCE = ROOT / 'data/training/shared/model-ready/maisondelux_model_ready_v1.csv'
 
 def build_reference():
     frame = pd.read_csv(SOURCE)

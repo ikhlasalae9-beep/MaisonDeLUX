@@ -111,7 +111,7 @@ def test_lightweight_joblib_parity():
     assert abs(pred_orig_sanity - pred_light_sanity) < 0.01
 
     # 2. 100+ dataset rows parity
-    csv_path = ROOT / 'data/processed/maisondelux_model_ready_v1.csv'
+    csv_path = ROOT / 'data/training/shared/model-ready/maisondelux_model_ready_v1.csv'
     if csv_path.is_file():
         df_sample = pd.read_csv(csv_path).sample(100, random_state=42)
         for _, row in df_sample.iterrows():

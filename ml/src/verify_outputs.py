@@ -17,7 +17,7 @@ REQUIRED = [
     "data/geographic/morocco_cities.geojson", "data/geographic/morocco_neighborhoods.geojson",
     "reports/data_quality/data_quality_report.md", "reports/scraping/source_coverage_report.md",
     "reports/scraping/geographic_coverage_report.md", "reports/scraping/historical_coverage_report.md",
-    "ml/notebooks/maisondelux_data_pipeline.ipynb",
+    "ml/notebooks/workflows/maisondelux_data_pipeline.ipynb",
 ]
 SHEETS = ["all_rows", "valid_rows", "rejected_rows", "source_summary", "city_summary", "quality_summary", "scraping_errors"]
 
@@ -82,7 +82,7 @@ def verify() -> dict:
         assert all(feature.get("geometry") and feature.get("properties", {}).get("source") for feature in layer["features"])
         geographic[name] = len(layer["features"])
 
-    previews = list((ROOT / "outputs/01a06449-2ac1-7fa2-a7ad-6d42f27ec146/previews").glob("*.png"))
+    previews = list((ROOT / "reports/data_quality/workbook-previews").glob("*.png"))
     result = {
         "status": "passed", "row_counts": {"raw": len(raw), "valid_unique": len(clean), "rejected_or_warning": len(rejected),
                                                 "duplicates": int(raw["deduplication_status"].ne("unique").sum())},

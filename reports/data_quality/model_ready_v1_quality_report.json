@@ -3,8 +3,8 @@
   "input": "data/processed/maisondelux_clean.csv",
   "input_sha256": "3a7a1cc9c2c3be4f6db2f4d53c8f7e51e84ba227d5a9017a3d869ae7715c5b8b",
   "outputs": {
-    "csv": "data/processed/maisondelux_model_ready_v1.csv",
-    "parquet": "data/processed/maisondelux_model_ready_v1.parquet"
+    "csv": "data/training/shared/model-ready/maisondelux_model_ready_v1.csv",
+    "parquet": "data/training/shared/model-ready/maisondelux_model_ready_v1.parquet"
   },
   "summary": {
     "original_rows": 13867,

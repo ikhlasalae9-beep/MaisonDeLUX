@@ -44,7 +44,7 @@ def test_model_failure(client,monkeypatch):
     assert client.post('/api/estimate',json=payload()).status_code==503
 
 def test_artifact_reproduces_notebook_test_metrics():
-    d=pd.read_csv(ROOT/'data/processed/maisondelux_model_ready_v1.csv')
+    d=pd.read_csv(ROOT/'data/training/shared/model-ready/maisondelux_model_ready_v1.csv')
     d['neighborhood']=d.neighborhood_clean
     d['property_type']=d.property_type_repaired
     for col in FEATURES[3:]:

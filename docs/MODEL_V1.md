@@ -1,3 +1,7 @@
+# Historical documentation
+
+Former generic XGBoost architecture; retained artifacts still support startup, locations and tests. See [current architecture](README.md) and [city handoff](ALAE_MODEL_TRAINING_HANDOFF.md).
+
 # MaisonDeLUX model V1
 
 ## Objective and supported use

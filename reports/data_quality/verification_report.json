@@ -119,7 +119,7 @@
       "bytes": 328,
       "sha256": "6ec8be994de022fcaf5efbaeb906c3607759d98a8e6c366a8ce213280427b0b7"
     },
-    "ml/notebooks/maisondelux_data_pipeline.ipynb": {
+    "ml/notebooks/workflows/maisondelux_data_pipeline.ipynb": {
       "bytes": 5826,
       "sha256": "6a1d15fbe5ddea0d5e59b0c5fd8480c89b2f3cd070b6e763ec1563d8537e2108"
     }

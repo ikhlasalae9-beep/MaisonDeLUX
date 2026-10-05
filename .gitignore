@@ -71,7 +71,7 @@ node_modules/
 .next/
 **/.next/
 
-!data/processed/maisondelux_model_ready_v1.csv
+!data/training/shared/model-ready/maisondelux_model_ready_v1.csv
 *.tsbuildinfo
 .env.local
 
@@ -80,3 +80,10 @@ node_modules/
 
 env.download.backup
 !.env.example
+
+# Generated CatBoost training logs
+**/catboost_info/
+
+# Reproducible optimization caches
+reports/**/cache_*/
+ml/**/cache_*/

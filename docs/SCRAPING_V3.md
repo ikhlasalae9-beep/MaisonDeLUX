@@ -2,7 +2,7 @@
 
 ## Safe entry point
 
-Open `notebooks/data_maisondelux_scraper_v3.ipynb`, leave `MODE = "PILOT"`,
+Open `ml/notebooks/workflows/data_maisondelux_scraper_v3.ipynb`, leave `MODE = "PILOT"`,
 and run all cells only after an authorized source feed has been enabled. The
 notebook locates the repository root dynamically and uses only project-relative
 paths. V3.1 intentionally has no enabled source: the preserved local evidence

@@ -12,7 +12,7 @@ The original schema carried inconsistent property labels, geographic text, missi
 
 ## Final preparation and validation
 
-`ml/src/data_repair/model_ready.py`, orchestrated by `notebooks/data_repair_model_ready.ipynb`, preserves the source CSV and its hash. It repairs types using textual evidence, checks neighborhood validity and city/region consistency, reconstructs URLs only when evidence exists, and audits numerical plausibility. It validates CSV/Parquet dimensions, positive finite prices/surfaces, required geography and explicit exclusion reasons.
+`ml/src/data_repair/model_ready.py`, orchestrated by `ml/notebooks/workflows/data_repair_model_ready.ipynb`, preserves the source CSV and its hash. It repairs types using textual evidence, checks neighborhood validity and city/region consistency, reconstructs URLs only when evidence exists, and audits numerical plausibility. It validates CSV/Parquet dimensions, positive finite prices/surfaces, required geography and explicit exclusion reasons.
 
 The quality report records 1,659 changed property types and 610 invalid neighborhoods detected before exclusions. Final output retains 13,537 rows across 10 regions and 30 cities. The report counts 646 values in its neighborhood field; the modeling notebook uses `neighborhood_clean`, including 534 unavailable values, so these counts should not be confused with validated nonmissing modeling categories.
 
@@ -20,7 +20,7 @@ Confirmed duplicate removal is conservative: 26 rows removed using high-confiden
 
 ## Modeling choice and leakage prevention
 
-`data/processed/maisondelux_model_ready_v1.csv` is selected because it contains the audited repairs and exclusion decisions and is the exact source of the executed final model notebook. The notebook assigns `property_type_repaired` to `property_type`, `neighborhood_clean` to `neighborhood`, and strips categorical whitespace. Only the 11 declared EXTENDED features enter inference. Target-derived price/m², IDs, batches, URLs and audit fields remain excluded.
+`data/training/shared/model-ready/maisondelux_model_ready_v1.csv` is selected because it contains the audited repairs and exclusion decisions and is the exact source of the executed final model notebook. The notebook assigns `property_type_repaired` to `property_type`, `neighborhood_clean` to `neighborhood`, and strips categorical whitespace. Only the 11 declared EXTENDED features enter inference. Target-derived price/m², IDs, batches, URLs and audit fields remain excluded.
 
 The Train/Test split groups related listings, with no group overlap, seed 18 and 10,852/2,685 rows. Imputation, rare-category grouping, scaling and encoding are fitted inside training pipelines and cross-validation folds.
 

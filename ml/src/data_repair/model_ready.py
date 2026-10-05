@@ -870,8 +870,8 @@ def build_quality_report(
         "input": "data/processed/maisondelux_clean.csv",
         "input_sha256": input_sha256,
         "outputs": {
-            "csv": "data/processed/maisondelux_model_ready_v1.csv",
-            "parquet": "data/processed/maisondelux_model_ready_v1.parquet",
+            "csv": "data/training/shared/model-ready/maisondelux_model_ready_v1.csv",
+            "parquet": "data/training/shared/model-ready/maisondelux_model_ready_v1.parquet",
         },
         "summary": {
             "original_rows": int(len(original)),
@@ -1075,8 +1075,8 @@ def _sha256(path: Path) -> str:
 def run_repair(project_root: Path) -> RepairResult:
     project_root = Path(project_root)
     input_path = project_root / "data" / "processed" / "maisondelux_clean.csv"
-    output_csv = project_root / "data" / "processed" / "maisondelux_model_ready_v1.csv"
-    output_parquet = project_root / "data" / "processed" / "maisondelux_model_ready_v1.parquet"
+    output_csv = project_root / "data" / "training" / "shared" / "model-ready" / "maisondelux_model_ready_v1.csv"
+    output_parquet = project_root / "data" / "training" / "shared" / "model-ready" / "maisondelux_model_ready_v1.parquet"
     report_dir = project_root / "reports" / "data_quality"
     paths = {
         "csv": output_csv,
