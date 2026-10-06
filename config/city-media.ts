@@ -1,7 +1,7 @@
 import type { Locale } from '@/lib/i18n/config';
 
 export type LocalizedMediaText = Record<Locale, string>;
-export type CityMediaKey = 'casablanca' | 'marrakech';
+export type CityMediaKey = 'casablanca' | 'marrakech' | 'rabat';
 
 export interface ImageMedia {
   id: string;
@@ -52,8 +52,21 @@ export const EXCLUDED_CASABLANCA_MEDIA = [
 ] as const;
 
 const marrakechGallery: readonly ImageMedia[] = [
-  { id: 'marrakech-1', src: '/media/cities/marrakech/marrakech-1.jpg', alt: { fr: 'Architecture à Marrakech', ar: 'عمارة في مراكش' } },
+  { id: 'marrakech-1', src: '/media/cities/marrakech/marrakech-image1.jpg', alt: { fr: 'Bassin et murs du palais El Badi à Marrakech', ar: 'حوض وأسوار قصر البديع في مراكش' } },
+  { id: 'marrakech-2', src: '/media/cities/marrakech/marrakech-image2.jpg', alt: { fr: 'Minaret et détail des façades historiques de Marrakech', ar: 'مئذنة وتفاصيل واجهات تاريخية في مراكش' } },
+  { id: 'marrakech-3', src: '/media/cities/marrakech/marrakech-image3.jpg', alt: { fr: 'La place Jamaâ El Fna à la tombée du jour', ar: 'ساحة جامع الفنا عند الغروب' } },
+  { id: 'marrakech-4', src: '/media/cities/marrakech/marrakech-image4.jpg', alt: { fr: 'Rue commerçante et tissu bâti de la médina de Marrakech', ar: 'شارع تجاري ونسيج مبني في المدينة العتيقة لمراكش' } },
 ];
+
+const rabatGallery: readonly ImageMedia[] = [1, 2, 3, 4].map(index => ({
+  id: `rabat-${index}`, src: `/media/cities/rabat/rabat-image${index}.jpg`,
+  alt: [
+    { fr: 'La tour Hassan à Rabat', ar: 'صومعة حسان في الرباط' },
+    { fr: 'Aménagements des rives du Bouregreg', ar: 'تهيئة ضفاف أبي رقراق' },
+    { fr: 'Paysage urbain sur le Bouregreg', ar: 'مشهد حضري على أبي رقراق' },
+    { fr: 'Le mausolée Mohammed V à Rabat', ar: 'ضريح محمد الخامس في الرباط' },
+  ][index - 1],
+}));
 
 export const CITY_MEDIA_CONFIG: Record<string, CityMediaConfig> = {
   casablanca: {
@@ -68,15 +81,22 @@ export const CITY_MEDIA_CONFIG: Record<string, CityMediaConfig> = {
     images: casablancaGallery.map((asset) => asset.src),
     fallback: BRAND_FALLBACK,
   },
+  rabat: {
+    id: 'rabat',
+    hero: { src: '/media/cities/rabat/rabat-hero-web.mp4', type: 'video/mp4', poster: null,
+      ariaLabel: { fr: 'Présentation vidéo de Rabat', ar: 'عرض مرئي لمدينة الرباط' } },
+    gallery: rabatGallery, images: rabatGallery.map(asset => asset.src), fallback: rabatGallery[3].src,
+  },
   marrakech: {
     id: 'marrakech',
-    hero: null,
+    hero: { src: '/media/cities/marrakech/marrakech-hero-web.mp4', type: 'video/mp4', poster: null,
+      ariaLabel: { fr: 'Présentation vidéo de Marrakech', ar: 'عرض مرئي لمدينة مراكش' } },
     gallery: marrakechGallery,
-    images: marrakechGallery.map((asset) => asset.src),
-    fallback: BRAND_FALLBACK,
+    images: marrakechGallery.map(asset => asset.src),
+    fallback: marrakechGallery[3].src,
   },
   ...Object.fromEntries(
-    ['rabat', 'tanger', 'agadir', 'fes', 'meknes', 'oujda', 'tetouan'].map((id) => [
+    ['tanger', 'agadir', 'fes', 'meknes', 'oujda', 'tetouan'].map((id) => [
       id,
       { id, hero: null, gallery: [], images: [], fallback: BRAND_FALLBACK },
     ])

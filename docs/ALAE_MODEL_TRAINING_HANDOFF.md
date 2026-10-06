@@ -34,3 +34,7 @@ Generic collection/repair notebooks live in `ml/notebooks/workflows/`.
 Reusable ML code lives in `ml/src/`; scraping tools in `ml/scraping/`.
 GeoJSON belongs in `public/maps/`, city media in `public/media/cities/<city>/`,
 and runtime Market Intelligence datasets in `server-data/`.
+
+Rabat UI, capability state and exact application integration steps: [Rabat city handoff](RABAT_CITY_HANDOFF.md).
+
+Marrakech UI, honest capabilities, data audit and exact model integration steps: [Marrakech city handoff](MARRAKECH_CITY_HANDOFF.md).

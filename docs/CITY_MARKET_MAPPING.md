@@ -35,3 +35,11 @@ Colors represent **covered neighborhoods only**, not complete arrondissement mar
 Up to four nearest-rank quantile classes from eligible arrondissement medians only; identical cutoffs are deduplicated. Rounded MAD/m² classes in this dataset: 9,610; 9,611–14,272; 14,273–17,887; 17,888–18,000. Values are assigned to the first upper cutoff containing them. Low samples are a subtle neutral class. Classes are recalculated from data, not fixed price assumptions.
 
 No runtime boundary downloads, tiles or extra map dependency are needed. Database schema, Admin, model and estimation behavior are not changed.
+
+## Rabat geography readiness
+
+The local rabat-boundaries.geojson contains four level-10 Polygons, one MultiPolygon (Hassan) and five helper Points. Its OSM IDs, HCP identifiers and localized names are preserved. Only the five shapes are projected by the existing SVG geometry functions. OpenStreetMap contributors / ODbL attribution appears on the market preparation page. No reviewed neighborhood crosswalk or analytics provider exists; metrics and mappings are empty, the advertised market capability is disabled while its noindex route renders a preparation state, and getCityMapSummary refuses Rabat to prevent Casablanca-data reuse. See [Rabat handoff](RABAT_CITY_HANDOFF.md).
+
+## Marrakech geographic preparation
+
+The local public/maps/marrakech-boundaries.geojson contains five admin_level 10 Polygons (Annakhil, Gueliz, Marrakech-Medina, Ménara, Sidi Youssef Ben Ali) and five Point helpers. Only the administrative polygons render in the existing CityMarketMap. Names and identifiers are preserved and OSM/ODbL attribution remains visible. No neighborhood crosswalk or price classes have been introduced. The noindex preparation route is unadvertised until a compatible approved cohort and mapping are delivered. See [Marrakech handoff](MARRAKECH_CITY_HANDOFF.md).

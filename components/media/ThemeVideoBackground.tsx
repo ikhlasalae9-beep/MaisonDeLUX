@@ -14,6 +14,7 @@ export function ThemeVideoBackground({
   imageClassName,
   videoClassName,
   imageUnoptimized = false,
+  deferVideo = false,
 }: {
   darkSrc: string;
   lightSrc?: string;
@@ -24,7 +25,17 @@ export function ThemeVideoBackground({
   imageClassName?: string;
   videoClassName?: string;
   imageUnoptimized?: boolean;
+  deferVideo?: boolean;
 }) {
+  const [videoAllowed, setVideoAllowed] = useState(!deferVideo);
+  useEffect(() => {
+    if (!deferVideo) return;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setVideoAllowed(!motion.matches);
+    sync();
+    motion.addEventListener('change', sync);
+    return () => motion.removeEventListener('change', sync);
+  }, [deferVideo]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const autoplayAttemptRef = useRef('');
   const [dark, setDark] = useState(false);
@@ -46,7 +57,7 @@ export function ThemeVideoBackground({
 
   const src = dark || !lightSrc ? darkSrc : lightSrc;
   const activePoster = dark && lightFallbackSrc ? fallbackSrc : lightFallbackSrc ?? fallbackSrc;
-  const activeSrc = !lightSrc ? darkSrc : mediaInitialized && readyPosters.includes(activePoster) ? src : '';
+  const activeSrc = !videoAllowed ? '' : !lightSrc ? darkSrc : mediaInitialized && readyPosters.includes(activePoster) ? src : '';
   const videoVisible = Boolean(activeSrc) && playingSrc === activeSrc;
   const posterVisibility = videoVisible ? 'opacity-0' : 'opacity-100';
 
@@ -88,7 +99,7 @@ export function ThemeVideoBackground({
       <Image src={fallbackSrc} alt="" fill loading="eager" sizes="(min-width: 1024px) 58vw, 100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('hidden object-cover transition-opacity duration-slow dark:block', posterVisibility, imageClassName)} />
     </> : <Image src={fallbackSrc} alt="" fill priority unoptimized={imageUnoptimized} sizes="100vw" onLoad={() => posterLoaded(fallbackSrc)} className={cn('object-cover transition-opacity duration-slow', posterVisibility, imageClassName)} />}
     <video
-      key={sourceType && lightSrc ? activeSrc || 'inactive' : undefined}
+      key={deferVideo || (sourceType && lightSrc) ? activeSrc || 'inactive' : undefined}
       ref={videoRef}
       aria-hidden="true"
       src={sourceType ? undefined : activeSrc || undefined}
@@ -96,7 +107,7 @@ export function ThemeVideoBackground({
       muted
       loop
       playsInline
-      preload={lightSrc ? 'none' : 'metadata'}
+      preload={deferVideo || lightSrc ? 'none' : 'metadata'}
       onLoadedData={attemptPlayback}
       onCanPlay={attemptPlayback}
       onPlaying={() => setPlayingSrc(activeSrc)}
@@ -110,3 +121,4 @@ export function ThemeVideoBackground({
     </video>
   </div>;
 }
+

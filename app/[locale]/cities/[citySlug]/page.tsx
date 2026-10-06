@@ -2,14 +2,16 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, BarChart3, Building2, MapPin } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { CITY_REGISTRY } from '@/config/cities.config';
 import { getCityContent } from '@/config/city-content';
 import { getCityMedia, localizedMediaText } from '@/config/city-media';
 import { getCityBySlug } from '@/lib/cities/registry';
 import { getDictionary } from '@/lib/i18n/getDictionary';
-import { CasablancaEditorialArticle } from '@/components/city/CasablancaEditorialArticle';
-import { CardSurface, CityStatusBadge, PageContainer, Section, StatePanel, ZelligePattern } from '@/components/city/CityFoundation';
+import { CityEditorialArticle } from '@/components/city/CityEditorialArticle';
+import { getCityEditorial } from '@/config/city-editorial';
+import { CityServicesSection } from '@/components/city/CityServicesSection';
+import { CityStatusBadge, PageContainer, ZelligePattern } from '@/components/city/CityFoundation';
 import { ThemeVideoBackground } from '@/components/media/ThemeVideoBackground';
 import { CityCapabilityActions } from '@/components/city/CityCapabilityActions';
 
@@ -45,15 +47,14 @@ export default function CityPage({ params }: { params: { locale: string; citySlu
         <Link href={`/${locale}/cities`} className="mb-5 inline-flex min-h-11 items-center gap-2 text-sm text-white/80 hover:text-white sm:mb-8"><Arrow className="h-4 w-4 rotate-180 rtl:rotate-180" />{labels.back}</Link>
         <div className="max-w-3xl"><div className="flex flex-wrap items-center gap-2.5"><p className="text-xs font-semibold uppercase tracking-[.14em] text-blue-200 sm:text-sm">{region}</p><CityStatusBadge status={city.estimation.publicEnabled ? 'available' : 'coming-soon'} className="border-white/20 bg-white/10 text-white">{city.estimation.publicEnabled ? dict.phase3.cities.available : dict.phase3.cities.comingSoon}</CityStatusBadge></div><h1 className="mt-3 text-[clamp(2.5rem,13vw,5rem)] leading-none tracking-[-.04em] text-white sm:mt-4">{name}</h1><p className="mt-4 max-w-2xl text-base leading-7 text-white/80 sm:mt-5 sm:text-lg sm:leading-8">{content?.subtitle ?? labels.genericIntro}</p>
           <CityCapabilityActions city={city} locale={locale}/>
+          {!city.estimation.publicEnabled && content ? <p className="mt-6 inline-flex rounded-control border border-white/20 bg-white/10 px-5 py-3 font-semibold" role="status">{content.estimationCta}</p> : null}
         </div>
       </PageContainer>
     </section>
 
-    {isCasablanca ? <CasablancaEditorialArticle locale={locale} /> : <>
-      <Section><PageContainer><div className="grid gap-6 lg:grid-cols-2"><CardSurface className="p-7 sm:p-9"><Building2 className="h-6 w-6 text-brand-blue" /><h2 className="mt-5 text-2xl font-bold">{labels.architecture}</h2><p className="mt-4 leading-8 text-text-secondary">{content?.architecture ?? labels.genericIntro}</p></CardSurface><CardSurface className="p-7 sm:p-9"><MapPin className="h-6 w-6 text-brand-blue" /><h2 className="mt-5 text-2xl font-bold">{labels.context}</h2><p className="mt-4 leading-8 text-text-secondary">{content?.realEstateContext ?? labels.genericContext}</p></CardSurface></div></PageContainer></Section>
-      <Section className="bg-surface-subtle"><PageContainer><StatePanel title={dict.phase3.cities.comingSoon} description={labels.unavailable} /></PageContainer></Section>
-    </>}
+    {city.contentRef && media ? <CityEditorialArticle locale={locale} copy={getCityEditorial(city.contentRef, locale)} media={media} cityLabel={isCasablanca ? 'Casablanca' : name} /> : null}
+    <CityServicesSection city={city} locale={locale} />
 
-    {city.estimation.publicEnabled || city.market.publicEnabled ? <Section><PageContainer><div className="rounded-media bg-[#101b2d] p-6 text-white sm:p-12"><h2 className="text-[clamp(1.75rem,8vw,3.5rem)] leading-tight text-white">{locale === 'ar' ? 'استكشف الخدمات المتاحة' : 'Explorez les services disponibles'}</h2><p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">{locale === 'ar' ? 'تقديرات العقارات وإحصاءات سوق الإعلانات حسب الخدمات المتاحة لهذه المدينة.' : 'Estimations immobilières et statistiques du marché d’annonces selon les services ouverts dans cette ville.'}</p><CityCapabilityActions city={city} locale={locale}/></div></PageContainer></Section> : null}
   </div>;
 }
+

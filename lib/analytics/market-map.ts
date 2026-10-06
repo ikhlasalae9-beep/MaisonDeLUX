@@ -15,7 +15,8 @@ export function hasBoundaryOutline(feature: BoundaryFeature) {
 }
 export function getCityMapSummary(citySlug: string): CityMapSummary | null {
   const config = CITY_MARKET_MAPS[citySlug];
-  if (!config) return null;
+  // This provider aggregates Casablanca records only; geography is registered independently.
+  if (!config || citySlug !== 'casablanca') return null;
   const source = JSON.parse(readFileSync(path.join(process.cwd(), 'public', config.geoJsonSource), 'utf8'));
   const boundaries = selectMarketBoundaries(source.features, config.boundaryLevel);
   const aggregates = aggregateArrondissements(getCasablancaMarketRows(), config.neighborhoodMapping, boundaries.map(feature => feature.id), MIN_NEIGHBORHOOD_OBSERVATIONS);

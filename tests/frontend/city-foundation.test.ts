@@ -20,10 +20,10 @@ import {
 
 const publicAssetExists = (src: string) => existsSync(join(process.cwd(), 'public', src.replace(/^\//, '')));
 
-test('the registry preserves 16 cities while only Casablanca is public', () => {
+test('the registry preserves 16 cities with three published city instances', () => {
   assert.equal(CITY_REGISTRY.length, 16);
   assert.equal(new Set(CITY_REGISTRY.map((city) => city.slug)).size, 16);
-  assert.deepEqual(CITY_REGISTRY.filter((city) => city.cityPage.publicVisible).map((city) => city.slug), ['casablanca']);
+  assert.deepEqual(CITY_REGISTRY.filter((city) => city.cityPage.publicVisible).map((city) => city.slug), ['casablanca', 'rabat', 'marrakech']);
   assert.equal(CITY_REGISTRY.filter((city) => city.estimation.publicEnabled).map((city) => city.slug).join(','), 'casablanca');
 });
 
@@ -52,7 +52,7 @@ test('Casablanca is the sole publicly enabled city model', () => {
 });
 
 test('other cities remain explicitly unavailable', () => {
-  const otherCities = CITY_REGISTRY.filter((city) => city.slug !== 'casablanca');
+  const otherCities = CITY_REGISTRY.filter((city) => !['casablanca', 'rabat', 'marrakech'].includes(city.slug));
   assert.ok(otherCities.every((city) => city.cityPage.status === 'hidden'));
   assert.ok(otherCities.every((city) => city.cityPage.publicVisible === false));
   assert.ok(otherCities.every((city) => city.estimation.status === 'unavailable'));

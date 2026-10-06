@@ -1,9 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, MapPinned } from 'lucide-react';
-import { CITY_REGISTRY } from '@/config/cities.config';
-import { cityImageSource, getCityMedia } from '@/config/city-media';
-import { CardSurface, PageContainer, Section, SectionHeading, CityStatusBadge } from '@/components/city/CityFoundation';
+import { getPublicCities } from '@/lib/cities/registry';
+import { CityCardGrid } from '@/components/city/CityCard';
+import { PageContainer, Section, SectionHeading } from '@/components/city/CityFoundation';
 
 export function NationalVision({ dict }: { dict: any }) {
   const copy = dict.phase3.landing;
@@ -13,10 +12,10 @@ export function NationalVision({ dict }: { dict: any }) {
 export function LandingCityPreview({ locale, dict }: { locale: string; dict: any }) {
   const copy = dict.phase3.landing;
   const cityCopy = dict.phase3.cities;
-  const featured = CITY_REGISTRY.filter((city) => city.slug === 'casablanca' && city.cityPage.publicVisible);
+  const cities = getPublicCities();
   const Arrow = locale === 'ar' ? ArrowLeft : ArrowRight;
   const futureMessage = locale === 'ar' ? 'قريباً، ستنضم مدن مغربية أخرى إلى MaisonDeLUX.' : 'D’autres villes marocaines rejoindront prochainement MaisonDeLUX.';
-  return <Section className="bg-surface-subtle"><PageContainer><div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading eyebrow={copy.citiesEyebrow} title={copy.citiesTitle} description={copy.citiesBody} /><Link href={`/${locale}/cities`} className="inline-flex shrink-0 items-center gap-2 font-semibold text-brand-blue">{copy.allCities}<Arrow className="h-4 w-4" /></Link></div><div className="mt-10 max-w-2xl">{featured.map((city) => { const media = getCityMedia(city.mediaRef); const image = media ? cityImageSource(media, 0) : '/brand/logo/maisondelux-logo-primary.png'; return <Link key={city.slug} href={`/${locale}/cities/${city.slug}`} className="group"><CardSurface className="h-full overflow-hidden transition duration-standard hover:-translate-y-1 hover:shadow-elevated"><div className="relative aspect-[16/10] overflow-hidden bg-surface-elevated"><Image src={image} alt={locale === 'ar' ? city.nameAr : city.nameFr} fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover transition duration-slow group-hover:scale-105" /></div><div className="p-5"><div className="flex items-start justify-between gap-3"><div><h3 className="text-xl font-bold">{locale === 'ar' ? city.nameAr : city.nameFr}</h3><p className="mt-1 text-sm text-text-muted">{locale === 'ar' ? city.regionAr : city.regionFr}</p></div><CityStatusBadge status="available">{cityCopy.available}</CityStatusBadge></div></div></CardSurface></Link>; })}</div><p className="mt-6 max-w-2xl rounded-card border border-dashed border-border-medium bg-surface px-5 py-4 text-sm text-text-secondary">{futureMessage}</p></PageContainer></Section>;
+  return <Section className="bg-surface-subtle"><PageContainer><div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading eyebrow={copy.citiesEyebrow} title={copy.citiesTitle} description={copy.citiesBody} /><Link href={`/${locale}/cities`} className="inline-flex shrink-0 items-center gap-2 font-semibold text-brand-blue">{copy.allCities}<Arrow className="h-4 w-4" /></Link></div><div className="mt-10"><CityCardGrid cities={cities} locale={locale} copy={cityCopy} /></div><p className="mt-6 max-w-2xl rounded-card border border-dashed border-border-medium bg-surface px-5 py-4 text-sm text-text-secondary">{futureMessage}</p></PageContainer></Section>;
 }
 
 export function FinalCallToAction({ locale, dict }: { locale: string; dict: any }) {

@@ -7,6 +7,8 @@ import { Menu, X, ArrowRight, ArrowLeft, Sparkles, UserRound, LogOut } from 'luc
 import { BrandLogo } from '@/components/common/BrandLogo';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { PublicEstimationAction } from '@/components/city/PublicEstimationAction';
+import { publicNavigationEstimation } from '@/lib/cities/registry';
 import { NAV_LINKS } from '@/config/navigation.config';
 import { isRTL } from '@/lib/i18n/config';
 
@@ -30,6 +32,8 @@ export function Navbar({ locale, dict }: NavbarProps) {
   const authenticated=session.authenticated;
   const accountLabel=authenticated?(session.displayName||(locale==='ar'?'فضائي':'Mon espace')):(locale==='ar'?'تسجيل الدخول':'Connexion');
   const accountHref=authenticated?`/${locale}/account`:`/${locale}/auth/login`;
+  const estimationAction = publicNavigationEstimation(locale, pathname, dict.common.estimateCta);
+  const estimateCtaLabel = estimationAction.label;
   const isEstimationPage = pathname.includes('/estimation') || pathname.endsWith('/estimate');
   const rtl = isRTL(locale);
   const resolveHref = (href: string) => href.startsWith('#') ? `/${locale}${href}` : `/${locale}${href}`;
@@ -122,16 +126,15 @@ export function Navbar({ locale, dict }: NavbarProps) {
 
           {/* Luxury CTA Button */}
           {!isEstimationPage ? (
-            <Link
-              href={`/${locale}/cities/casablanca/estimate`}
+            <PublicEstimationAction href={estimationAction.href}
               className={`group relative inline-flex items-center gap-2 rounded-full text-xs font-semibold text-white tracking-wide bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 hover:from-blue-600 hover:to-blue-500 shadow-[0_2px_12px_-2px_rgba(29,78,216,0.5),inset_0_1px_0_0_rgba(255,255,255,0.3)] dark:shadow-[0_2px_16px_-2px_rgba(59,130,246,0.5),inset_0_1px_0_0_rgba(255,255,255,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ${
                 isScrolled ? 'px-4 py-2' : 'px-4.5 sm:px-5 py-2 sm:py-2.5'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 text-blue-200 group-hover:rotate-12 transition-transform duration-300" />
-              <span>{dict.common.estimateCta}</span>
+              <span>{estimateCtaLabel}</span>
               <ArrowIcon className="w-3 h-3 text-blue-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform duration-200" />
-            </Link>
+            </PublicEstimationAction>
           ) : (
             <Link
               href={`/${locale}`}
@@ -192,15 +195,14 @@ export function Navbar({ locale, dict }: NavbarProps) {
           <div className="pt-2">
             <div className="mb-3 text-sm">{authenticated?<div className="rounded-xl border border-border-subtle p-3"><p className="font-bold text-text-primary">{session.displayName||(locale==='ar'?'فضائي MaisonDeLUX':'Mon espace MaisonDeLUX')}</p><p className="mt-1 truncate text-xs text-text-muted" dir="ltr">{session.email}</p><div className="mt-2 flex items-center justify-between gap-3"><Link className="inline-flex min-h-11 items-center text-brand-blue" href={accountHref}>{locale==='ar'?'فضائي':'Mon espace'}</Link><button className="min-h-11" onClick={logout}>{locale==='ar'?'تسجيل الخروج':'Déconnexion'}</button></div></div>:<Link className="inline-flex min-h-11 items-center text-brand-blue" href={accountHref}>{accountLabel}</Link>}</div>
             {!isEstimationPage ? (
-              <Link
-                href={`/${locale}/cities/casablanca/estimate`}
+              <PublicEstimationAction href={estimationAction.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-semibold text-white bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 shadow-md"
               >
                 <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-                <span>{dict.common.estimateCta}</span>
+                <span>{estimateCtaLabel}</span>
                 <ArrowIcon className="w-3.5 h-3.5 text-blue-200" />
-              </Link>
+              </PublicEstimationAction>
             ) : (
               <Link
                 href={`/${locale}`}

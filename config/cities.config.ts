@@ -265,8 +265,16 @@ const CITY_FOUNDATION: Record<CitySlug, CityFoundation> = {
     modelRef: 'casablanca',
     seoRef: 'casablanca',
   },
-  rabat: unavailable(['Rabat', 'الرباط']),
-  marrakech: unavailable(['Marrakech', 'Marrakesh', 'مراكش'], 'marrakech'),
+  rabat: {
+    ...unavailable(['Rabat', 'الرباط'], 'rabat'),
+    cityPage: { status: 'published', publicVisible: true },
+    contentRef: 'rabat', seoRef: 'rabat',
+  },
+  marrakech: {
+    ...unavailable(['Marrakech', 'Marrakesh', 'مراكش'], 'marrakech'),
+    cityPage: { status: 'published', publicVisible: true },
+    contentRef: 'marrakech', seoRef: 'marrakech',
+  },
   tanger: unavailable(['Tanger', 'Tangier', 'طنجة']),
   agadir: unavailable(['Agadir', 'أكادير']),
   fes: unavailable(['Fès', 'Fes', 'Fez', 'فاس']),

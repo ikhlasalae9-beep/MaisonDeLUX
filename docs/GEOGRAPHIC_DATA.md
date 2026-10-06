@@ -12,3 +12,5 @@ Region and province polygons come from [geoBoundaries gbOpen](https://www.geobou
 Every feature retains source, license, normalized name, alternative names, coordinates, region and (when a reliable nearby populated place exists) parent city. `geography_manifest.json` records the exact metadata and limitations.
 
 The layers are geographic references, not price observations. Zero-listing features remain zero in `reports/scraping/geographic_coverage_detail.csv`. External boundary sources may encode disputed territories differently; they must not be silently merged with an official Moroccan hierarchy.
+
+Rabat administrative geography uses the supplied local public/maps/rabat-boundaries.geojson (OpenStreetMap contributors, ODbL, source check_date 2024-10-26). Five administrative shapes and five Point helpers are preserved; only the shapes render. See [Rabat handoff](RABAT_CITY_HANDOFF.md).

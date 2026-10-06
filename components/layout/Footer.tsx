@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import { PublicEstimationAction } from '@/components/city/PublicEstimationAction';
 import { BrandLogo } from '@/components/common/BrandLogo';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { NAV_LINKS } from '@/config/navigation.config';
@@ -7,9 +7,11 @@ import { NAV_LINKS } from '@/config/navigation.config';
 interface FooterProps {
   locale: string;
   dict: any;
+  estimateCtaLabel?: string;
+  estimateCtaHref?: string | null;
 }
 
-export function Footer({ locale, dict }: FooterProps) {
+export function Footer({ locale, dict, estimateCtaLabel, estimateCtaHref }: FooterProps) {
   const currentYear = new Date().getFullYear();
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@maison-delux.com';
   const resolveHref = (href: string) => `/${locale}${href}`;
@@ -52,12 +54,11 @@ export function Footer({ locale, dict }: FooterProps) {
                 );
               })}
               <li>
-                <Link
-                  href={`/${locale}/cities/casablanca/estimate`}
+                <PublicEstimationAction href={estimateCtaHref === undefined ? `/${locale}/cities/casablanca/estimate` : estimateCtaHref} disabledClassName="font-medium text-text-muted"
                   className="font-medium text-brand-blue dark:text-blue-400 hover:underline"
                 >
-                  {dict.common.estimateCta}
-                </Link>
+                  {estimateCtaLabel ?? dict.common.estimateCta}
+                </PublicEstimationAction>
               </li>
             </ul>
           </div>

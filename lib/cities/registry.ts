@@ -18,6 +18,11 @@ export interface ResolvedEstimationAvailability {
 
 const cityBySlug = new Map(CITY_REGISTRY.map((city) => [city.slug, city]));
 
+/** Registry catalog order is shared by discovery surfaces; publication alone selects cities. */
+export function getPublicCities(): readonly VerifiedCity[] {
+  return CITY_REGISTRY.filter(city => city.cityPage.publicVisible);
+}
+
 const searchKey = (value: string) => value
   .normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
@@ -108,4 +113,20 @@ export function publicEstimatePath(
 export function legacyEstimationPath(locale: Locale, cityName?: string): string {
   const query = cityName ? `?ville=${encodeURIComponent(cityName)}` : '';
   return `/${locale}/estimation${query}`;
+}
+
+/** Public navigation uses the current city capability, never another city's estimator. */
+export function publicNavigationEstimation(locale: string, pathname: string, defaultLabel: string): { href: string | null; label: string } {
+  const slug = pathname.split('/')[2] === 'cities' ? pathname.split('/')[3] : '';
+  const city = getCityBySlug(slug);
+  if (city?.cityPage.publicVisible) {
+    if (!city.estimation.publicEnabled) return { href: null, label: locale === 'ar' ? 'التقييم العقاري متاح قريباً' : 'Estimation bientôt disponible' };
+    return { href: `/${locale}/cities/${city.slug}/estimate`, label: defaultLabel };
+  }
+  const available = CITY_REGISTRY.find(item => item.cityPage.publicVisible && item.estimation.publicEnabled);
+  return { href: available ? `/${locale}/cities/${available.slug}/estimate` : null, label: defaultLabel };
+}
+
+export function globalEstimationLabel(locale: string, pathname: string, defaultLabel: string): string {
+  return publicNavigationEstimation(locale, pathname, defaultLabel).label;
 }

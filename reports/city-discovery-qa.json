@@ -1,0 +1,989 @@
+{
+  "layouts": [
+    {
+      "cards": [
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 392,
+          "x": 108,
+          "y": 1630.4000244140625
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 520,
+          "y": 1630.4000244140625
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 932,
+          "y": 1630.4000244140625
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr",
+      "theme": "light",
+      "videoCount": 1,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 392,
+          "x": 108,
+          "y": 1630.4000244140625
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 520,
+          "y": 1630.4000244140625
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 932,
+          "y": 1630.4000244140625
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr",
+      "theme": "dark",
+      "videoCount": 1,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 392,
+          "x": 108,
+          "y": 623.2000122070312
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 520,
+          "y": 623.2000122070312
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 932,
+          "y": 623.2000122070312
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr/cities",
+      "theme": "light",
+      "videoCount": 0,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 392,
+          "x": 108,
+          "y": 623.2000122070312
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 520,
+          "y": 623.2000122070312
+        },
+        {
+          "height": 440,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 392,
+          "x": 932,
+          "y": 623.2000122070312
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr/cities",
+      "theme": "dark",
+      "videoCount": 0,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 392,
+          "x": 932,
+          "y": 1574.800048828125
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 520,
+          "y": 1574.800048828125
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 108,
+          "y": 1574.800048828125
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar",
+      "theme": "light",
+      "videoCount": 1,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 392,
+          "x": 932,
+          "y": 1574.800048828125
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 520,
+          "y": 1574.800048828125
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 108,
+          "y": 1574.800048828125
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar",
+      "theme": "dark",
+      "videoCount": 1,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 392,
+          "x": 932,
+          "y": 609.2000122070312
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 520,
+          "y": 609.2000122070312
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 108,
+          "y": 609.2000122070312
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar/cities",
+      "theme": "light",
+      "videoCount": 0,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 392,
+          "x": 932,
+          "y": 609.2000122070312
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 520,
+          "y": 609.2000122070312
+        },
+        {
+          "height": 439,
+          "imageHeight": 244,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 392,
+          "x": 108,
+          "y": 609.2000122070312
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar/cities",
+      "theme": "dark",
+      "videoCount": 0,
+      "width": 1440
+    },
+    {
+      "cards": [
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 1628
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 416,
+          "y": 1628
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 2075.5
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr",
+      "theme": "light",
+      "videoCount": 1,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 1628
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 416,
+          "y": 1628
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 2075.5
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr",
+      "theme": "dark",
+      "videoCount": 1,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 591.2000122070312
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 416,
+          "y": 591.2000122070312
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 1038.7000732421875
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr/cities",
+      "theme": "light",
+      "videoCount": 0,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 591.2000122070312
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 416,
+          "y": 591.2000122070312
+        },
+        {
+          "height": 427.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 372,
+          "x": 24,
+          "y": 1038.7000732421875
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr/cities",
+      "theme": "dark",
+      "videoCount": 0,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 1595.5999755859375
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 24,
+          "y": 1595.5999755859375
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 2042.0999755859375
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar",
+      "theme": "light",
+      "videoCount": 1,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 1595.5999755859375
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 24,
+          "y": 1595.5999755859375
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 2042.0999755859375
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar",
+      "theme": "dark",
+      "videoCount": 1,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 577.2000122070312
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 24,
+          "y": 577.2000122070312
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 1023.7000122070312
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar/cities",
+      "theme": "light",
+      "videoCount": 0,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 577.2000122070312
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 24,
+          "y": 577.2000122070312
+        },
+        {
+          "height": 426.5,
+          "imageHeight": 231.5,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 372,
+          "x": 416,
+          "y": 1023.7000122070312
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar/cities",
+      "theme": "dark",
+      "videoCount": 0,
+      "width": 820
+    },
+    {
+      "cards": [
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1557.9749755859375
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1991.9749755859375
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 2425.97509765625
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr",
+      "theme": "light",
+      "videoCount": 1,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1557.9749755859375
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1991.9749755859375
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 2425.97509765625
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr",
+      "theme": "dark",
+      "videoCount": 1,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 694.1000366210938
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1128.0999755859375
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1562.0999755859375
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr/cities",
+      "theme": "light",
+      "videoCount": 0,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "CasablancaCasablanca-SettatEstimation disponibleDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 694.1000366210938
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1128.0999755859375
+        },
+        {
+          "height": 414,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "MarrakechMarrakech-SafiEstimation à venirDécouvrir",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1562.0999755859375
+        }
+      ],
+      "dir": "ltr",
+      "overflow": false,
+      "route": "/fr/cities",
+      "theme": "dark",
+      "videoCount": 0,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1366.2125244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1799.2125244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 2232.212646484375
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar",
+      "theme": "light",
+      "videoCount": 1,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1366.2125244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1799.2125244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 2232.212646484375
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar",
+      "theme": "dark",
+      "videoCount": 1,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 674.4000244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1107.4000244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1540.4000244140625
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar/cities",
+      "theme": "light",
+      "videoCount": 0,
+      "width": 390
+    },
+    {
+      "cards": [
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "casablanca",
+          "text": "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 674.4000244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "rabat",
+          "text": "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1107.4000244140625
+        },
+        {
+          "height": 413,
+          "imageHeight": 218,
+          "slug": "marrakech",
+          "text": "مراكشمراكش - آسفيالتقييم قريباًاكتشاف",
+          "width": 350.3999938964844,
+          "x": 16,
+          "y": 1540.4000244140625
+        }
+      ],
+      "dir": "rtl",
+      "overflow": false,
+      "route": "/ar/cities",
+      "theme": "dark",
+      "videoCount": 0,
+      "width": 390
+    }
+  ],
+  "filters": [
+    {
+      "locale": "fr",
+      "filter": "search",
+      "cards": [
+        "MarrakechMarrakech-SafiEstimation à venirDécouvrir"
+      ]
+    },
+    {
+      "locale": "fr",
+      "filter": "Marrakech-Safi",
+      "cards": [
+        "MarrakechMarrakech-SafiEstimation à venirDécouvrir"
+      ]
+    },
+    {
+      "locale": "fr",
+      "filter": "Rabat-Sale-Kenitra",
+      "cards": [
+        "RabatRabat-Salé-KénitraEstimation à venirDécouvrir"
+      ]
+    },
+    {
+      "locale": "fr",
+      "filter": "available",
+      "cards": [
+        "CasablancaCasablanca-SettatEstimation disponibleDécouvrir"
+      ]
+    },
+    {
+      "locale": "fr",
+      "filter": "coming",
+      "cards": [
+        "RabatRabat-Salé-KénitraEstimation à venirDécouvrir",
+        "MarrakechMarrakech-SafiEstimation à venirDécouvrir"
+      ]
+    },
+    {
+      "locale": "ar",
+      "filter": "search",
+      "cards": [
+        "مراكشمراكش - آسفيالتقييم قريباًاكتشاف"
+      ]
+    },
+    {
+      "locale": "ar",
+      "filter": "Marrakech-Safi",
+      "cards": [
+        "مراكشمراكش - آسفيالتقييم قريباًاكتشاف"
+      ]
+    },
+    {
+      "locale": "ar",
+      "filter": "Rabat-Sale-Kenitra",
+      "cards": [
+        "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف"
+      ]
+    },
+    {
+      "locale": "ar",
+      "filter": "available",
+      "cards": [
+        "الدار البيضاءالدار البيضاء - سطاتالتقييم متاحاكتشاف"
+      ]
+    },
+    {
+      "locale": "ar",
+      "filter": "coming",
+      "cards": [
+        "الرباطالرباط - سلا - القنيطرةالتقييم قريباًاكتشاف",
+        "مراكشمراكش - آسفيالتقييم قريباًاكتشاف"
+      ]
+    }
+  ],
+  "details": [
+    {
+      "estimateLinks": 4,
+      "route": "/fr/cities/casablanca",
+      "sections": 9,
+      "title": "Casablanca",
+      "video": "http://127.0.0.1:3018/media/cities/casablanca/Casablanca-hero-web.mp4"
+    },
+    {
+      "estimateLinks": 0,
+      "route": "/fr/cities/rabat",
+      "sections": 9,
+      "title": "Rabat",
+      "video": "http://127.0.0.1:3018/media/cities/rabat/rabat-hero-web.mp4"
+    },
+    {
+      "estimateLinks": 0,
+      "route": "/fr/cities/marrakech",
+      "sections": 9,
+      "title": "Marrakech",
+      "video": "http://127.0.0.1:3018/media/cities/marrakech/marrakech-hero-web.mp4"
+    }
+  ]
+}
