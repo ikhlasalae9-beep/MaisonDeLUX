@@ -13,6 +13,10 @@ export interface PredictPayload {
 }
 
 export interface PredictResponse {
+  city?: 'Casablanca' | 'Marrakech';
+  model_id?: string;
+  raw_price_mad?: number;
+  display_price_mad?: number;
   estimation_event_id?: string;
   guest?: boolean;
   phase_c_degraded?: boolean;
@@ -76,6 +80,20 @@ export interface CasablancaPredictPayload {
   current_state: string | null;
   age: string | null;
 }
+
+export interface MarrakechPredictPayload {
+  city: 'Marrakech';
+  property_type: string;
+  neighborhood: string;
+  area: number;
+  rooms: number;
+  bedrooms: number;
+  bathrooms: number;
+  current_state: string;
+  age: string;
+}
+export type CityPredictPayload = CasablancaPredictPayload | MarrakechPredictPayload;
+export type CityMetadata = Omit<CasablancaMetadata, 'city'> & { city: 'Casablanca' | 'Marrakech' };
 
 export interface CasablancaMetadata {
   city: 'Casablanca';

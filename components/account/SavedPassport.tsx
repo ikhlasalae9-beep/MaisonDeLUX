@@ -9,7 +9,7 @@ import { PassportExportActions } from '@/components/account/PassportExportAction
 import { fetchCasablancaContext } from '@/lib/api/client';
 import { getDictionary } from '@/lib/i18n/getDictionary';
 import { propertyTypeLabel } from '@/lib/account/presentation';
-import manifest from '@/models/casablanca/v1/preprocessing.json';
+import { estimatorMetadata } from '@/lib/estimations/contracts';
 
 export function SavedPassport({locale,id}:{locale:string;id:string}){
   const [event,setEvent]=useState<any>(null),[failed,setFailed]=useState(false),[loading,setLoading]=useState(false);
@@ -22,8 +22,8 @@ export function SavedPassport({locale,id}:{locale:string;id:string}){
   const prediction={...event.prediction,...event.context,estimated_price_mad:Number(event.estimated_price_mad),model_version:event.model_version,estimation_event_id:id,guest:false};
   return <article className="passport-print-root space-y-6">
     <div className="print-only mb-8"><Image src="/brand/logo/maisondelux-logo-horizontal.png" alt="MaisonDeLUX" width={230} height={52}/><p className="mt-5 text-xs font-bold uppercase tracking-[.18em] text-brand-blue">{ar?'جواز عقاري':'Passeport Immobilier'}</p></div>
-    <header className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-brand-blue">{ar?'جواز عقاري MaisonDeLUX':'Passeport Immobilier MaisonDeLUX'}</p><h1 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl"><bdi dir="ltr">{event.input_features.neighborhood}</bdi> · {propertyTypeLabel(event.input_features.property_type,locale)}</h1><p className="mt-2 text-sm text-text-secondary">Casablanca · {ar?'تقييم عقاري محفوظ':'Évaluation immobilière enregistrée'}</p></div><Link href={`/${locale}/account/passports`} className="no-print inline-flex min-h-11 items-center gap-2 text-sm font-bold text-brand-blue">{ar?'كل جوازاتي':'Tous mes Passeports'}<DirectionIcon className="h-4 w-4"/></Link></header>
+    <header className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-brand-blue">{ar?'جواز عقاري MaisonDeLUX':'Passeport Immobilier MaisonDeLUX'}</p><h1 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl"><bdi dir="ltr">{event.input_features.neighborhood}</bdi> · {propertyTypeLabel(event.input_features.property_type,locale)}</h1><p className="mt-2 text-sm text-text-secondary">{event.input_features.city} · {ar?'تقييم عقاري محفوظ':'Évaluation immobilière enregistrée'}</p></div><Link href={`/${locale}/account/passports`} className="no-print inline-flex min-h-11 items-center gap-2 text-sm font-bold text-brand-blue">{ar?'كل جوازاتي':'Tous mes Passeports'}<DirectionIcon className="h-4 w-4"/></Link></header>
     <PassportExportActions event={event} locale={locale}/>
-    <CasablancaEstimateResult completed={{inputFeatures:event.input_features,estimatedAt:event.created_at,prediction}} supported={{property_types:Object.keys(manifest.categorical.Type.accepted),neighborhoods:manifest.categorical.Localisation.accepted,current_states:manifest.categorical.Current_state.accepted,ages:manifest.categorical.Age.accepted}} contextLoading={loading} locale={locale} copy={getDictionary(locale).phase3.estimate} onEdit={()=>window.location.assign(`/${locale}/cities/casablanca/estimate`)} inAccount/>
+    <CasablancaEstimateResult completed={{inputFeatures:event.input_features,estimatedAt:event.created_at,prediction}} supported={estimatorMetadata(event.input_features.city).supported} contextLoading={loading} locale={locale} copy={getDictionary(locale).phase3.estimate} onEdit={()=>window.location.assign(`/${locale}/cities/${event.input_features.city.toLowerCase()}/estimate`)} inAccount/>
   </article>;
 }

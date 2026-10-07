@@ -1,26 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { CasablancaEstimator } from '@/components/estimation/CasablancaEstimator';
+import { CityEstimator } from '@/components/estimation/CasablancaEstimator';
 import { PageContainer, Section, SectionHeading } from '@/components/city/CityFoundation';
 import { getCityBySlug } from '@/lib/cities/registry';
 import { getDictionary } from '@/lib/i18n/getDictionary';
-import type { CasablancaMetadata } from '@/lib/api/types';
-import modelMetadata from '@/models/casablanca/v1/metadata.json';
-import preprocessing from '@/models/casablanca/v1/preprocessing.json';
-
-const casablancaFormScope: CasablancaMetadata = {
-  city: 'Casablanca',
-  status: 'available',
-  public_enabled: true,
-  model_version: modelMetadata.model_version,
-  supported: {
-    property_types: Object.keys(preprocessing.categorical.Type.accepted),
-    neighborhoods: [...preprocessing.categorical.Localisation.accepted],
-    current_states: [...preprocessing.categorical.Current_state.accepted],
-    ages: [...preprocessing.categorical.Age.accepted],
-  },
-};
-
+import { estimatorMetadata } from '@/lib/estimations/contracts';
 export function generateStaticParams() {
   return [{ citySlug: 'casablanca' }];
 }
@@ -32,7 +16,8 @@ export function generateMetadata({ params }: { params: { locale: string; citySlu
 
 export default function CityEstimatePage({ params }: { params: { locale: string; citySlug: string } }) {
   const city = getCityBySlug(params.citySlug);
-  if (!city || city.slug !== 'casablanca' || !city.estimation.publicEnabled) notFound();
+  if (!city || !['casablanca','marrakech'].includes(city.slug) || !city.estimation.publicEnabled) notFound();
   const copy = getDictionary(params.locale).phase3.estimate;
-  return <div className="min-h-screen bg-surface-subtle pt-16 sm:pt-24"><Section><PageContainer><SectionHeading eyebrow={copy.eyebrow} title={copy.title} description={copy.subtitle} /><div className="mt-8 sm:mt-10"><CasablancaEstimator locale={params.locale} copy={copy} metadata={casablancaFormScope} /></div></PageContainer></Section></div>;
+  const metadata = estimatorMetadata(city.slug === 'marrakech' ? 'Marrakech' : 'Casablanca');
+  return <div className="min-h-screen bg-surface-subtle pt-16 sm:pt-24"><Section><PageContainer><SectionHeading eyebrow={copy.eyebrow} title={copy.title} description={copy.subtitle} /><div className="mt-8 sm:mt-10"><CityEstimator locale={params.locale} copy={copy} metadata={metadata} /></div></PageContainer></Section></div>;
 }

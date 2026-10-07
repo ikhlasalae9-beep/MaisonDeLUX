@@ -14,6 +14,12 @@ except ImportError:
 
 from backend.app import app
 
+# Startup checks are Preview-only and never expose prepared inference over HTTP.
+import os
+if os.environ.get('MDL_PREVIEW_RUNTIME_CHECK') == '1' and os.environ.get('VERCEL_ENV') == 'preview':
+    from backend.inference.preview_validation import validate_preview_runtime
+    app.logger.warning('MDL_PREVIEW_RUNTIME_CHECK %s', validate_preview_runtime())
+
 # Expose WSGI application for Vercel
 application = app
 

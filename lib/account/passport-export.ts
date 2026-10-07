@@ -1,11 +1,11 @@
-import { ageLabel,conditionLabel,propertyTypeLabel } from '@/lib/account/presentation';
+import { ageLabel,conditionLabel,propertyTypeLabel,cityLabel } from '@/lib/account/presentation';
 import { formatArea,formatDate,formatInteger } from '@/lib/utils';
 
 export type PassportExportSource={
   created_at:string;
   estimated_price_mad:number|string;
   model_version?:string;
-  input_features:{neighborhood:string;property_type:string;area:number;rooms?:number;bedrooms?:number;bathrooms?:number;floor?:number;current_state?:string|null;age?:string|null};
+  input_features:{city?:string;neighborhood:string;property_type:string;area:number;rooms?:number;bedrooms?:number;bathrooms?:number;floor?:number;current_state?:string|null;age?:string|null};
   prediction?:Record<string,any>|null;
   context?:Record<string,any>|null;
 };
@@ -31,11 +31,11 @@ const PANEL_INNER_PADDING=42;
 
 export function createPassportExportData(source:PassportExportSource,locale:string):PassportExportData{
   const ar=locale==='ar',input=source.input_features,price=Number(source.estimated_price_mad),area=Number(input.area),context=source.context||{},prediction=source.prediction||{};
-  const rawMarket=context.market_context||prediction.market_context;
+  const rawMarket=input.city === 'Marrakech' ? null : context.market_context||prediction.market_context;
   const market=rawMarket?.benchmark_eligible?{neighborhood:String(rawMarket.neighborhood||input.neighborhood),listingCount:Number(rawMarket.listing_count)||0,medianPerM2:Number(rawMarket.median_listing_price_per_m2)||0}:null;
-  const rawComparables=Array.isArray(context.comparables)?context.comparables:Array.isArray(prediction.comparables)?prediction.comparables:[];
+  const rawComparables=input.city === 'Marrakech' ? [] : Array.isArray(context.comparables)?context.comparables:Array.isArray(prediction.comparables)?prediction.comparables:[];
   const date=new Date(source.created_at),validDate=!Number.isNaN(date.getTime());
-  return {locale,rtl:ar,city:ar?'الدار البيضاء':'Casablanca',neighborhood:String(input.neighborhood||''),propertyType:propertyTypeLabel(input.property_type,locale),area,
+  return {locale,rtl:ar,city:cityLabel(input.city || 'Casablanca',locale),neighborhood:String(input.neighborhood||''),propertyType:propertyTypeLabel(input.property_type,locale),area,
     rooms:finite(input.rooms),bedrooms:finite(input.bedrooms),bathrooms:finite(input.bathrooms),floor:finite(input.floor),condition:input.current_state?conditionLabel(input.current_state,locale):undefined,age:input.age?ageLabel(input.age,locale):undefined,
     estimatedValue:Number.isFinite(price)?price:0,pricePerM2:area>0&&Number.isFinite(price)?price/area:null,date:formatDate(source.created_at,locale),isoDate:validDate?date.toISOString().slice(0,10):'date',market,
     comparables:rawComparables.slice(0,3).map((item:any)=>({neighborhood:String(item.neighborhood||''),propertyType:propertyTypeLabel(item.property_type,locale),area:Number(item.area)||0,rooms:finite(item.rooms),bedrooms:finite(item.bedrooms),price:Number(item.listing_price_mad)||0,sameNeighborhood:item.same_neighborhood===true,areaDifference:Number(item.area_difference_m2)||0}))};
@@ -105,7 +105,7 @@ function renderPdfPageTwo(data:PassportExportData,logo:HTMLImageElement){
   const x=data.rtl?PAGE_RIGHT:PAGE_LEFT,align=data.rtl?'right':'left',dir=data.rtl?'rtl':'ltr';text(ctx,data.rtl?'الأدلة والشفافية':'CONTEXTE ET TRANSPARENCE',x,205,31,COLORS.blue,800,align,dir,PAGE_CONTENT_WIDTH);let y=292;
   if(data.market){text(ctx,data.rtl?'سياق السوق':'CONTEXTE DU MARCHÉ',x,y,27,COLORS.ink,800,align,dir,PAGE_CONTENT_WIDTH);y+=58;text(ctx,data.rtl?data.market.neighborhood:`Quartier · ${data.market.neighborhood}`,x,y,27,COLORS.ink,700,align,'ltr',PAGE_CONTENT_WIDTH);y+=48;text(ctx,`${formatInteger(data.market.medianPerM2,data.locale)} MAD/m²`,x,y,32,COLORS.blue,800,align,'ltr',PAGE_CONTENT_WIDTH);y+=42;text(ctx,`${formatInteger(data.market.listingCount,data.locale)} ${data.rtl?'إعلاناً محللاً':'annonces analysées'}`,x,y,23,COLORS.muted,600,align,dir,PAGE_CONTENT_WIDTH);y+=58;wrap(ctx,data.rtl?'أسعار معروضة في الإعلانات وليست أسعار معاملات. هذه البيانات لا تؤثر في تقدير النموذج.':"Prix affichés dans les annonces, et non prix de transaction. Ces données n'influencent pas l'estimation du modèle.",x,y,PAGE_CONTENT_WIDTH,23,34,COLORS.muted,500,align,dir);y+=112;line(ctx,PAGE_LEFT,y,PAGE_RIGHT,y,COLORS.border);y+=68;}
   if(data.comparables.length){text(ctx,data.rtl?'إعلانات عقارية مشابهة':'ANNONCES COMPARABLES',x,y,27,COLORS.ink,800,align,dir,PAGE_CONTENT_WIDTH);y+=50;for(const item of data.comparables){rounded(ctx,PAGE_LEFT,y,PAGE_CONTENT_WIDTH,140,14,COLORS.soft);const itemX=data.rtl?PAGE_RIGHT-32:PAGE_LEFT+32,cardTextWidth=PAGE_CONTENT_WIDTH-64;text(ctx,item.neighborhood,itemX,y+42,25,COLORS.ink,700,data.rtl?'right':'left','ltr',cardTextWidth);text(ctx,`${item.propertyType} · ${formatArea(item.area,data.locale)}`,itemX,y+82,22,COLORS.muted,600,data.rtl?'right':'left',dir,cardTextWidth);text(ctx,mad(item.price,data.locale),itemX,y+120,27,COLORS.blue,800,data.rtl?'right':'left','ltr',cardTextWidth);y+=160;}y+=38;line(ctx,PAGE_LEFT,y,PAGE_RIGHT,y,COLORS.border);y+=68;}
-  text(ctx,data.rtl?'شفافية النموذج':'TRANSPARENCE DU MODÈLE',x,y,27,COLORS.ink,800,align,dir,PAGE_CONTENT_WIDTH);y+=52;wrap(ctx,data.rtl?'تقدير إرشادي ناتج عن نموذج عقاري مخصص لمدينة الدار البيضاء. يتم عرض سياق الإعلانات بشكل منفصل ولا يؤثر مباشرة على القيمة التقديرية المعروضة.':'Estimation indicative produite par un modèle immobilier spécifique à Casablanca. Le contexte des annonces est présenté séparément et n’influence pas directement l’estimation affichée.',x,y,PAGE_CONTENT_WIDTH,24,35,COLORS.muted,500,align,dir);pdfFooter(ctx,data,2);return canvas;
+  text(ctx,data.rtl?'شفافية النموذج':'TRANSPARENCE DU MODÈLE',x,y,27,COLORS.ink,800,align,dir,PAGE_CONTENT_WIDTH);y+=52;wrap(ctx,data.city === 'Marrakech' || data.city === 'مراكش' ? (data.rtl ? 'تقدير إرشادي خاص بمراكش. التفسيرات والمقارنات وسياق السوق غير متاحة.' : 'Estimation indicative du modèle Marrakech. Explications, comparables et contexte du marché indisponibles.') : (data.rtl?'تقدير إرشادي ناتج عن نموذج عقاري مخصص لمدينة الدار البيضاء. يتم عرض سياق الإعلانات بشكل منفصل ولا يؤثر مباشرة على القيمة التقديرية المعروضة.':'Estimation indicative produite par un modèle immobilier spécifique à Casablanca. Le contexte des annonces est présenté séparément et n’influence pas directement l’estimation affichée.'),x,y,PAGE_CONTENT_WIDTH,24,35,COLORS.muted,500,align,dir);pdfFooter(ctx,data,2);return canvas;
 }
 
 function characteristics(data:PassportExportData):Array<[label:string,value:string,direction?:'ltr'|'rtl']>{

@@ -140,7 +140,8 @@ def test_requirements_include_verified_casablanca_runtime():
     assert 'flask>=3.1,<4' in lines
     assert 'werkzeug>=3.1,<4' in lines
     assert 'catboost==1.2.10' in lines
-    assert 'joblib>=1.5,<2' in lines
-    assert 'numpy>=2.0,<3' in lines
-    for forbidden in ['xgboost', 'scipy', 'scikit-learn', 'pandas']:
-        assert not any(forbidden in l for l in lines)
+    for pin in ['joblib==1.5.3', 'numpy==2.4.4', 'pandas==2.2.3',
+                'scipy==1.17.1', 'scikit-learn==1.9.0', 'xgboost-cpu==3.4.1']:
+        assert pin in lines
+    assert not any(line.startswith(('xgboost==', 'nvidia-')) for line in lines)
+    assert (ROOT / '.python-version').read_text(encoding='utf-8').strip() == '3.12'

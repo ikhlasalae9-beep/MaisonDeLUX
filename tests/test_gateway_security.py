@@ -11,9 +11,9 @@ def test_unsigned_or_tampered_transport_cannot_invoke_model(monkeypatch, path):
     import backend.app as service
     def forbidden(*_args, **_kwargs):
         pytest.fail('Unauthorized transport reached the model')
-    monkeypatch.setattr(service, 'predict_for_city', forbidden)
-    monkeypatch.setattr(service, 'context_for_city', forbidden)
-    monkeypatch.setattr(service, 'load_model', forbidden)
+    monkeypatch.setattr(service.service, 'estimate', forbidden)
+    monkeypatch.setattr(service.service, 'context', forbidden)
+    monkeypatch.setattr(service.service, 'model_metadata', forbidden)
     monkeypatch.setenv('INFERENCE_GATEWAY_SECRET', 'test-only-inference-gateway-secret-32-chars')
     client = app.test_client()
     method = 'GET' if path.endswith('health') else 'POST'

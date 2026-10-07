@@ -1,7 +1,8 @@
 import 'server-only';
 import { createHmac } from 'node:crypto';
 import { siteOrigin } from '@/lib/auth/config';
-import type { CasablancaPredictPayload } from '@/lib/api/types';
+import type { CityPredictPayload } from '@/lib/api/types';
+import { requirePublicInference, verifyPrediction } from '@/lib/estimations/contracts';
 
 function gatewaySecret() {
   // Transitional compatibility for installations that predate the dedicated
@@ -11,7 +12,8 @@ function gatewaySecret() {
   return secret;
 }
 
-export async function invokeInference(kind: 'estimate' | 'context', input: CasablancaPredictPayload) {
+export async function invokeInference(kind: 'estimate' | 'context', input: CityPredictPayload) {
+  requirePublicInference(input.city);
   const secret = gatewaySecret();
   const path = `/api/ml/${kind}`, body = JSON.stringify(input), timestamp = String(Math.floor(Date.now()/1000));
   const signature = createHmac('sha256',secret).update(`${timestamp}\n${path}\n${body}`).digest('hex');
@@ -26,6 +28,6 @@ export async function invokeInference(kind: 'estimate' | 'context', input: Casab
   });
   if (!response.ok) throw new Error('INFERENCE_UNAVAILABLE');
   const result = await response.json();
-  if (kind === 'estimate' && (!Number.isFinite(result.estimated_price_mad) || result.estimated_price_mad <= 0 || result.model_version !== 'casablanca-catboost-v1')) throw new Error('INVALID_MODEL_RESULT');
+  if (kind === 'estimate') verifyPrediction(input, result);
   return result;
 }

@@ -1,4 +1,4 @@
-import { PredictPayload, PredictResponse, CitiesResponse, CasablancaContextResponse, CasablancaPredictPayload } from './types';
+import { PredictPayload, PredictResponse, CitiesResponse, CasablancaContextResponse, CasablancaPredictPayload, CityPredictPayload } from './types';
 
 
 /**
@@ -48,7 +48,7 @@ export async function predictProperty(
 }
 
 export class EstimationError extends Error { constructor(public code: string, message: string) { super(message); } }
-export async function predictCasablanca(payload: CasablancaPredictPayload, options: { eventId?: string; locale?: string; requestId?: string } = {}): Promise<PredictResponse> {
+export async function predictCasablanca(payload: CityPredictPayload, options: { eventId?: string; locale?: string; requestId?: string } = {}): Promise<PredictResponse> {
   // A Python/CatBoost serverless instance can legitimately take longer than 15s
   // to cold-start. Keep a finite guard, but do not cancel healthy cold inference.
   const predictionTimeoutMs = 60_000;
@@ -80,7 +80,7 @@ export async function predictCasablanca(payload: CasablancaPredictPayload, optio
   }
 }
 
-export async function fetchCasablancaContext(_payload: CasablancaPredictPayload, eventId?: string): Promise<CasablancaContextResponse> {
+export async function fetchCasablancaContext(_payload: CityPredictPayload, eventId?: string): Promise<CasablancaContextResponse> {
   if (!eventId) throw new Error('Optional Casablanca analysis unavailable');
   const response = await fetch(`/api/estimations/${eventId}/context`, {
     method: 'POST',

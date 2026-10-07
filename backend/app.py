@@ -8,7 +8,9 @@ from werkzeug.exceptions import HTTPException
 from backend.security import require_gateway
 
 from backend.inference.casablanca import CasablancaInferenceError, load_manifest, load_metadata, load_model
-from backend.inference.registry import MODEL_REGISTRY, ModelRegistryError, context_for_city, predict_for_city
+from backend.inference.registry import MODEL_REGISTRY, ModelRegistryError
+from backend.inference.marrakech import MarrakechInferenceError
+from backend.inference import service
 
 try:
     import pandas as pd
@@ -211,8 +213,8 @@ def city_estimate():
     if not isinstance(payload, dict):
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
     try:
-        return jsonify(**predict_for_city(payload))
-    except (CasablancaInferenceError, ModelRegistryError) as error:
+        return jsonify(**service.estimate(payload))
+    except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
         app.logger.exception('Casablanca inference failed')
@@ -231,8 +233,8 @@ def city_estimate_context():
     if not isinstance(payload, dict):
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
     try:
-        return jsonify(**context_for_city(payload))
-    except (CasablancaInferenceError, ModelRegistryError) as error:
+        return jsonify(**service.context(payload))
+    except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
         app.logger.exception('Optional Casablanca context failed')
@@ -241,21 +243,10 @@ def city_estimate_context():
 
 @app.get('/api/ml/metadata')
 def city_model_metadata():
-    manifest = load_manifest()
-    model_metadata = load_metadata()
-    entry = MODEL_REGISTRY['casablanca']
-    return jsonify(
-        city='Casablanca',
-        status=entry['status'],
-        public_enabled=entry['public_enabled'],
-        model_version=model_metadata['model_version'],
-        supported={
-            'property_types': list(manifest['categorical']['Type']['accepted']),
-            'neighborhoods': manifest['categorical']['Localisation']['accepted'],
-            'current_states': manifest['categorical']['Current_state']['accepted'],
-            'ages': manifest['categorical']['Age']['accepted'],
-        },
-    )
+    try:
+        return jsonify(**service.model_metadata(request.args.get('city', 'Casablanca')))
+    except ModelRegistryError as error:
+        return jsonify(error=str(error), code='unsupported_request'), 400
 
 
 @app.get('/api/ml/health')
@@ -263,18 +254,14 @@ def city_model_health():
     denied = require_gateway()
     if denied is not None:
         return denied
-    entry = MODEL_REGISTRY['casablanca']
+    city = request.args.get('city', 'Casablanca')
     try:
-        load_model()
+        return jsonify(**service.model_metadata(city, check_ready=True))
+    except ModelRegistryError as error:
+        return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
-        app.logger.exception('Casablanca model health check failed')
-        return jsonify(status='unavailable', city='Casablanca', public_enabled=False), 503
-    return jsonify(
-        status=entry['status'],
-        city=entry['city'],
-        model_version=entry['version'],
-        public_enabled=entry['public_enabled'],
-    )
+        app.logger.exception('City model health check failed')
+        return jsonify(status='unavailable', city=city, public_enabled=False, inference_ready=False), 503
 
 
 @app.get('/api/villes')
