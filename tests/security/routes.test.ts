@@ -7,6 +7,7 @@ import { NextRequest } from 'next/server';
 // Database role/ownership enforcement is separately exercised in real PGlite.
 let user:any=null,role='user',decision='ALLOWED',modelCalls=0,contextCalls=0,phaseReady=true,persistenceFails=false,verifyError=false,verifiedType='',passport:any=null,queries:{sql:string;values:any[]}[]=[];
 const cookieJar=new Map<string,string>();
+let existing:any=null, inferenceResponse:any=null;
 const userId='11111111-1111-4111-8111-111111111111';
 const prediction={estimated_price_mad:1500000,model_version:'casablanca-catboost-v1'};
 const replace=(path:string,exports:any)=>{const filename=require.resolve(path);require.cache[filename]={id:filename,filename,loaded:true,exports} as any;};
@@ -17,6 +18,7 @@ replace('../../lib/auth/server',{
 });
 replace('../../lib/admin/db',{query:async(sql:string,values:any[]=[])=>{
   queries.push({sql,values});
+  if(sql.includes('c.slug AS city_slug')&&sql.includes('e.event_key=$1'))return {rows:existing?[existing]:[]};
   if(sql.includes("to_regclass('public.guest_trials')"))return {rows:[{ready:phaseReady}]};
   if(sql.includes('phase_c_rate_limit'))return {rows:[{allowed:true}]};
   if(sql.includes('phase_c_reserve_guest'))return {rows:[{decision}]};
@@ -24,7 +26,7 @@ replace('../../lib/admin/db',{query:async(sql:string,values:any[]=[])=>{
   if(sql.includes('LEFT JOIN public.estimation_passports'))return {rows:passport?[passport]:[]};
   return {rows:[]};
 }});
-replace('../../lib/estimations/gateway',{invokeInference:async(kind:string)=>{if(kind==='context'){contextCalls++;return {comparables:[]};}modelCalls++;return prediction;}});
+replace('../../lib/estimations/gateway',{invokeInference:async(kind:string)=>{if(kind==='context'){contextCalls++;return {comparables:[]};}modelCalls++;return inferenceResponse;}});
 const main=require('../../app/api/estimations/route');
 const {requireAdmin}=require('../../lib/admin/require');
 const callback=require('../../app/[locale]/auth/callback/route');
@@ -34,7 +36,7 @@ const input={city:'Casablanca',property_type:'appartement',neighborhood:'Maârif
 const request=(body:any)=>new NextRequest('http://localhost:3000/api/estimations',{method:'POST',headers:{origin:'http://localhost:3000','content-type':'application/json'},body:JSON.stringify(body)});
 test.beforeEach(()=>{
   process.env.SITE_URL='http://localhost:3000';process.env.ADMIN_AUTH_MODE='supabase-only';process.env.GUEST_TRIAL_HMAC_SECRET='test-only-guest-hmac-secret-32-characters';
-  user=null;role='user';decision='ALLOWED';modelCalls=0;contextCalls=0;phaseReady=true;persistenceFails=false;verifyError=false;verifiedType='';passport=null;queries=[];cookieJar.clear();
+  user=null;role='user';decision='ALLOWED';modelCalls=0;contextCalls=0;phaseReady=true;persistenceFails=false;verifyError=false;verifiedType='';passport=null;existing=null;inferenceResponse=prediction;queries=[];cookieJar.clear();
 });
 test('actual main route checks entitlement before inference, persists success and refuses forged ownership',async()=>{
   const first=await main.POST(request({input,request_id:randomUUID()}));
@@ -50,6 +52,41 @@ test('authenticated main route uses verified identity and does not reserve guest
   for(let i=0;i<2;i++)assert.equal((await main.POST(request({input,request_id:randomUUID()}))).status,200);
   assert.equal(modelCalls,2);assert.ok(!queries.some(q=>q.sql.includes('SELECT public.phase_c_reserve_guest')));
   assert.ok(queries.filter(q=>q.sql.includes('SELECT public.phase_c_complete_estimation')).every(q=>q.values[2]===userId));
+});
+test('unsupported city rejection happens before any entitlement or inference operation',async()=>{
+  const prepared={city:'Rabat',property_type:'appartement',neighborhood:'Guéliz',area:100,rooms:3,bedrooms:2,bathrooms:1,current_state:'bon état',age:'5-10 ans'};
+  const result=await main.POST(request({input:prepared,request_id:randomUUID()}));
+  assert.equal(result.status,400); assert.equal(modelCalls,0); assert.equal(contextCalls,0);
+  assert.ok(!queries.some(q=>q.sql.includes('SELECT public.phase_c_reserve_guest')||q.sql.includes('phase_c_complete_estimation')));
+});
+test('public Marrakech shares guest/auth rules and persists its exact city and locale',async()=>{
+  const m={city:'Marrakech',property_type:'appartement',neighborhood:'Route de Casablanca',area:100,rooms:3,bedrooms:2,bathrooms:1,current_state:'bon état',age:'5-10 ans'};
+  inferenceResponse={city:'Marrakech',model_id:'marrakech-stacking-alae',model_version:'marrakech-stacking-v1',estimated_price_mad:1468447};
+  assert.equal((await main.POST(request({input:m,request_id:randomUUID(),locale:'ar'}))).status,200);
+  const saved=queries.find(q=>q.sql.includes('SELECT public.phase_c_complete_estimation'))!;
+  assert.equal(saved.values[2],null); assert.equal(JSON.parse(saved.values[3]).city,'Marrakech');
+  assert.equal(JSON.parse(saved.values[3]).neighborhood,'Route de Casablanca'); assert.equal(saved.values[5],'ar');
+  decision='GUEST_TRIAL_CONSUMED';
+  assert.equal((await main.POST(request({input:m,request_id:randomUUID()}))).status,403);
+  assert.equal(modelCalls,1);
+  user={id:userId,email_confirmed_at:'2026-01-01'}; queries=[];
+  for(let i=0;i<2;i++) assert.equal((await main.POST(request({input:m,request_id:randomUUID(),locale:'fr'}))).status,200);
+  assert.ok(!queries.some(q=>q.sql.includes('SELECT public.phase_c_reserve_guest')));
+  assert.ok(queries.filter(q=>q.sql.includes('SELECT public.phase_c_complete_estimation')).every(q=>q.values[2]===userId));
+  user=null; queries=[]; const before=modelCalls;
+  for(const invalid of [{...m,allow_prepared:true},{...m,model_version:'casablanca-catboost-v1'},{...m,floor:1},{...m,area:14}]) {
+    assert.equal((await main.POST(request({input:invalid,request_id:randomUUID()}))).status,400);
+  }
+  assert.equal((await main.POST(request({input:m,request_id:randomUUID(),locale:'xx'}))).status,400);
+  assert.equal(modelCalls,before); assert.ok(!queries.some(q=>q.sql.includes('SELECT public.phase_c_reserve_guest')));
+});
+test('idempotent replay preserves legacy Casablanca identity and rejects another city result',async()=>{
+  existing={id:123,city_slug:'casablanca',model_version:'casablanca-catboost-v1',prediction};
+  assert.equal((await main.POST(request({input,request_id:randomUUID()}))).status,200);
+  assert.equal(modelCalls,0);
+  existing={...existing,city_slug:'marrakech',model_version:'marrakech-stacking-v1'};
+  assert.equal((await main.POST(request({input,request_id:randomUUID()}))).status,503);
+  assert.equal(modelCalls,0);
 });
 test('missing Phase C schema and persistence failures fail closed without reporting a successful estimate',async()=>{
   phaseReady=false;

@@ -1,8 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "fluid": true,
   "functions": {
     "api/index.py": {
-      "includeFiles": "{models/**,ml/notebooks/**}"
+      "includeFiles": "{backend/**,models/**,server-data/casablanca-market.csv,ml/src/inference.py}",
+      "excludeFiles": "{ml/notebooks/**,ml/scraping/**,ml/artifacts/**,data/**,tests/**,docs/**,reports/**,outputs/**,public/**,app/**,components/**,node_modules/**,.next/**,.git/**}",
+      "maxDuration": 60
     }
   },
   "rewrites": [

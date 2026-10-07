@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "city": "Marrakech",
+  "model_id": "marrakech-stacking-alae",
+  "model_version": "marrakech-stacking-v1",
+  "release": "v1",
+  "status": "certified_for_application_integration_not_publicly_enabled",
+  "public_enabled": false,
+  "algorithm": "StackingRegressor",
+  "object_class": "sklearn.ensemble._stacking.StackingRegressor",
+  "artifact": "models/marrakech/v1/model.pkl",
+  "artifact_sha256": "623de883b958bb3fca1bfd545fa0f1d41d084179a45f901940f8901170e8dcf4",
+  "artifact_size_bytes": 13529823,
+  "packaging_method": "byte-for-byte copy; no deserialization/reserialization to create release artifact",
+  "preprocessing": "models/marrakech/v1/preprocessing.json",
+  "preprocessing_sha256": "6c6b38750b0a53a10d4af7896302ff047997bd7a326f758af46ef7af0e939cd1",
+  "source_artifact": "ml/notebooks/marrakech/best_model_marrakech.pkl",
+  "source_notebook": "ml/notebooks/marrakech/marrakech_final.ipynb",
+  "source_dataset": "ml/notebooks/marrakech/listings_villas_appartements (2).csv",
+  "source_metadata": "ml/notebooks/marrakech/best_model_marrakech.json",
+  "source_file_sha256": {
+    "best_model_marrakech.json": "2bec1bcc3828fd5d8ce51aa93c605834d4e890c1fb469fe07dd0e0c8009e3e66",
+    "best_model_marrakech.pkl": "623de883b958bb3fca1bfd545fa0f1d41d084179a45f901940f8901170e8dcf4",
+    "listings_villas_appartements (2).csv": "2de23f9972d5e4a697361553039b437a47dcf5792471465b8cd4b564ec51c06a",
+    "marrakech_final.ipynb": "21cb3f69a05c91a3358f67aeeea40db91651b28ccba558ac68ab22ec48724f3a"
+  },
+  "model_input_count": 9,
+  "model_feature_names": [
+    "Type",
+    "Localisation",
+    "Area",
+    "Rooms",
+    "Bedrooms",
+    "Bathrooms",
+    "Current_state",
+    "Age",
+    "Loc_Type"
+  ],
+  "nested_estimators": [
+    {
+      "name": "Random Forest",
+      "pipeline_class": "sklearn.pipeline.Pipeline",
+      "estimator_class": "sklearn.ensemble._forest.RandomForestRegressor",
+      "preprocessor_class": "sklearn.compose._column_transformer.ColumnTransformer"
+    },
+    {
+      "name": "XGBoost",
+      "pipeline_class": "sklearn.pipeline.Pipeline",
+      "estimator_class": "xgboost.sklearn.XGBRegressor",
+      "preprocessor_class": "sklearn.compose._column_transformer.ColumnTransformer"
+    },
+    {
+      "name": "Ridge",
+      "pipeline_class": "sklearn.pipeline.Pipeline",
+      "estimator_class": "sklearn.linear_model._ridge.Ridge",
+      "preprocessor_class": "sklearn.compose._column_transformer.ColumnTransformer"
+    }
+  ],
+  "final_estimator": {
+    "class": "sklearn.linear_model._ridge.Ridge",
+    "alpha": 1
+  },
+  "stacking": {
+    "passthrough": false,
+    "cv": 5,
+    "n_jobs": 1,
+    "base_estimator_order": [
+      "Random Forest",
+      "XGBoost",
+      "Ridge"
+    ]
+  },
+  "training_cohort": {
+    "raw_rows": 2260,
+    "deduplicated_reduced_columns_rows": 2253,
+    "sale_rows": 1032,
+    "labelled_non_terrain_rows": 933,
+    "terrain_rows_excluded": 52,
+    "holdout_training_rows": 746,
+    "holdout_test_rows": 187,
+    "source": "notebook recorded outputs; final fitted Random Forest _n_samples=933 confirms full-cohort fit size",
+    "final_refit": "all 933 labelled non-terrain rows with log target clipped using earlier training-split quantile bounds"
+  },
+  "target": {
+    "name": "Price",
+    "currency": "MAD",
+    "training_transform": "numpy.log1p",
+    "model_output": "log1p(Price)",
+    "inverse_transform": "numpy.expm1",
+    "inverse_application_count": 1,
+    "display_rounding": "numpy.round(unrounded_mad, -3)",
+    "post_prediction_clipping": "none"
+  },
+  "dependency_versions_proven_by_evidence": {
+    "python": {
+      "version": "3.12.10",
+      "evidence": "source notebook language_info.version"
+    },
+    "scikit-learn": {
+      "version": "1.9.0",
+      "evidence": "_sklearn_version stored in delivered artifact"
+    },
+    "xgboost": {
+      "version": "3.4.1",
+      "evidence": "version stored in fitted booster save_config"
+    }
+  },
+  "historical_dependency_versions_not_recoverable": [
+    "numpy",
+    "pandas",
+    "scipy",
+    "joblib",
+    "transitive dependencies"
+  ],
+  "compatible_certification_environment": {
+    "isolated_virtual_environment": true,
+    "python": "3.12.10",
+    "packages": {
+      "scikit-learn": "1.9.0",
+      "xgboost": "3.4.1",
+      "numpy": "2.4.4",
+      "pandas": "2.2.3",
+      "scipy": "1.17.1",
+      "joblib": "1.5.3"
+    },
+    "version_selection_note": "Python, scikit-learn and XGBoost match source evidence. NumPy, pandas, scipy and joblib are selected compatible validation versions; not claimed as exact training versions.",
+    "production_requirements_modified": false,
+    "dependency_check": "pip check: No broken requirements found.",
+    "scope": "Windows AMD64 local certification; deployment platform compatibility and resource testing remain future gates."
+  },
+  "notebook_reported_metrics": {
+    "R2_Test_log": 0.7276,
+    "R2_Test_DH": 0.5822,
+    "MAE_DH": 1408655,
+    "MAPE_median_percent": 17.7
+  },
+  "metrics_status": "not_independently_recomputed",
+  "metrics_scope": "Notebook metrics describe the 746/187 holdout experiment before the final full-cohort refit of the serialized stack. Random Forest CV 0.705 ± 0.035 is not a stacking CV result.",
+  "known_data_limitations": [
+    "Raw scraped observations mix sale and rental listings; notebook sale filtering precedes modeling.",
+    "Training Area combines listing area, terrain-derived values and manual corrections; net habitable area is not consistently established.",
+    "Training target currency correction includes a fixed 10.8 multiplier and heuristic/out-of-fold/agency-specific assumptions; these are not inference transforms.",
+    "Numerical group imputation was performed outside the fitted pipelines and before train/test split; strict complete inputs avoid that path at inference.",
+    "Condition and age text preparation and fallback constants are external to the serialized model; missing categorical inputs have no default in the initial strict release contract.",
+    "Construction-year preparation depends on datetime.now().year, and the historical reference year is not stored as release evidence.",
+    "Test metrics influenced selection of stacking components and final model; label corrections used the wider cohort, creating evaluation optimism risks.",
+    "marrakech_clean.csv export fills missing prices with medians; later Price_final may contain predictions. Neither is automatically observed market-price data.",
+    "Two combinations of accepted location/type categories are absent from fitted TargetEncoder categories; their scope is not certified by golden examples.",
+    "Notebook final save cell has execution_count=null despite output; delivered artifact identity and checksum remain authoritative."
+  ],
+  "golden_prediction_cases": [
+    {
+      "id": "typical_apartment",
+      "input": {
+        "Type": "Appartement",
+        "Localisation": "Guéliz",
+        "Area": 100,
+        "Rooms": 3,
+        "Bedrooms": 2,
+        "Bathrooms": 1,
+        "Current_state": "bon état",
+        "Age": "5-10 ans",
+        "Loc_Type": "Guéliz|Appartement"
+      },
+      "expected_log": 14.199716906516706,
+      "actual_log": 14.199716906516706,
+      "log_absolute_difference": 0,
+      "expected_mad": 1468447.422627404,
+      "actual_mad": 1468447.422627404,
+      "mad_absolute_difference": 0,
+      "expected_display_mad": 1468000,
+      "actual_display_mad": 1468000,
+      "passed": true
+    },
+    {
+      "id": "typical_villa",
+      "input": {
+        "Type": "Villa",
+        "Localisation": "Palmeraie",
+        "Area": 393,
+        "Rooms": 7,
+        "Bedrooms": 4,
+        "Bathrooms": 3,
+        "Current_state": "bon état",
+        "Age": "+10 ans",
+        "Loc_Type": "Palmeraie|Villa"
+      },
+      "expected_log": 15.363126537927496,
+      "actual_log": 15.363126537927496,
+      "log_absolute_difference": 0,
+      "expected_mad": 4700250.32158106,
+      "actual_mad": 4700250.32158106,
+      "mad_absolute_difference": 0,
+      "expected_display_mad": 4700000,
+      "actual_display_mad": 4700000,
+      "passed": true
+    },
+    {
+      "id": "additional_apartment",
+      "input": {
+        "Type": "Appartement",
+        "Localisation": "Targa",
+        "Area": 81,
+        "Rooms": 2,
+        "Bedrooms": 2,
+        "Bathrooms": 2,
+        "Current_state": "bon état",
+        "Age": "+10 ans",
+        "Loc_Type": "Targa|Appartement"
+      },
+      "expected_log": 14.202495607716534,
+      "actual_log": 14.202495607716534,
+      "log_absolute_difference": 0,
+      "expected_mad": 1472533.476353344,
+      "actual_mad": 1472533.476353344,
+      "mad_absolute_difference": 0,
+      "expected_display_mad": 1473000,
+      "actual_display_mad": 1473000,
+      "passed": true
+    },
+    {
+      "id": "villa_fairmont",
+      "input": {
+        "Type": "Villa",
+        "Localisation": "Autre / Centre",
+        "Area": 340,
+        "Rooms": 6,
+        "Bedrooms": 4,
+        "Bathrooms": 4,
+        "Current_state": "neuf",
+        "Age": "0-5 ans",
+        "Loc_Type": "Autre / Centre|Villa"
+      },
+      "expected_log": null,
+      "actual_log": 15.313303438300451,
+      "log_absolute_difference": null,
+      "expected_mad": 4471807.3542362405,
+      "actual_mad": 4471807.3542362405,
+      "mad_absolute_difference": 0,
+      "expected_display_mad": 4472000,
+      "actual_display_mad": 4472000,
+      "passed": true
+    }
+  ],
+  "certification": {
+    "status": "PASS",
+    "date_utc": "2026-10-06",
+    "scope": "runtime compatibility, unchanged artifact identity, four fixed prediction cases and documentation packaging only",
+    "expected_reference": "Three mandatory expected values supplied in Step 4, originating from the preceding forensic audit. Fairmont exact input recovered from notebook cell 154; rounded output is recorded there, and unrounded expected value was supplied in Step 4.",
+    "source_and_packaged_fresh_processes": 2,
+    "tolerance": {
+      "log_absolute": 1e-12,
+      "mad_absolute": 0.000001,
+      "display": "exact"
+    },
+    "source_load_warnings": [],
+    "packaged_load_warnings": [],
+    "prediction_warnings": [],
+    "expm1_exactly_once_per_prediction": true,
+    "source_packaged_bytes_equal": true,
+    "casablanca_artifacts_unchanged": true,
+    "casablanca_artifact_sha256": {
+      "metadata.json": "c4742651aeb3f0717b33fc2cdf8374a988cd78341f9c988e955411a6136b3f69",
+      "model.pkl": "b5ba50e9b6fd35203b556c840fe97170ee23441a6cce0ffa927f3c09944b8e1d",
+      "preprocessing.json": "70f7e7ee1ee6318b6fc379c16527da7558184b0b97f792849e5a163f3fd1c7e9"
+    },
+    "model_retrained": false,
+    "model_reserialized": false,
+    "estimator_parameters_modified": false,
+    "application_integration_performed": false,
+    "public_activation_performed": false,
+    "limitations": "Passing fixed-case runtime parity does not independently certify predictive accuracy, all inputs, deployment runtime, persistence or public activation."
+  },
+  "next_gate": "Implement isolated Marrakech application adapter and city-aware contracts in a separate authorized task; preserve Casablanca and entitlement/security behavior. Leave Marrakech public estimation disabled until that integration is verified."
+}

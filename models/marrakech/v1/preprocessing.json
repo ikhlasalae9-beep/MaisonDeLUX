@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "artifact_role": "inference_contract_documentation",
+  "city": "Marrakech",
+  "public_enabled": false,
+  "model_feature_names": [
+    "Type",
+    "Localisation",
+    "Area",
+    "Rooms",
+    "Bedrooms",
+    "Bathrooms",
+    "Current_state",
+    "Age",
+    "Loc_Type"
+  ],
+  "feature_order_is_authoritative": true,
+  "required_prepared_fields": [
+    "Type",
+    "Localisation",
+    "Area",
+    "Rooms",
+    "Bedrooms",
+    "Bathrooms",
+    "Current_state",
+    "Age"
+  ],
+  "derived_model_fields": {
+    "Loc_Type": {
+      "expression": "Localisation + \"|\" + Type",
+      "source": "notebook cell 126; re-established in cell 134",
+      "user_supplied": false
+    }
+  },
+  "numerical": {
+    "Area": {
+      "required": true,
+      "dtype": "finite numeric; booleans and numeric strings rejected",
+      "unit": "m2",
+      "minimum_inclusive": 15,
+      "maximum": null,
+      "external_transform": "none",
+      "embedded_transform": "median imputation then numpy.log1p",
+      "minimum_evidence": "notebook cell 126 marks Area < 15 as missing; complete-input policy rejects it",
+      "limitations": [
+        "Training Area uses surface_clean and can represent listing area, terrain area or manually corrected area.",
+        "Net habitable area is not consistently established.",
+        "Observed training-preparation area range is not a certified extrapolation range."
+      ]
+    },
+    "Rooms": {
+      "required": true,
+      "dtype": "finite integer",
+      "minimum": 1,
+      "maximum": 15,
+      "production_policy": "reject missing, non-integer or out-of-range values; no silent clipping",
+      "historical_training_policy": "round and clip to [1, 15]"
+    },
+    "Bedrooms": {
+      "required": true,
+      "dtype": "finite integer",
+      "minimum": 1,
+      "maximum": 12,
+      "production_policy": "reject missing, non-integer or out-of-range values; no silent clipping",
+      "historical_training_policy": "round and clip to [1, 12]"
+    },
+    "Bathrooms": {
+      "required": true,
+      "dtype": "finite integer",
+      "minimum": 1,
+      "maximum": 12,
+      "production_policy": "reject missing, non-integer or out-of-range values; no silent clipping",
+      "historical_training_policy": "round and clip to [1, 12]"
+    }
+  },
+  "verified_training_location_aliases": {
+    "Victor Hugo": "Guéliz",
+    "Majorelle": "Guéliz",
+    "Semlalia": "Guéliz",
+    "Bab Doukkala": "Médina",
+    "Bab Atlas": "Médina",
+    "Amerchich": "Route de Safi",
+    "Izdihar": "Route de Safi",
+    "Tamansourt": "Route de Safi",
+    "Sidi Youssef Ben Ali": "Route de l'Ourika",
+    "Golf City": "Amelkis",
+    "Mabrouka": "Route de Fès"
+  },
+  "location_alias_evidence": "notebook cell 29; exact category normalization only, not a geographic or arrondissement crosswalk",
+  "external_preprocessing": {
+    "policy": "strict_complete_input",
+    "required_numerical_inputs": [
+      "Area",
+      "Rooms",
+      "Bedrooms",
+      "Bathrooms"
+    ],
+    "required_categorical_inputs": [
+      "Type",
+      "Localisation",
+      "Current_state",
+      "Age"
+    ],
+    "optional_field_defaults": "none defined for initial strict contract",
+    "operations": [
+      "validate complete structured values",
+      "apply only documented exact location aliases when supplied",
+      "derive Loc_Type server-side",
+      "construct pandas DataFrame in exact model_feature_names order"
+    ],
+    "excluded": [
+      "group-based numerical missing-value imputation",
+      "raw title/description fuzzy matching",
+      "construction-year parsing",
+      "refitting any encoder or scaler",
+      "external Area log transformation",
+      "training label/currency correction"
+    ],
+    "historical_only": [
+      "Numeric group medians and Rooms/Bedrooms relationship were calculated before splitting in notebook cell 138.",
+      "Notebook condition/age extraction and fallback constants occurred outside the serialized model.",
+      "Construction-year extraction used datetime.now().year; historical year is not recorded as release evidence."
+    ]
+  },
+  "embedded_preprocessing": {
+    "owner": "unchanged serialized base-model pipelines",
+    "fit_or_fit_transform_at_inference": false,
+    "column_transformer_order": [
+      "area",
+      "num",
+      "cat",
+      "te"
+    ],
+    "area": [
+      "SimpleImputer(strategy=median, add_indicator=True)",
+      "FunctionTransformer(numpy.log1p)"
+    ],
+    "numerical": {
+      "columns": [
+        "Rooms",
+        "Bedrooms",
+        "Bathrooms"
+      ],
+      "steps": [
+        "SimpleImputer(strategy=median, add_indicator=True)"
+      ]
+    },
+    "categorical": {
+      "columns": [
+        "Type",
+        "Localisation",
+        "Current_state",
+        "Age"
+      ],
+      "class": "sklearn.preprocessing.OneHotEncoder",
+      "handle_unknown": "ignore",
+      "min_frequency": 5,
+      "sparse_output": false
+    },
+    "interaction": {
+      "column": "Loc_Type",
+      "class": "sklearn.preprocessing.TargetEncoder",
+      "target_type": "continuous",
+      "smooth": "auto",
+      "random_state": 42,
+      "inference": "transform through saved fitted state, never fit_transform"
+    },
+    "scaling": "StandardScaler after numeric preparation only in the base Ridge pipeline; absent in Random Forest and XGBoost pipelines",
+    "fitted_shape": {
+      "area_columns": 1,
+      "numerical_columns": 3,
+      "one_hot_columns": 26,
+      "target_encoded_columns": 1,
+      "total": 31,
+      "missing_indicator_columns": 0
+    },
+    "warning": "Embedded global numerical imputation remains in the artifact but is not a supported substitute for notebook external group imputation; strict complete inputs keep it unused.",
+    "fitted_location_type_categories": [
+      "Agdal|Appartement",
+      "Agdal|Villa",
+      "Amelkis|Appartement",
+      "Amelkis|Villa",
+      "Autre / Centre|Appartement",
+      "Autre / Centre|Villa",
+      "Chrifia|Appartement",
+      "Chrifia|Villa",
+      "Guéliz|Appartement",
+      "Guéliz|Villa",
+      "Hivernage|Appartement",
+      "Hivernage|Villa",
+      "M'hamid|Appartement",
+      "Médina|Villa",
+      "Ménara|Appartement",
+      "Ménara|Villa",
+      "Palmeraie|Appartement",
+      "Palmeraie|Villa",
+      "Prestigia|Appartement",
+      "Prestigia|Villa",
+      "Route d'Amizmiz|Appartement",
+      "Route d'Amizmiz|Villa",
+      "Route de Casablanca|Appartement",
+      "Route de Casablanca|Villa",
+      "Route de Fès|Appartement",
+      "Route de Fès|Villa",
+      "Route de Safi|Appartement",
+      "Route de Safi|Villa",
+      "Route de Tahanaout|Appartement",
+      "Route de Tahanaout|Villa",
+      "Route de l'Ourika|Appartement",
+      "Route de l'Ourika|Villa",
+      "Targa|Appartement",
+      "Targa|Villa"
+    ]
+  },
+  "unknown_category_policy": {
+    "prepared_categorical_values": "reject values outside the exact fitted vocabularies; no guessed aliases",
+    "derived_interaction": "derive from accepted Localisation and Type; no caller-supplied token",
+    "embedded_mathematical_behavior": {
+      "one_hot_unknown": "all-zero block for an unknown category",
+      "target_encoder_unknown": "saved target_mean_"
+    },
+    "unseen_known_category_combinations": "Two combinations of known location/type labels were absent from fitted TargetEncoder categories; mathematical fallback is documented, but those combinations were not golden-certified. Scope approval remains a future integration decision.",
+    "scope_note": "This documentation does not enable any API or public service."
+  },
+  "target": {
+    "name": "Price",
+    "unit": "MAD",
+    "training_transform": "numpy.log1p",
+    "model_output": "log1p(Price)",
+    "prediction_inverse_transform": "numpy.expm1",
+    "inverse_application_count": 1,
+    "display_rounding": {
+      "expression": "numpy.round(prediction_mad, -3)",
+      "unit": "MAD",
+      "increment": 1000,
+      "method": "nearest; numpy ties-to-even"
+    },
+    "output_clipping": "none in notebook inference",
+    "production_sanity": "finite positive MAD; reject invalid output without fallback"
+  },
+  "training_price_corrections": {
+    "inference_transform": false,
+    "warning": "EUR_RATE=10.8 and text, out-of-fold, price-per-m2 and Vaneau corrections modify training labels only. Never multiply a model prediction by EUR_RATE.",
+    "target_winsorization": "training only: log targets clipped at train-split 1%/99% quantiles; final refit reused those bounds"
+  },
+  "unsupported_inputs": [
+    "Floor",
+    "region",
+    "parking",
+    "balcony",
+    "sea_view",
+    "furnished_status"
+  ],
+  "no_cross_city_fallback": true,
+  "categorical": {
+    "Type": [
+      "Appartement",
+      "Villa"
+    ],
+    "Localisation": [
+      "Agdal",
+      "Amelkis",
+      "Autre / Centre",
+      "Chrifia",
+      "Guéliz",
+      "Hivernage",
+      "M'hamid",
+      "Médina",
+      "Ménara",
+      "Palmeraie",
+      "Prestigia",
+      "Route d'Amizmiz",
+      "Route de Casablanca",
+      "Route de Fès",
+      "Route de Safi",
+      "Route de Tahanaout",
+      "Route de l'Ourika",
+      "Targa"
+    ],
+    "Current_state": [
+      "bon état",
+      "neuf",
+      "à rénover"
+    ],
+    "Age": [
+      "+10 ans",
+      "0-5 ans",
+      "5-10 ans"
+    ]
+  }
+}

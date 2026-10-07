@@ -1,0 +1,41 @@
+{
+    "project": "Prediction des prix immobiliers - Marrakech",
+    "model_name": "Stacking",
+    "metrics": {
+        "R2_Test_log": 0.7276,
+        "R2_Test_DH": 0.5822,
+        "MAE_DH": 1408655.0,
+        "MAPE_median_percent": 17.7
+    },
+    "target": "Price",
+    "target_transformation": "log1p",
+    "prediction_inverse_transformation": "expm1",
+    "features": [
+        "Type",
+        "Localisation",
+        "Area",
+        "Rooms",
+        "Bedrooms",
+        "Bathrooms",
+        "Current_state",
+        "Age",
+        "Loc_Type"
+    ],
+    "categorical_features": [
+        "Type",
+        "Localisation",
+        "Current_state",
+        "Age",
+        "Loc_Type"
+    ],
+    "numerical_features": [
+        "Area",
+        "Rooms",
+        "Bedrooms",
+        "Bathrooms"
+    ],
+    "test_size": 0.2,
+    "random_state": 42,
+    "cross_validation": 5,
+    "price_unit": "DH"
+}

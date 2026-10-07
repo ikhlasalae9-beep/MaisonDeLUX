@@ -1,0 +1,37 @@
+[
+  {
+    "path": "models/marrakech/v1/model.pkl",
+    "sha256": "623de883b958bb3fca1bfd545fa0f1d41d084179a45f901940f8901170e8dcf4",
+    "unchanged": true
+  },
+  {
+    "path": "models/marrakech/v1/preprocessing.json",
+    "sha256": "6c6b38750b0a53a10d4af7896302ff047997bd7a326f758af46ef7af0e939cd1",
+    "unchanged": true
+  },
+  {
+    "path": "models/marrakech/v1/metadata.json",
+    "sha256": "25e31340d37b7b522305b5cb32b2d2d3e58eb524453e402ed30fda9268ab470e",
+    "unchanged": true
+  },
+  {
+    "path": "models/casablanca/v1/model.pkl",
+    "sha256": "b5ba50e9b6fd35203b556c840fe97170ee23441a6cce0ffa927f3c09944b8e1d",
+    "unchanged": true
+  },
+  {
+    "path": "models/casablanca/v1/preprocessing.json",
+    "sha256": "70f7e7ee1ee6318b6fc379c16527da7558184b0b97f792849e5a163f3fd1c7e9",
+    "unchanged": true
+  },
+  {
+    "path": "models/casablanca/v1/metadata.json",
+    "sha256": "c4742651aeb3f0717b33fc2cdf8374a988cd78341f9c988e955411a6136b3f69",
+    "unchanged": true
+  },
+  {
+    "path": "backend/inference/casablanca.py",
+    "sha256": "466e92464c390825129cc440d6b899f07e62bf2ac17127606fe13d1c212a1d60",
+    "unchanged": true
+  }
+]

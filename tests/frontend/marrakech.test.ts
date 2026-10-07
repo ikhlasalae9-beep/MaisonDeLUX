@@ -19,17 +19,17 @@ import { selectMarketBoundaries, projectMarketBoundaries } from '../../lib/analy
 import { validateModelInput } from '../../lib/security/model-input';
 import { PublicEstimationAction } from '../../components/city/PublicEstimationAction';
 
-test('Marrakech publishes the shared FR/AR template and its own media, with no model or active services', () => {
+test('Marrakech publishes the shared FR/AR template and its own media, with certified estimation and no fabricated market services', () => {
   const city = getCityBySlug('marrakech')!;
   assert.equal(city.cityPage.publicVisible, true);
   assert.equal(city.cityPage.status, 'published');
-  assert.equal(city.estimation.publicEnabled, false);
-  assert.equal(city.estimation.backendStatusKey, null);
-  assert.equal(city.modelRef, null);
+  assert.equal(city.estimation.publicEnabled, true);
+  assert.equal(city.estimation.backendStatusKey, 'marrakech');
+  assert.equal(city.modelRef, 'marrakech');
   assert.throws(() => validateModelInput({ city: 'Marrakech' }), /INVALID_INPUT/);
   assert.equal(city.market.publicEnabled, false);
   assert.equal(city.market.analyticsRef, null);
-  assert.deepEqual(cityCapabilityActions('fr', city), []);
+  assert.deepEqual(cityCapabilityActions('fr', city).map(action => action.kind), ['estimate']);
   assert.equal(publicEstimatePath('fr', city, { city: 'Casablanca', status: 'available' }), null);
   for (const locale of ['fr','ar']) {
     const html = renderToStaticMarkup(CityPage({ params: { locale, citySlug: 'marrakech' } }));
@@ -46,17 +46,19 @@ test('Marrakech publishes the shared FR/AR template and its own media, with no m
     assert.ok(html.includes(copy.sourcesTitle));
     assert.equal(generateMetadata({ params: { locale, citySlug: 'marrakech' } }).title, getCityContent('marrakech', locale).seo.title);
     const nav = publicNavigationEstimation(locale, `/${locale}/cities/marrakech`, 'Estimer mon bien');
-    assert.equal(nav.href, null);
+    assert.equal(nav.href, `/${locale}/cities/marrakech/estimate`);
     const action = renderToStaticMarkup(React.createElement(PublicEstimationAction, { href: nav.href, children: nav.label }));
-    assert.ok(action.includes('aria-disabled="true"'));
-    assert.ok(!action.includes('<a'));
+    assert.ok(action.includes('<a'));
+    assert.ok(!action.includes('aria-disabled="true"'));
   }
   const media = getCityMedia('marrakech')!;
   assert.equal(media.gallery.length, 4);
   assert.equal(media.fallback, media.gallery[3].src);
   assert.equal(media.hero?.poster, null);
   assert.ok(sitemap().some(entry => entry.url.endsWith('/fr/cities/marrakech')));
-  assert.ok(!sitemap().some(entry => /marrakech\/(estimate|market)$/.test(entry.url)));
+  assert.ok(sitemap().some(entry => entry.url.endsWith('/fr/cities/marrakech/estimate')));
+  assert.ok(sitemap().some(entry => entry.url.endsWith('/ar/cities/marrakech/estimate')));
+  assert.ok(!sitemap().some(entry => entry.url.endsWith('/marrakech/market')));
 });
 
 test('Marrakech geographic market preparation cannot expose another city dataset or fake statistics', () => {

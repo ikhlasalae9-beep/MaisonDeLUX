@@ -11,7 +11,7 @@ export async function POST(request:NextRequest) {
     const body=await jsonBody(request,['label','input']);
     if (typeof body.label!=='string'||!body.label.trim()||body.label.length>100) throw new PublicError('INVALID_LABEL');
     let input;try{input=validateModelInput(body.input);}catch{throw new PublicError('INVALID_INPUT');}
-    const city=(await query("SELECT id FROM public.cities WHERE slug='casablanca' AND public_enabled=true")).rows[0];
+    const city=(await query("SELECT id FROM public.cities WHERE slug=$1 AND public_enabled=true",[input.city.toLowerCase()])).rows[0];
     if (!city) throw new PublicError('INVALID_CITY');
     const result=await client.from('saved_properties').insert({user_id:user.id,city_id:city.id,label:body.label.trim(),input_features:input}).select('id').single();
     if (result.error) throw new Error('PROPERTY_SAVE_FAILED');

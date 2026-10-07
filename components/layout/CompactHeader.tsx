@@ -7,7 +7,7 @@ import { BrandLogo } from '@/components/common/BrandLogo';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
-export function CompactHeader({ locale, variant }: { locale: string; variant: 'auth' | 'product' }) {
+export function CompactHeader({ locale, variant, citySlug = 'casablanca' }: { locale: string; variant: 'auth' | 'product'; citySlug?: 'casablanca' | 'marrakech' }) {
   const ar = locale === 'ar';
   const [authenticated, setAuthenticated] = useState(false);
   useEffect(() => {
@@ -19,9 +19,9 @@ export function CompactHeader({ locale, variant }: { locale: string; variant: 'a
     return () => { active = false; };
   }, [variant]);
   const BackIcon = ar ? ArrowRight : ArrowLeft;
-  const backHref = variant === 'product' ? `/${locale}/cities/casablanca` : `/${locale}`;
+  const backHref = variant === 'product' ? `/${locale}/cities/${citySlug}` : `/${locale}`;
   const backLabel = variant === 'product'
-    ? (ar ? 'العودة إلى الدار البيضاء' : 'Retour à Casablanca')
+    ? (citySlug === 'marrakech' ? (ar ? 'العودة إلى مراكش' : 'Retour à Marrakech') : (ar ? 'العودة إلى الدار البيضاء' : 'Retour à Casablanca'))
     : (ar ? 'العودة إلى الموقع' : 'Retour au site');
 
   return <header className="relative z-40 border-b border-border-subtle bg-surface/90 backdrop-blur-xl">

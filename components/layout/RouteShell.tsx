@@ -19,7 +19,7 @@ export function RouteShell({ children, locale, dict }: { children: React.ReactNo
   return <>
     {publicShell ? <Navbar locale={locale} dict={dict} /> : null}
     {auth ? <CompactHeader locale={locale} variant="auth" /> : null}
-    {product ? <CompactHeader locale={locale} variant="product" /> : null}
+    {product ? <CompactHeader locale={locale} variant="product" citySlug={pathname === `/${locale}/cities/marrakech/estimate` ? 'marrakech' : 'casablanca'} /> : null}
     <main className="relative z-10 flex-1">{children}</main>
     {publicShell ? <Footer locale={locale} dict={dict} estimateCtaLabel={estimationAction.label} estimateCtaHref={estimationAction.href} /> : null}
   </>;

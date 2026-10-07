@@ -51,3 +51,26 @@ Certains tests historiques des exports nécessitent les données locales de réc
 - [Documentation actuelle](docs/README.md)
 
 Le prototype est principalement adapté aux appartements à vendre. Les prix sont indicatifs, non des expertises officielles. Les documents historiques sont conservés pour la traçabilité ; MODEL_V1 décrit le modèle générique historique. Le point d’entrée actuel est [docs/README.md](docs/README.md).
+
+
+## Runtime préparé Casablanca / Marrakech
+
+Python **3.12** est requis par le runtime de production. Installer `requirements.txt` dans un environnement dédié ; utiliser `requirements-dev.txt` pour pytest et les outils de développement. Le runtime utilise `xgboost-cpu==3.4.1` et `scikit-learn==1.9.0`, sans modifier les modèles certifiés.
+
+Après activation de cet environnement, sous PowerShell :
+
+```powershell
+$env:MDL_TEST_PYTHON = (python -c "import sys; print(sys.executable)")
+python -m pip check
+python -m pytest tests/test_city_service.py tests/test_marrakech_inference.py tests/test_casablanca_inference.py tests/test_casablanca_api.py tests/test_marrakech_availability.py tests/test_gateway_security.py -q -W error -p no:cacheprovider
+npm run test:security
+npx tsc --noEmit --incremental false
+npm run lint
+npm run build
+```
+
+Marrakech est activée dans les configurations du dépôt. Les tests utilisent le package certifié de production et les migrations additives 006 puis 007 dans une base locale isolée. La migration 007 doit être appliquée manuellement à l’environnement cible avant son activation déployée. Les anciens tests nationaux qui attendent une estimation via `/api/estimate` ne décrivent plus le contrat actif : ce service retourne 410.
+
+Le [rapport final Marrakech et sa checklist unique de Preview](docs/MARRAKECH_FINAL_INTEGRATION_REPORT.md) décrit l'intégration, les vérifications et les mesures hébergées encore nécessaires. Aucune migration distante ni aucun déploiement n'a été effectué pendant ce sprint.
+
+Le [rapport final d’activation Marrakech](docs/MARRAKECH_PUBLIC_ACTIVATION_REPORT.md) remplace les consignes de désactivation et de validation automatique Preview des rapports précédents. Le démarrage normal ne lance aucun validateur de modèle.

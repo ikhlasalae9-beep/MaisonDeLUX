@@ -1,10 +1,10 @@
-"""Minimal city-to-model registry; prepared models are not public by default."""
+"""Explicit city-to-model registry with server-owned public capability gates."""
 
 from __future__ import annotations
 
 from typing import Any, Mapping
 
-from . import casablanca
+from . import casablanca, marrakech
 
 
 class ModelRegistryError(ValueError):
@@ -19,7 +19,17 @@ MODEL_REGISTRY = {
         "status": "available",
         "public_enabled": True,
         "predict": casablanca.predict,
-    }
+        "context": casablanca.prediction_context,
+    },
+    "marrakech": {
+        "city": "Marrakech",
+        "model_id": "marrakech-stacking-alae",
+        "version": "marrakech-stacking-v1",
+        "status": "available",
+        "public_enabled": True,
+        "predict": marrakech.predict,
+        "context": marrakech.prediction_context,
+    },
 }
 
 
@@ -39,5 +49,4 @@ def predict_for_city(payload: Mapping[str, Any], *, allow_prepared: bool = False
 
 
 def context_for_city(payload: Mapping[str, Any], *, allow_prepared: bool = False) -> dict[str, Any]:
-    _public_entry(payload, allow_prepared=allow_prepared)
-    return casablanca.prediction_context(payload)
+    return _public_entry(payload, allow_prepared=allow_prepared)["context"](payload)
