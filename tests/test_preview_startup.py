@@ -1,7 +1,6 @@
-"""Branch-scoped startup trigger, stdout record and unchanged public policy."""
+"""Production startup never runs the retained internal validation harness."""
 import importlib
 import importlib.util
-import json
 import platform
 import sys
 from pathlib import Path
@@ -25,59 +24,33 @@ def startup(monkeypatch):
     return module
 
 
-@pytest.mark.parametrize('environment,branch,legacy_flag,expected_calls', [
-    ('production', 'test', '1', 0),
-    ('production', 'main', '1', 0),
-    ('preview', 'main', '1', 0),
-    ('preview', '', '1', 0),
-    ('preview', 'test', None, 1),
-    ('preview', 'test', '0', 1),
+@pytest.mark.parametrize('environment,branch,legacy_flag', [
+    ('production', 'test', '1'),
+    ('production', 'main', '1'),
+    ('preview', 'main', '1'),
+    ('preview', '', '1'),
+    ('preview', 'test', '1'),
+    ('preview', 'test', None),
+    ('preview', 'test', '0'),
 ])
-def test_startup_guard_and_flushed_stdout(monkeypatch, capsys, environment, branch, legacy_flag, expected_calls):
+def test_startup_never_runs_internal_validator(monkeypatch, capsys, environment, branch, legacy_flag):
     monkeypatch.setenv('VERCEL_ENV', environment)
     monkeypatch.setenv('VERCEL_GIT_COMMIT_REF', branch)
     if legacy_flag is None:
         monkeypatch.delenv('MDL_PREVIEW_RUNTIME_CHECK', raising=False)
     else:
         monkeypatch.setenv('MDL_PREVIEW_RUNTIME_CHECK', legacy_flag)
-    result = {'status': 'PASS', 'goldens': ['Guéliz'], 'detail': Path('runtime')}
-    validator = Mock(return_value=result)
+    validator = Mock(side_effect=RuntimeError('Startup must not validate models'))
     monkeypatch.setattr(preview_validation, 'validate_preview_runtime', validator)
     routes_before = [(rule.rule, rule.endpoint) for rule in app.url_map.iter_rules()]
     flags_before = {key: entry['public_enabled'] for key, entry in registry.MODEL_REGISTRY.items()}
-    stdout = sys.stdout
-    flush = Mock(wraps=stdout.flush)
-    monkeypatch.setattr(stdout, 'flush', flush)
     module = startup(monkeypatch)
-    assert validator.call_count == expected_calls
-    # Reading pytest's capture buffer itself flushes stdout; inspect first.
-    if expected_calls:
-        flush.assert_called_once()
-    else:
-        flush.assert_not_called()
-    output = capsys.readouterr().out
-    if expected_calls:
-        assert output == 'MDL_PREVIEW_RUNTIME_CHECK ' + json.dumps(result, ensure_ascii=False, default=str) + '\n'
-    else:
-        assert output == ''
+    validator.assert_not_called()
+    assert capsys.readouterr().out == ''
     assert module.application is app
     assert routes_before == [(rule.rule, rule.endpoint) for rule in app.url_map.iter_rules()]
     assert flags_before == {key: entry['public_enabled'] for key, entry in registry.MODEL_REGISTRY.items()}
-    assert registry.MODEL_REGISTRY['marrakech']['public_enabled'] is False
-    with pytest.raises(registry.ModelRegistryError):
-        registry.predict_for_city({'city': 'Marrakech'})
-
-
-def test_startup_failure_propagates_without_pass_record(monkeypatch, capsys):
-    monkeypatch.setenv('VERCEL_ENV', 'preview')
-    monkeypatch.setenv('VERCEL_GIT_COMMIT_REF', 'test')
-    validator = Mock(side_effect=RuntimeError('golden parity failure'))
-    monkeypatch.setattr(preview_validation, 'validate_preview_runtime', validator)
-    with pytest.raises(RuntimeError, match='golden parity failure'):
-        startup(monkeypatch)
-    validator.assert_called_once_with()
-    assert 'MDL_PREVIEW_RUNTIME_CHECK' not in capsys.readouterr().out
-    assert registry.MODEL_REGISTRY['marrakech']['public_enabled'] is False
+    assert registry.MODEL_REGISTRY['marrakech']['public_enabled'] is True
 
 
 def test_existing_preview_runtime_harness_results():
@@ -99,4 +72,4 @@ def test_existing_preview_runtime_harness_results():
     if platform.system() == 'Linux':
         assert result['peak_resident_bytes'] > 0
     assert result['marrakech_sha256'] == '623de883b958bb3fca1bfd545fa0f1d41d084179a45f901940f8901170e8dcf4'
-    assert registry.MODEL_REGISTRY['marrakech']['public_enabled'] is False
+    assert registry.MODEL_REGISTRY['marrakech']['public_enabled'] is True

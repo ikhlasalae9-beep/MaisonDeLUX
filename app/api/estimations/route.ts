@@ -14,7 +14,9 @@ export const maxDuration = 60;
 export async function POST(request: NextRequest) {
   try {
     sameOrigin(request);
-    const body = await jsonBody(request,['input','request_id']);
+    const body = await jsonBody(request,['input','request_id','locale']);
+    const locale=body.locale ?? 'fr';
+    if(locale!=='fr' && locale!=='ar') throw new PublicError('INVALID_INPUT');
     if (!uuid(body.request_id)) throw new PublicError('INVALID_REQUEST');
     let input; try { input=validateModelInput(body.input); } catch { throw new PublicError('INVALID_INPUT'); }
     const user = await currentUser();
@@ -55,7 +57,7 @@ export async function POST(request: NextRequest) {
       throw error;
     }
     try {
-      const result = await query('SELECT public.phase_c_complete_estimation($1,$2,$3,$4::jsonb,$5::jsonb) AS id',[tokenHash,body.request_id,user?.id || null,JSON.stringify(input),JSON.stringify(prediction)]);
+      const result = await query('SELECT public.phase_c_complete_estimation($1,$2,$3,$4::jsonb,$5::jsonb,$6::text) AS id',[tokenHash,body.request_id,user?.id || null,JSON.stringify(input),JSON.stringify(prediction),locale]);
       return safeResponse({ ...prediction,estimation_event_id:String(result.rows[0].id),guest:!user });
     } catch {
       if (!user) await query('SELECT public.phase_c_release_guest($1,$2)',[tokenHash,body.request_id]).catch(()=>{});

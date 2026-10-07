@@ -1,11 +1,11 @@
-"""Opt-in Preview startup checks; no endpoint and no public prepared switch."""
+"""Internal runtime validation, invoked explicitly by tests rather than startup."""
 import hashlib
 import warnings
 import platform
 from concurrent.futures import ThreadPoolExecutor
 from importlib.metadata import version
 from time import perf_counter
-from . import service, marrakech, registry
+from . import service, marrakech
 
 
 def validate_preview_runtime():
@@ -39,12 +39,8 @@ def validate_preview_runtime():
         context = service.context(c)
         if context.get('explanation',{}).get('method') != 'catboost_shap_values' or not context.get('comparables'):
             raise RuntimeError('Preview Casablanca context regression')
-        try:
-            registry.predict_for_city({'city':'Marrakech'})
-        except registry.ModelRegistryError:
-            pass
-        else:
-            raise RuntimeError('Preview public Marrakech capability enabled')
+        if service.context(payloads[0]) != {'unavailable':['explanation','comparables','market_context']}:
+            raise RuntimeError('Marrakech context capability regression')
     if captured:
         raise RuntimeError('Preview model compatibility warnings')
     try:

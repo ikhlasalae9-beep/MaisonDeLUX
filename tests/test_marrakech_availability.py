@@ -1,4 +1,4 @@
-"""An unpublished Marrakech model must never invoke any other city's model."""
+"""A disabled Marrakech capability must never invoke any other city's model."""
 import pytest
 
 from backend.inference import registry
@@ -8,6 +8,7 @@ def test_marrakech_registry_rejects_prediction_and_context_without_fallback(monk
     def forbidden_prediction(_payload):
         raise AssertionError("Casablanca must not predict for Marrakech")
 
+    monkeypatch.setitem(registry.MODEL_REGISTRY["marrakech"], "public_enabled", False)
     monkeypatch.setitem(registry.MODEL_REGISTRY["casablanca"], "predict", forbidden_prediction)
     for city in ["Marrakech", "marrakech", " MARRAKECH "]:
         with pytest.raises(registry.ModelRegistryError):

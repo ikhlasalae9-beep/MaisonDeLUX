@@ -1,4 +1,4 @@
-"""Minimal city-to-model registry; prepared models are not public by default."""
+"""Explicit city-to-model registry with server-owned public capability gates."""
 
 from __future__ import annotations
 
@@ -25,8 +25,8 @@ MODEL_REGISTRY = {
         "city": "Marrakech",
         "model_id": "marrakech-stacking-alae",
         "version": "marrakech-stacking-v1",
-        "status": "prepared",
-        "public_enabled": False,
+        "status": "available",
+        "public_enabled": True,
         "predict": marrakech.predict,
         "context": marrakech.prediction_context,
     },

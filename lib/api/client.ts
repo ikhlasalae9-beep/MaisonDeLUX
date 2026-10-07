@@ -62,7 +62,7 @@ export async function predictCasablanca(payload: CityPredictPayload, options: { 
     const response = await fetch(options.eventId ? `/api/estimations/${options.eventId}/simulate` : '/api/estimations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(options.eventId ? { input: payload } : { input: payload, request_id: options.requestId || crypto.randomUUID() }),
+      body: JSON.stringify(options.eventId ? { input: payload } : { input: payload, request_id: options.requestId || crypto.randomUUID(), locale: options.locale || 'fr' }),
       signal: controller.signal,
     });
     const body = await response.json().catch(() => ({}));

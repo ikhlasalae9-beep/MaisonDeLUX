@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import marrakechContract from '@/models/marrakech/v1/preprocessing.json';
+import { validatePreparedModelInput } from '@/lib/security/model-input';
 import { EstimationError, fetchCasablancaContext, predictCasablanca } from '@/lib/api/client';
 import { PassportAccountCTA } from '@/components/auth/PassportAccountCTA';
 import type { CityMetadata, CityPredictPayload, PredictResponse } from '@/lib/api/types';
@@ -15,6 +17,7 @@ const CasablancaEstimateResult = dynamic(
   { ssr: false },
 );
 
+const marrakechMaximums: Record<string, number | null> = Object.fromEntries(Object.entries(marrakechContract.numerical).map(([key,rule]) => [key.toLowerCase(),rule.maximum]));
 const initialForm = { property_type: '', neighborhood: '', area: '', rooms: '', bedrooms: '', bathrooms: '', floor: '', current_state: '', age: '' };
 // Resume storage and routes are isolated by city.
 export type CompletedCasablancaEstimation = { prediction: PredictResponse; inputFeatures: CityPredictPayload; estimatedAt: string };
@@ -73,7 +76,11 @@ export function CasablancaEstimator({ locale, copy, metadata }: { locale: string
     submittingRef.current = true;
     setLoading(true);
     try {
-      const inputFeatures: CityPredictPayload = { city, property_type: form.property_type, neighborhood: form.neighborhood, area: Number(form.area), rooms: Number(form.rooms), bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms), ...(marrakech ? {} : { floor: Number(form.floor) }), current_state: form.current_state || null, age: form.age || null } as CityPredictPayload;
+      let inputFeatures: CityPredictPayload = { city, property_type: form.property_type, neighborhood: form.neighborhood, area: Number(form.area), rooms: Number(form.rooms), bedrooms: Number(form.bedrooms), bathrooms: Number(form.bathrooms), ...(marrakech ? {} : { floor: Number(form.floor) }), current_state: form.current_state || null, age: form.age || null } as CityPredictPayload;
+      if (marrakech) {
+        try { inputFeatures=validatePreparedModelInput(inputFeatures); }
+        catch { throw new Error(copy.requiredError); }
+      }
       const serialized=JSON.stringify(inputFeatures);
       if(pendingRequestRef.current?.input!==serialized)pendingRequestRef.current={input:serialized,id:crypto.randomUUID()};
       const prediction = await predictCasablanca(inputFeatures, { locale, requestId: pendingRequestRef.current.id });
@@ -122,7 +129,7 @@ function EstimatorForm({ form, fields, metadata, copy, loading, error, labelFor,
   return <CardSurface className="p-4 min-[360px]:p-5 sm:p-8"><form onSubmit={submit} noValidate><fieldset disabled={loading} className="disabled:opacity-70"><div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
     <SelectField label={copy.propertyType} value={form.property_type} onChange={(value) => update('property_type', value)} options={metadata.supported.property_types} placeholder={copy.select} labelFor={labelFor} />
     <SelectField label={copy.neighborhood} value={form.neighborhood} onChange={(value) => update('neighborhood', value)} options={metadata.supported.neighborhoods} placeholder={copy.select} />
-    {fields.map((field) => <label key={field.key}><span className="mb-2 block text-sm font-semibold">{field.label}</span><input type="number" inputMode={field.step === '1' ? 'numeric' : 'decimal'} min={field.min} step={field.step} value={form[field.key]} onChange={(event) => update(field.key, event.target.value)} className="h-12 w-full rounded-control border border-border-medium bg-background px-4 text-base outline-none focus:border-brand-blue focus:shadow-focus" required /></label>)}
+    {fields.map((field) => <label key={field.key}><span className="mb-2 block text-sm font-semibold">{field.label}</span><input type="number" inputMode={field.step === '1' ? 'numeric' : 'decimal'} min={field.min} max={metadata.city === 'Marrakech' ? marrakechMaximums[field.key] ?? undefined : undefined} step={field.step} value={form[field.key]} onChange={(event) => update(field.key, event.target.value)} className="h-12 w-full rounded-control border border-border-medium bg-background px-4 text-base outline-none focus:border-brand-blue focus:shadow-focus" required /></label>)}
     <SelectField label={metadata.city === 'Marrakech' ? copy.condition : `${copy.condition} (${copy.optional})`} value={form.current_state} onChange={(value) => update('current_state', value)} options={metadata.supported.current_states} placeholder={copy.select} labelFor={metadata.city === 'Marrakech' ? value => conditionLabel(value, locale) : undefined} />
     <SelectField label={metadata.city === 'Marrakech' ? copy.age : `${copy.age} (${copy.optional})`} value={form.age} onChange={(value) => update('age', value)} options={metadata.supported.ages} placeholder={copy.select} labelFor={metadata.city === 'Marrakech' ? value => ageLabel(value, locale) : undefined} />
   </div>{error ? <div role="alert" className="mt-5 flex items-start gap-2 rounded-control border border-status-danger/25 bg-status-danger/10 p-4 text-sm text-status-danger"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div> : null}<Button type="submit" size="lg" loading={loading} className="mt-6 min-h-12 w-full sm:w-auto">{loading ? copy.loading : copy.submit}</Button></fieldset></form></CardSurface>;

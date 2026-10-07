@@ -217,9 +217,9 @@ def city_estimate():
     except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
-        app.logger.exception('Casablanca inference failed')
+        app.logger.exception('City inference failed')
         return jsonify(
-            error="Le service d'estimation de Casablanca est momentanément indisponible.",
+            error=("Le service d'estimation de Marrakech est momentanément indisponible." if str(payload.get('city', '')).strip().casefold() == 'marrakech' else "Le service d'estimation de Casablanca est momentanément indisponible."),
             code='model_unavailable',
         ), 503
 
@@ -237,8 +237,8 @@ def city_estimate_context():
     except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
-        app.logger.exception('Optional Casablanca context failed')
-        return jsonify(unavailable=['explanation', 'comparables']), 200
+        app.logger.exception('Optional city context failed')
+        return jsonify(unavailable=['explanation', 'comparables', *(['market_context'] if str(payload.get('city', '')).strip().casefold() == 'marrakech' else [])]), 200
 
 
 @app.get('/api/ml/metadata')

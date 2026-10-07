@@ -34,5 +34,5 @@ export function estimatorMetadata(city: 'Casablanca' | 'Marrakech'): CityMetadat
     property_types: m.categorical.Type.map(value => value.toLowerCase()), neighborhoods: [...m.categorical.Localisation],
     current_states: [...m.categorical.Current_state], ages: [...m.categorical.Age],
   };
-  return { city, status: city === 'Casablanca' ? 'available' : 'prepared', public_enabled: !!getCityBySlug(identity.slug)?.estimation.publicEnabled, model_version: identity.version, supported };
+  return { city, status: getCityBySlug(identity.slug)!.estimation.status, public_enabled: !!getCityBySlug(identity.slug)?.estimation.publicEnabled, model_version: identity.version, supported };
 }

@@ -69,6 +69,8 @@ npm run lint
 npm run build
 ```
 
-Marrakech reste publiquement désactivée. Les tests internes utilisent le package de production et la migration additive 006 dans une base locale isolée. Les anciens tests nationaux qui attendent une estimation via `/api/estimate` ne décrivent plus le contrat actif : ce service retourne 410.
+Marrakech est activée dans les configurations du dépôt. Les tests utilisent le package certifié de production et les migrations additives 006 puis 007 dans une base locale isolée. La migration 007 doit être appliquée manuellement à l’environnement cible avant son activation déployée. Les anciens tests nationaux qui attendent une estimation via `/api/estimate` ne décrivent plus le contrat actif : ce service retourne 410.
 
 Le [rapport final Marrakech et sa checklist unique de Preview](docs/MARRAKECH_FINAL_INTEGRATION_REPORT.md) décrit l'intégration, les vérifications et les mesures hébergées encore nécessaires. Aucune migration distante ni aucun déploiement n'a été effectué pendant ce sprint.
+
+Le [rapport final d’activation Marrakech](docs/MARRAKECH_PUBLIC_ACTIVATION_REPORT.md) remplace les consignes de désactivation et de validation automatique Preview des rapports précédents. Le démarrage normal ne lance aucun validateur de modèle.

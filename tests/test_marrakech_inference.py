@@ -30,7 +30,7 @@ def test_production_adapter_golden_parity(case, monkeypatch):
         raise AssertionError("Marrakech must not load Casablanca")
 
     monkeypatch.setattr(casablanca, "load_model", forbidden)
-    result = registry.predict_for_city(prepared(case), allow_prepared=True)
+    result = registry.predict_for_city(prepared(case))
     assert result["raw_price_mad"] == pytest.approx(case["expected_mad"], rel=0, abs=1e-6)
     assert result["estimated_price_mad"] == round(case["expected_mad"])
     assert result["display_price_mad"] == case["expected_display_mad"]
@@ -195,8 +195,9 @@ def test_direct_adapter_rejects_wrong_city_and_non_object(payload):
             m.transform(value)
 
 
-def test_prepared_registry_does_not_publicly_enable_marrakech(payload):
-    assert registry.MODEL_REGISTRY["marrakech"]["public_enabled"] is False
+def test_disabled_registry_cannot_be_bypassed_by_public_input(payload, monkeypatch):
+    assert registry.MODEL_REGISTRY["marrakech"]["public_enabled"] is True
+    monkeypatch.setitem(registry.MODEL_REGISTRY["marrakech"], "public_enabled", False)
     for handler in [registry.predict_for_city, registry.context_for_city]:
         with pytest.raises(registry.ModelRegistryError, match="not publicly enabled"):
             handler(payload)
