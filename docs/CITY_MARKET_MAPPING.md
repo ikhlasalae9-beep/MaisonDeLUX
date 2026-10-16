@@ -42,4 +42,6 @@ The local rabat-boundaries.geojson contains four level-10 Polygons, one MultiPol
 
 ## Marrakech geographic preparation
 
+Update (15 October 2026): the [Marrakech Market implementation](marrakech-market-implementation.md) enables descriptive neighborhood analytics from a conservative local apartment cohort. Geographic pricing remains withheld; the existing administrative-only map and empty crosswalk are preserved. The following preparation notes describe the earlier state.
+
 The local public/maps/marrakech-boundaries.geojson contains five admin_level 10 Polygons (Annakhil, Gueliz, Marrakech-Medina, Ménara, Sidi Youssef Ben Ali) and five Point helpers. Only the administrative polygons render in the existing CityMarketMap. Names and identifiers are preserved and OSM/ODbL attribution remains visible. No neighborhood crosswalk or price classes have been introduced. The noindex preparation route is unadvertised until a compatible approved cohort and mapping are delivered. See [Marrakech handoff](MARRAKECH_CITY_HANDOFF.md).

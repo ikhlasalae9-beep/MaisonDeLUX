@@ -1,0 +1,668 @@
+{
+  "reviewedAt": "2026-10-16",
+  "snapshotSha256": "6f538fb49fa0db745db3872832e41312454fd629cc1c604697d4b97b7705d4b9",
+  "boundarySha256": "dab20b0bf79164b6a48fd4062508bf1db6a34c739845b8ddc89c39856d52ab9a",
+  "attributionScope": "Evidence-backed neighborhood-label attribution; no listing coordinates. Only exact reviewed dataset labels are matched. Unresolved extents/corridors are excluded.",
+  "citySlug": "marrakech",
+  "geoJsonSource": "/maps/marrakech-boundaries.geojson",
+  "boundaryLevel": "10",
+  "boundaryCount": 5,
+  "outlineCount": 5,
+  "mappedNeighborhoodCount": 17,
+  "minimumObservations": 8,
+  "arrondissements": [
+    {
+      "boundaryId": "relation/2799527",
+      "listingCount": 0,
+      "neighborhoods": [],
+      "eligible": false,
+      "medianListingPriceMad": null,
+      "medianPricePerM2": null,
+      "medianArea": null
+    },
+    {
+      "boundaryId": "relation/2799529",
+      "listingCount": 0,
+      "neighborhoods": [],
+      "eligible": false,
+      "medianListingPriceMad": null,
+      "medianPricePerM2": null,
+      "medianArea": null
+    },
+    {
+      "boundaryId": "relation/2799533",
+      "listingCount": 627,
+      "neighborhoods": [
+        "Guéliz",
+        "Samlalia",
+        "Hivernage",
+        "Camp Al Ghoul",
+        "Hay Mabrouka",
+        "Daoudiat",
+        "Amerchich",
+        "Issil",
+        "Izdihar"
+      ],
+      "eligible": true,
+      "medianListingPriceMad": 1550000,
+      "medianPricePerM2": 18690,
+      "medianArea": 85
+    },
+    {
+      "boundaryId": "relation/2799534",
+      "listingCount": 0,
+      "neighborhoods": [],
+      "eligible": false,
+      "medianListingPriceMad": null,
+      "medianPricePerM2": null,
+      "medianArea": null
+    },
+    {
+      "boundaryId": "relation/2799537",
+      "listingCount": 89,
+      "neighborhoods": [
+        "Massira 3",
+        "Mhamid",
+        "Ain Mezouar",
+        "Massira 1",
+        "Hay Al Hassani",
+        "Iziki",
+        "Azli",
+        "Massira 2"
+      ],
+      "eligible": true,
+      "medianListingPriceMad": 762000,
+      "medianPricePerM2": 9239,
+      "medianArea": 77
+    }
+  ],
+  "mappedNeighborhoods": [
+    "Ain Mezouar",
+    "Amerchich",
+    "Azli",
+    "Camp Al Ghoul",
+    "Daoudiat",
+    "Guéliz",
+    "Hay Al Hassani",
+    "Hay Mabrouka",
+    "Hivernage",
+    "Issil",
+    "Izdihar",
+    "Iziki",
+    "Massira 1",
+    "Massira 2",
+    "Massira 3",
+    "Mhamid",
+    "Samlalia"
+  ],
+  "unmappedNeighborhoods": [
+    "Agdal",
+    "Amelkis",
+    "Arset Ben Chebli",
+    "Arset El Maach",
+    "Arset Sbaia",
+    "Assif",
+    "Azzouzia",
+    "Bab Ighli",
+    "Belbekkar",
+    "Ben Saleh",
+    "Bouaakkaz",
+    "Boukar",
+    "Boulevard Med 6",
+    "Boumesmar",
+    "El Hara",
+    "El Moukef",
+    "Ennakhil (Palmeraie)",
+    "Hay Al Bahja",
+    "Hay Alfadl",
+    "Hay Annahda",
+    "Hay Firdaouss",
+    "Hay Saada",
+    "Hay Saada 1",
+    "Hay Targa",
+    "Hay Yasmina",
+    "Hay Zitoun",
+    "Jbilat",
+    "Les Portes de Marrakech",
+    "Majorelle",
+    "Masmoudi",
+    "Ouasis",
+    "Riad Al Atlas",
+    "Riad Zitoun",
+    "Route Amizmiz",
+    "Route Casablanca",
+    "Route d'Agadir - Essaouira",
+    "Route de Fez",
+    "Route de Ouarzazate",
+    "Route de Safi",
+    "Route de Tahanaout",
+    "Route de l'Ourika",
+    "Sanaoubar",
+    "Sidi Abbad",
+    "Sidi Ghanem",
+    "Sidi Youssef"
+  ],
+  "mappedListings": 716,
+  "bins": [
+    {
+      "min": 9239,
+      "max": 9239,
+      "color": "#dbeafe"
+    },
+    {
+      "min": 9240,
+      "max": 18690,
+      "color": "#1e40af"
+    }
+  ],
+  "attribution": {
+    "retainedListings": 1339,
+    "unmappedListings": 623,
+    "mappedSharePercent": 53.5,
+    "arrondissementShares": {
+      "relation/2799527": 0,
+      "relation/2799529": 0,
+      "relation/2799533": 46.8,
+      "relation/2799534": 0,
+      "relation/2799537": 6.6
+    }
+  },
+  "neighborhoodCoverage": [
+    {
+      "originalNeighborhood": "Agdal",
+      "normalizedNeighborhood": "agdal",
+      "listingCount": 76,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Ain Mezouar",
+      "normalizedNeighborhood": "ain mezouar",
+      "listingCount": 23,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Accent-only variant Aïn Mezouar; municipal address and ARDS Ménara. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Amelkis",
+      "normalizedNeighborhood": "amelkis",
+      "listingCount": 7,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Amerchich",
+      "normalizedNeighborhood": "amerchich",
+      "listingCount": 12,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Amerchich address explicitly grouped under ARDS Guéliz. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Arset Ben Chebli",
+      "normalizedNeighborhood": "arset ben chebli",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Arset El Maach",
+      "normalizedNeighborhood": "arset el maach",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Arset Sbaia",
+      "normalizedNeighborhood": "arset sbaia",
+      "listingCount": 5,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Assif",
+      "normalizedNeighborhood": "assif",
+      "listingCount": 6,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Azli",
+      "normalizedNeighborhood": "azli",
+      "listingCount": 2,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Exact Azli address in ARDS Ménara; corroborating AZLI row page 7. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Azzouzia",
+      "normalizedNeighborhood": "azzouzia",
+      "listingCount": 8,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Bab Ighli",
+      "normalizedNeighborhood": "bab ighli",
+      "listingCount": 3,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Belbekkar",
+      "normalizedNeighborhood": "belbekkar",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Ben Saleh",
+      "normalizedNeighborhood": "ben saleh",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Bouaakkaz",
+      "normalizedNeighborhood": "bouaakkaz",
+      "listingCount": 6,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Boukar",
+      "normalizedNeighborhood": "boukar",
+      "listingCount": 8,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Boulevard Med 6",
+      "normalizedNeighborhood": "boulevard med 6",
+      "listingCount": 39,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Boumesmar",
+      "normalizedNeighborhood": "boumesmar",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Camp Al Ghoul",
+      "normalizedNeighborhood": "camp al ghoul",
+      "listingCount": 45,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Reviewed Al/El Ghoul article variant; address explicitly Camp El Ghoul-Guéliz. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Daoudiat",
+      "normalizedNeighborhood": "daoudiat",
+      "listingCount": 25,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Daoudiate spelling variant; 2025 municipal programme explicitly Arr Guéliz; overrides contradictory legacy directory row. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "El Hara",
+      "normalizedNeighborhood": "el hara",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "El Moukef",
+      "normalizedNeighborhood": "el moukef",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Ennakhil (Palmeraie)",
+      "normalizedNeighborhood": "ennakhil (palmeraie)",
+      "listingCount": 58,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Guéliz",
+      "normalizedNeighborhood": "gueliz",
+      "listingCount": 342,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Exact central-neighborhood label; municipal ARDS column and GeoNames 2548531 containment. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Hay Al Bahja",
+      "normalizedNeighborhood": "hay al bahja",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Al Hassani",
+      "normalizedNeighborhood": "hay al hassani",
+      "listingCount": 3,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Reviewed Hay Al/El Hassani article variant; address and ARDS Ménara. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Hay Alfadl",
+      "normalizedNeighborhood": "hay alfadl",
+      "listingCount": 7,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Annahda",
+      "normalizedNeighborhood": "hay annahda",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Firdaouss",
+      "normalizedNeighborhood": "hay firdaouss",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Mabrouka",
+      "normalizedNeighborhood": "hay mabrouka",
+      "listingCount": 34,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Exact neighborhood in municipal address/Quartier and ARDS Guéliz. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Hay Saada",
+      "normalizedNeighborhood": "hay saada",
+      "listingCount": 11,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Saada 1",
+      "normalizedNeighborhood": "hay saada 1",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Targa",
+      "normalizedNeighborhood": "hay targa",
+      "listingCount": 26,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Yasmina",
+      "normalizedNeighborhood": "hay yasmina",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hay Zitoun",
+      "normalizedNeighborhood": "hay zitoun",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Hivernage",
+      "normalizedNeighborhood": "hivernage",
+      "listingCount": 74,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Municipal Hivernage address and ARDS Guéliz; GeoNames 11049541 containment corroborates. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Issil",
+      "normalizedNeighborhood": "issil",
+      "listingCount": 11,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Issil address explicitly grouped under ARDS Guéliz. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Izdihar",
+      "normalizedNeighborhood": "izdihar",
+      "listingCount": 22,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Reviewed omission of Al article; neighborhood Al Izdihar and ARDS Guéliz. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Iziki",
+      "normalizedNeighborhood": "iziki",
+      "listingCount": 2,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Explicit Douar Iziki address and ARDS Ménara; no route-wide inference. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Jbilat",
+      "normalizedNeighborhood": "jbilat",
+      "listingCount": 2,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Les Portes de Marrakech",
+      "normalizedNeighborhood": "les portes de marrakech",
+      "listingCount": 17,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Majorelle",
+      "normalizedNeighborhood": "majorelle",
+      "listingCount": 24,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Masmoudi",
+      "normalizedNeighborhood": "masmoudi",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Massira 1",
+      "normalizedNeighborhood": "massira 1",
+      "listingCount": 13,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Reviewed Roman I/Arabic 1 equivalence in Massira address, ARDS Ménara. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Massira 2",
+      "normalizedNeighborhood": "massira 2",
+      "listingCount": 3,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Reviewed Roman II/Arabic 2 equivalence, municipal address and ARDS Ménara. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Massira 3",
+      "normalizedNeighborhood": "massira 3",
+      "listingCount": 2,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Exact Massira 3 municipal address and ARDS Ménara. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Mhamid",
+      "normalizedNeighborhood": "mhamid",
+      "listingCount": 41,
+      "boundaryId": "relation/2799537",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Mhamid explicitly Arr Ménara in 2025 programme; legacy Ménara directory page 1 corroborates. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Ouasis",
+      "normalizedNeighborhood": "ouasis",
+      "listingCount": 12,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Riad Al Atlas",
+      "normalizedNeighborhood": "riad al atlas",
+      "listingCount": 10,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Riad Zitoun",
+      "normalizedNeighborhood": "riad zitoun",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route Amizmiz",
+      "normalizedNeighborhood": "route amizmiz",
+      "listingCount": 24,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route Casablanca",
+      "normalizedNeighborhood": "route casablanca",
+      "listingCount": 140,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route d'Agadir - Essaouira",
+      "normalizedNeighborhood": "route d'agadir - essaouira",
+      "listingCount": 16,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route de Fez",
+      "normalizedNeighborhood": "route de fez",
+      "listingCount": 11,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route de Ouarzazate",
+      "normalizedNeighborhood": "route de ouarzazate",
+      "listingCount": 9,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route de Safi",
+      "normalizedNeighborhood": "route de safi",
+      "listingCount": 45,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route de Tahanaout",
+      "normalizedNeighborhood": "route de tahanaout",
+      "listingCount": 7,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Route de l'Ourika",
+      "normalizedNeighborhood": "route de l'ourika",
+      "listingCount": 12,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Samlalia",
+      "normalizedNeighborhood": "samlalia",
+      "listingCount": 62,
+      "boundaryId": "relation/2799533",
+      "status": "verified-label-attribution",
+      "ambiguityNotes": "Reviewed Samlalia/Semlalia spelling variant; explicit Guéliz address and ARDS. Relationship-level attribution, not individual listing geolocation or proof of neighborhood extent."
+    },
+    {
+      "originalNeighborhood": "Sanaoubar",
+      "normalizedNeighborhood": "sanaoubar",
+      "listingCount": 5,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Sidi Abbad",
+      "normalizedNeighborhood": "sidi abbad",
+      "listingCount": 5,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Sidi Ghanem",
+      "normalizedNeighborhood": "sidi ghanem",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "unverified",
+      "ambiguityNotes": "No sufficiently corroborated exact label relationship retained in this review; requires current neighborhood extent or reliable listing coordinates."
+    },
+    {
+      "originalNeighborhood": "Sidi Youssef",
+      "normalizedNeighborhood": "sidi youssef",
+      "listingCount": 1,
+      "boundaryId": null,
+      "status": "ambiguous",
+      "ambiguityNotes": "Broad corridor, composite label, homonym or potentially cross-boundary sector. No whole-label allocation without a verified extent or listing coordinates."
+    }
+  ]
+}

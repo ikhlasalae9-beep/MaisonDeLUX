@@ -1,6 +1,8 @@
 import { getCasablancaDataQuality, getCasablancaDrift, getCasablancaMarketAnalytics } from './casablanca';
+import { getMarrakechMarketAnalytics } from './marrakech';
 
 export const cityAnalyticsRegistry = {
+  marrakech: { market: getMarrakechMarketAnalytics },
   casablanca: {
     market: getCasablancaMarketAnalytics,
     quality: getCasablancaDataQuality,

@@ -7,6 +7,8 @@ import { CityMarketIntelligence } from '@/components/market/CityMarketIntelligen
 import { CITY_MARKET_MAPS } from '@/config/city-market';
 import { getCityMapSummary } from '@/lib/analytics/market-map';
 import { LOCALES } from '@/lib/i18n/config';
+import { getMarrakechMarketAnalytics } from '@/lib/analytics/marrakech';
+import { MarrakechMarketIntelligence } from '@/components/market/MarrakechMarketIntelligence';
 
 export const revalidate = false;
 export function generateStaticParams() {
@@ -24,6 +26,19 @@ export default function CityMarketPage({ params }: { params: { locale: string; c
   const city = getCityBySlug(params.citySlug);
   if (!LOCALES.includes(params.locale as any) || !city?.cityPage.publicVisible) notFound();
   const geography = CITY_MARKET_MAPS[city.slug];
+  if (city.slug === 'marrakech' && city.market.publicEnabled) {
+    try {
+      const data = getMarrakechMarketAnalytics();
+      let mapSummary = null;
+      try { mapSummary = getCityMapSummary('marrakech'); }
+      catch { console.error('Marrakech geographical attribution unavailable or invalid'); }
+      return <MarrakechMarketIntelligence data={data} locale={params.locale} mapSummary={mapSummary} />;
+    } catch {
+      // Fail closed: never substitute another city's cohort or zero-valued KPIs.
+      console.error('Marrakech market snapshot unavailable or invalid');
+      return <MarrakechMarketIntelligence data={null} locale={params.locale} />;
+    }
+  }
   if (!city.market.publicEnabled || !city.market.analyticsRef) {
     if (!geography) notFound();
     return <CityMarketIntelligence data={null} locale={params.locale} citySlug={city.slug} mapSummary={null} geography={geography} />;

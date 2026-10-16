@@ -4,18 +4,20 @@ import { CITY_MARKET_MAPS } from '@/config/city-market';
 import { getCasablancaMarketRows, MIN_NEIGHBORHOOD_OBSERVATIONS } from './casablanca';
 import { aggregateArrondissements } from './arrondissement-market';
 
+import { getMarrakechMapSummary } from './marrakech-geography';
 import { selectMarketBoundaries } from './market-geometry';
 import type { BoundaryFeature } from './market-geometry';
 export { selectMarketBoundaries } from './market-geometry';
 export type { BoundaryFeature } from './market-geometry';
-export type CityMapSummary = { citySlug: string; geoJsonSource: string; boundaryLevel: string; boundaryCount: number; outlineCount: number; mappedNeighborhoodCount: number; minimumObservations: number } & ReturnType<typeof aggregateArrondissements>;
+export type CityMapSummary = { citySlug: string; geoJsonSource: string; boundaryLevel: string; boundaryCount: number; outlineCount: number; mappedNeighborhoodCount: number; minimumObservations: number; attribution?: { retainedListings: number; unmappedListings: number; mappedSharePercent: number; arrondissementShares: Record<string, number> } } & ReturnType<typeof aggregateArrondissements>;
 
 export function hasBoundaryOutline(feature: BoundaryFeature) {
   return feature.properties['@geometry'] !== 'bounds';
 }
 export function getCityMapSummary(citySlug: string): CityMapSummary | null {
   const config = CITY_MARKET_MAPS[citySlug];
-  // This provider aggregates Casablanca records only; geography is registered independently.
+  if (citySlug === 'marrakech') return getMarrakechMapSummary();
+  // Other cities remain independently gated; never reuse Casablanca records.
   if (!config || citySlug !== 'casablanca') return null;
   const source = JSON.parse(readFileSync(path.join(process.cwd(), 'public', config.geoJsonSource), 'utf8'));
   const boundaries = selectMarketBoundaries(source.features, config.boundaryLevel);

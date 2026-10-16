@@ -7,14 +7,16 @@ import { boundaryName, projectMarketBoundaries, selectMarketBoundaries } from '@
 import { arrondissementColor } from '@/lib/analytics/arrondissement-market';
 import type { BoundaryFeature, CityMapSummary } from '@/lib/analytics/market-map';
 import { formatArea, formatCurrency, formatInteger, formatPricePerSquareMeter } from '@/lib/utils';
+import { MarketMapExplorer } from './MarketMapExplorer';
 import { CardSurface, PageContainer, Section } from '@/components/city/CityFoundation';
 
-export function CityMarketMap({ summary, geography, locale }: { summary?: CityMapSummary | null; geography?: CityMarketMapConfig; locale: string }) {
+export function CityMarketMap({ summary, geography, locale, geographyNotice, administrativeDetails = false }: { summary?: CityMapSummary | null; geography?: CityMarketMapConfig; locale: string; geographyNotice?: string; administrativeDetails?: boolean }) {
   const ar = locale === 'ar';
   const config = summary ?? geography;
   const city = getCityBySlug(config?.citySlug ?? '');
   const cityName = ar ? city?.nameAr : city?.nameFr;
   const available = Boolean(summary);
+  const detailed = administrativeDetails && !available;
   const geoJsonSource = config?.geoJsonSource;
   const boundaryLevel = config?.boundaryLevel;
   const [boundaries, setBoundaries] = useState<BoundaryFeature[]>([]);
@@ -25,24 +27,32 @@ export function CityMarketMap({ summary, geography, locale }: { summary?: CityMa
     if (!geoJsonSource || !boundaryLevel) return;
     const controller = new AbortController();
     setError(false);
+    if (detailed) setBoundaries([]);
     fetch(geoJsonSource, { signal: controller.signal })
       .then(response => { if (!response.ok) throw new Error('Geometry unavailable'); return response.json(); })
-      .then(source => setBoundaries(selectMarketBoundaries(source.features, boundaryLevel)))
+      .then(source => {
+        const features = selectMarketBoundaries(source.features, boundaryLevel);
+        if (detailed && !features.length) throw new Error('No administrative outlines');
+        setBoundaries(features);
+        if (detailed) setSelected(current => features.some(feature => feature.id === current) ? current : features[0].id);
+      })
       .catch(reason => { if (reason.name !== 'AbortError') setError(true); });
     return () => controller.abort();
-  }, [geoJsonSource, boundaryLevel]);
+  }, [geoJsonSource, boundaryLevel, detailed]);
   const outlines = useMemo(() => projectMarketBoundaries(boundaries), [boundaries]);
   const byId = new Map((summary?.arrondissements ?? []).map(item => [item.boundaryId, item]));
-  const activeId = hovered || selected || summary?.arrondissements.find(item => item.eligible)?.boundaryId;
+  const activeId = hovered || selected || summary?.arrondissements.find(item => item.eligible)?.boundaryId || (detailed ? boundaries[0]?.id : undefined);
   const chosen = boundaries.find(feature => feature.id === activeId);
   const stats = activeId ? byId.get(activeId) : undefined;
   const covered = summary?.arrondissements.filter(item => item.eligible).length ?? 0;
   const name = (feature: BoundaryFeature) => boundaryName(feature, locale);
   const description = (feature: BoundaryFeature) => {
     const item = byId.get(feature.id);
+    if (detailed) return `${name(feature)} — ${ar ? 'حد إداري، دون إحصاءات عقارية منسوبة' : 'contour administratif, sans statistiques immobilières attribuées'}`;
     return `${name(feature)} — ${item?.eligible ? `${formatPricePerSquareMeter(item.medianPricePerM2!, locale)} · ${formatInteger(item.listingCount, locale)} ${ar ? 'إعلان' : 'annonces'}` : !available ? (ar ? 'الإحصاءات قيد الإعداد' : 'Statistiques en préparation') : ar ? 'تغطية محدودة' : 'Couverture limitée'}`;
   };
   if (!config) return null;
+  if (config.citySlug === 'casablanca' || config.citySlug === 'marrakech') return <MarketMapExplorer summary={summary} locale={locale} cityName={cityName} outlines={outlines} selected={selected} hovered={hovered} error={error} onSelect={setSelected} onHover={setHovered} />;
   return <Section className="pt-0"><PageContainer><CardSurface className="overflow-hidden">
     <div className="border-b border-border-subtle p-5 sm:p-7">
       <p className="text-xs font-bold uppercase tracking-wider text-brand-blue">{!available ? (ar ? 'المجال الجغرافي · حسب المقاطعة' : 'Géographie · Par arrondissement') : ar ? 'أسعار معروضة · حسب المقاطعة' : 'Prix affichés · Par arrondissement'}</p>
@@ -77,9 +87,19 @@ export function CityMarketMap({ summary, geography, locale }: { summary?: CityMa
               <div><dt className="text-xs text-text-muted">{ar ? 'الأحياء المغطاة' : 'Quartiers couverts'}</dt><dd className="mt-1 font-semibold">{stats.neighborhoods.length}</dd></div>
             </dl>
             <p className="mt-4 text-xs leading-5 text-text-secondary">{stats.neighborhoods.join(' · ')}</p>
+          </> : detailed ? <>
+            <p className="mt-4 text-2xl font-bold text-brand-blue">{ar ? 'غير متاح' : 'Non disponible'}</p>
+            <p className="mt-1 text-xs text-text-muted">{ar ? 'إحصاءات عقارية غير منسوبة للمقاطعة' : 'Statistiques immobilières non attribuées'}</p>
+            {chosen ? <dl className="mt-5 grid grid-cols-2 gap-4 text-sm">
+              <div><dt className="text-xs text-text-muted">{ar ? 'معرّف OpenStreetMap' : 'Identifiant OpenStreetMap'}</dt><dd className="mt-1 break-all font-semibold"><bdi>{chosen.id}</bdi></dd></div>
+              <div><dt className="text-xs text-text-muted">{ar ? 'رمز HCP في المصدر' : 'Code HCP dans la source'}</dt><dd className="mt-1 font-semibold"><bdi>{chosen.properties['ref:MA:HCP'] || '—'}</bdi></dd></div>
+              <div><dt className="text-xs text-text-muted">{ar ? 'المستوى الإداري' : 'Niveau administratif'}</dt><dd className="mt-1 font-semibold">{chosen.properties.admin_level}</dd></div>
+              <div><dt className="text-xs text-text-muted">{ar ? 'نطاق المعلومات' : 'Portée des informations'}</dt><dd className="mt-1 font-semibold">{ar ? 'حدود إدارية' : 'Contours administratifs'}</dd></div>
+            </dl> : null}
+            <p className="mt-4 text-xs leading-5 text-text-secondary">{ar ? 'لا تُنسب أسعار أو إعلانات إلى هذه الحدود دون مطابقة معتمدة للأحياء.' : 'Aucun prix ni effectif attribué sans correspondance validée des quartiers.'}</p>
           </> : <p className="mt-3 text-sm text-text-secondary">{!available ? (ar ? 'الإحصاءات قيد الإعداد' : 'Statistiques en préparation') : ar ? 'تغطية محدودة' : 'Couverture limitée'}{stats?.listingCount ? ` · ${formatInteger(stats.listingCount, locale)} ${ar ? 'إعلان' : 'annonces'}` : ''}</p>}
         </div>
-        <p className="mt-5 text-xs text-text-muted">{!available ? (ar ? 'اختر مقاطعة للاطلاع على اسمها. البيانات العقارية غير متاحة حالياً.' : 'Sélectionnez un arrondissement pour le situer. Les données immobilières ne sont pas encore disponibles.') : ar ? 'مرّر المؤشر أو اختر مقاطعة لعرض تفاصيلها.' : 'Survolez ou sélectionnez une zone pour explorer ses prix.'}</p>
+        <p className="mt-5 text-xs text-text-muted">{geographyNotice ?? (!available ? (ar ? 'اختر مقاطعة للاطلاع على اسمها. البيانات العقارية غير متاحة حالياً.' : 'Sélectionnez un arrondissement pour le situer. Les données immobilières ne sont pas encore disponibles.') : ar ? 'مرّر المؤشر أو اختر مقاطعة لعرض تفاصيلها.' : 'Survolez ou sélectionnez une zone pour explorer ses prix.')}</p>
         <div className="mt-3 grid max-h-52 gap-2 overflow-y-auto p-1">{boundaries.map(feature => <button type="button" key={feature.id} aria-pressed={selected === feature.id} onClick={() => { setHovered(''); setSelected(feature.id); }} className={`flex min-h-11 items-center justify-between gap-3 rounded-control border px-3 py-2 text-start text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-blue ${activeId === feature.id ? 'border-brand-blue font-bold' : 'border-border-medium'}`}>
           <span>{name(feature)}</span><span className="h-3 w-3 shrink-0 rounded" style={{ background: arrondissementColor(byId.get(feature.id), (summary?.bins ?? [])) }} />
         </button>)}</div>
@@ -87,7 +107,7 @@ export function CityMarketMap({ summary, geography, locale }: { summary?: CityMa
     </div>
     <div className="border-t border-border-subtle p-5 sm:p-7">
       <p className="text-xs font-bold">{!available ? (ar ? 'حدود إدارية · لا توجد فئات أسعار' : 'Contours administratifs · aucune classe de prix') : ar ? 'السعر المعروض الوسيط · درهم/م²' : 'Prix affiché médian · MAD/m²'}</p>
-      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3 text-xs">{(summary?.bins ?? []).map(bin => <span key={bin.max} className="inline-flex items-center gap-2"><span className="h-3 w-5 rounded" style={{ background: bin.color }} />{bin.min === bin.max ? formatInteger(bin.min, locale) : `${formatInteger(bin.min, locale)}–${formatInteger(bin.max, locale)}`}</span>)}<span className="inline-flex items-center gap-2 text-text-muted"><span className="h-3 w-5 rounded border border-slate-400 bg-slate-200" />{!available ? (ar ? 'الإحصاءات قيد الإعداد' : 'Statistiques en préparation') : ar ? 'تغطية محدودة' : 'Couverture limitée'}</span></div>
+      {detailed ? <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3 text-xs"><span className="inline-flex items-center gap-2"><span className="h-3 w-5 rounded border-2 border-amber-500 bg-slate-200" aria-hidden="true" />{ar ? 'مقاطعة محددة أو تحت التركيز' : 'Arrondissement sélectionné ou survolé'}</span><span className="inline-flex items-center gap-2"><span className="h-3 w-5 rounded border border-slate-400 bg-slate-200" aria-hidden="true" />{ar ? 'حدود إدارية أخرى' : 'Autres contours administratifs'}</span></div> : <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3 text-xs">{(summary?.bins ?? []).map(bin => <span key={bin.max} className="inline-flex items-center gap-2"><span className="h-3 w-5 rounded" style={{ background: bin.color }} />{bin.min === bin.max ? formatInteger(bin.min, locale) : `${formatInteger(bin.min, locale)}–${formatInteger(bin.max, locale)}`}</span>)}<span className="inline-flex items-center gap-2 text-text-muted"><span className="h-3 w-5 rounded border border-slate-400 bg-slate-200" />{!available ? (ar ? 'الإحصاءات قيد الإعداد' : 'Statistiques en préparation') : ar ? 'تغطية محدودة' : 'Couverture limitée'}</span></div>}
       <p className="mt-4 text-xs leading-6 text-text-secondary">{!summary ? (ar ? 'يلزم اعتماد بيانات الإعلانات وربط الأحياء بالمقاطعات قبل نشر المؤشرات.' : 'Les annonces et la correspondance entre quartiers et arrondissements doivent être approuvées avant publication des indicateurs.') : ar ? `${covered} مقاطعات مغطاة · ${formatInteger(summary.mappedListings, locale)} إعلان مرتبط. الأسعار تخص الأحياء المغطاة فقط، وليست جميع عقارات المقاطعة. الحد الأدنى: ${summary.minimumObservations} إعلانات. فئات لونية حسب أرباع توزيع الأسعار الوسيطة.` : `${covered} arrondissements couverts · ${formatInteger(summary.mappedListings, locale)} annonces rattachées. Prix des seuls quartiers couverts, pas de l’ensemble de l’arrondissement. Minimum : ${summary.minimumObservations} annonces. Classes par quantiles des médianes.`}</p>
       <p className="mt-3 text-[11px] text-text-muted">© <a href="https://www.openstreetmap.org/copyright" className="underline">OpenStreetMap contributors</a> · ODbL{available ? <> · <a href="https://www.geonames.org/" className="underline">GeoNames</a> · CC BY 4.0 · <a href="https://www.casablancacity.ma/" className="underline">CasablancaCity</a></> : null}</p>
     </div>

@@ -272,6 +272,7 @@ const CITY_FOUNDATION: Record<CitySlug, CityFoundation> = {
   },
   marrakech: {
     ...unavailable(['Marrakech', 'Marrakesh', 'مراكش'], 'marrakech'),
+    market: { publicEnabled: true, analyticsRef: 'marrakech' },
     estimation: { status: 'available', publicEnabled: true, backendStatusKey: 'marrakech' },
     modelRef: 'marrakech',
     cityPage: { status: 'published', publicVisible: true },

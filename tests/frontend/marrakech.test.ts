@@ -18,6 +18,7 @@ import { getCityMapSummary } from '../../lib/analytics/market-map';
 import { selectMarketBoundaries, projectMarketBoundaries } from '../../lib/analytics/market-geometry';
 import { validateModelInput } from '../../lib/security/model-input';
 import { PublicEstimationAction } from '../../components/city/PublicEstimationAction';
+import { MarrakechMarketIntelligence } from '../../components/market/MarrakechMarketIntelligence';
 
 test('Marrakech publishes the shared FR/AR template and its own media, with certified estimation and no fabricated market services', () => {
   const city = getCityBySlug('marrakech')!;
@@ -27,9 +28,9 @@ test('Marrakech publishes the shared FR/AR template and its own media, with cert
   assert.equal(city.estimation.backendStatusKey, 'marrakech');
   assert.equal(city.modelRef, 'marrakech');
   assert.throws(() => validateModelInput({ city: 'Marrakech' }), /INVALID_INPUT/);
-  assert.equal(city.market.publicEnabled, false);
-  assert.equal(city.market.analyticsRef, null);
-  assert.deepEqual(cityCapabilityActions('fr', city).map(action => action.kind), ['estimate']);
+  assert.equal(city.market.publicEnabled, true);
+  assert.equal(city.market.analyticsRef, 'marrakech');
+  assert.deepEqual(cityCapabilityActions('fr', city).map(action => action.kind), ['estimate', 'market']);
   assert.equal(publicEstimatePath('fr', city, { city: 'Casablanca', status: 'available' }), null);
   for (const locale of ['fr','ar']) {
     const html = renderToStaticMarkup(CityPage({ params: { locale, citySlug: 'marrakech' } }));
@@ -58,13 +59,14 @@ test('Marrakech publishes the shared FR/AR template and its own media, with cert
   assert.ok(sitemap().some(entry => entry.url.endsWith('/fr/cities/marrakech')));
   assert.ok(sitemap().some(entry => entry.url.endsWith('/fr/cities/marrakech/estimate')));
   assert.ok(sitemap().some(entry => entry.url.endsWith('/ar/cities/marrakech/estimate')));
-  assert.ok(!sitemap().some(entry => entry.url.endsWith('/marrakech/market')));
+  assert.ok(sitemap().some(entry => entry.url.endsWith('/fr/cities/marrakech/market')));
+  assert.ok(sitemap().some(entry => entry.url.endsWith('/ar/cities/marrakech/market')));
 });
 
-test('Marrakech geographic market preparation cannot expose another city dataset or fake statistics', () => {
-  assert.equal(analyticsForCity('marrakech'), null);
-  assert.equal(getCityMapSummary('marrakech'), null);
-  assert.deepEqual(CITY_MARKET_MAPS.marrakech.metrics, []);
+test('Marrakech publishes its own apartment analytics without inventing geographic price mappings', () => {
+  assert.equal(analyticsForCity('marrakech')?.market()?.city, 'Marrakech');
+  assert.equal(getCityMapSummary('marrakech')?.mappedListings, 716);
+  assert.deepEqual(CITY_MARKET_MAPS.marrakech.metrics, ['medianPricePerM2', 'listingCount', 'medianArea']);
   assert.deepEqual(CITY_MARKET_MAPS.marrakech.neighborhoodMapping, {});
   const source = JSON.parse(readFileSync('public/maps/marrakech-boundaries.geojson','utf8'));
   const selected = selectMarketBoundaries(source.features, '10');
@@ -75,20 +77,52 @@ test('Marrakech geographic market preparation cannot expose another city dataset
   assert.ok(projectMarketBoundaries(selected).every(p => !/NaN|Infinity/.test(p.path)));
   for (const locale of ['fr','ar']) {
     const html = renderToStaticMarkup(MarketPage({ params: { locale, citySlug: 'marrakech' } }));
-    assert.ok(html.includes(locale === 'ar' ? 'الإحصاءات قيد الإعداد' : 'Statistiques en préparation'));
-    assert.ok(!html.includes('MAD/m²'));
+    assert.ok(html.includes(locale === 'ar' ? 'شقق للبيع' : 'Appartements à vendre'));
+    assert.ok(!html.includes(locale === 'ar' ? 'المصدر والمنهجية' : 'Source et méthode'));
+    assert.ok(!html.includes('Source : server-data/'));
+    const mapBaseline = JSON.parse(readFileSync('reports/market-map-non-map-hashes.json', 'utf8'));
+    let section = 0;
+    const nonMap = html.replace(/<section\b[\s\S]*?<\/section>/g, part => section++ === 1 ? '<!-- market map -->' : part);
+    assert.equal(createHash('sha256').update(nonMap).digest('hex'), mapBaseline[`marrakech-${locale}`]);
+    assert.equal((html.match(/<section/g) || []).length, 5);
+    assert.ok(html.includes(locale === 'ar' ? 'وليست أسعار معاملات مؤكدة' : 'non des prix de transaction confirmés'));
     assert.ok(!html.includes('server-data/casablanca-market.csv'));
-    assert.ok(!html.includes('<table'));
-    assert.deepEqual(marketMetadata({ params: { locale, citySlug: 'marrakech' } }).robots, { index: false, follow: false });
+    assert.ok(html.includes('<table'));
+    assert.ok(html.includes(locale === 'ar' ? 'الأحياء الأكثر تمثيلاً' : 'Quartiers les plus représentés'));
+    assert.ok(html.indexOf(locale === 'ar' ? 'خريطة أسعار العقارات في مراكش' : 'Carte des prix immobiliers à Marrakech') < html.indexOf(locale === 'ar' ? 'بنية البيانات المرجعية' : 'Structure du référentiel'));
+    assert.ok(!html.includes(locale === 'ar' ? 'الاطلاع على قواعد الاختيار والحساب والحدود' : 'Consulter les règles de sélection, les calculs et les limites'));
+    assert.ok(html.includes(locale === 'ar' ? 'عرض القيم في جداول' : 'Voir les valeurs en tableaux'));
+    assert.equal(marketMetadata({ params: { locale, citySlug: 'marrakech' } }).robots, undefined);
+    assert.equal(marketMetadata({ params: { locale, citySlug: 'marrakech' } }).alternates?.canonical, `https://www.maison-delux.com/${locale}/cities/marrakech/market`);
   }
 });
 
-test('Casablanca and Rabat city/market body markup is identical to the pre-Marrakech audit', () => {
+test('Marrakech unavailable data state is localized and contains no fabricated KPIs', () => {
+  for (const locale of ['fr', 'ar']) {
+    const html = renderToStaticMarkup(React.createElement(MarrakechMarketIntelligence, { data: null, locale }));
+    assert.ok(html.includes(locale === 'ar' ? 'البيانات غير متاحة حالياً' : 'Données momentanément indisponibles'));
+    assert.ok(!html.includes('<table'));
+    assert.ok(!html.includes('1 470 000'));
+  }
+  for (const citySlug of ['missing-city', 'marrakech']) {
+    assert.throws(() => MarketPage({ params: { locale: 'invalid', citySlug } }), /NEXT_NOT_FOUND/);
+  }
+});
+
+test('Casablanca and Rabat body markup preserves the baseline outside the intentional Casablanca map and source badge changes', () => {
   const baseline = JSON.parse(readFileSync('reports/marrakech-reference-hashes.json','utf8'));
   const hash = (html: string) => createHash('sha256').update(html).digest('hex');
   for (const citySlug of ['casablanca','rabat']) for (const locale of ['fr','ar']) {
     assert.equal(hash(renderToStaticMarkup(CityPage({ params: { locale, citySlug } }))), baseline[`${citySlug}-city-${locale}`]);
-    assert.equal(hash(renderToStaticMarkup(MarketPage({ params: { locale, citySlug } }))), baseline[`${citySlug}-market-${locale}`]);
+    const marketHtml = renderToStaticMarkup(MarketPage({ params: { locale, citySlug } }));
+    if (citySlug === 'casablanca') {
+      assert.ok(!marketHtml.includes('Source : server-data/'));
+      const mapBaseline = JSON.parse(readFileSync('reports/market-map-non-map-hashes.json', 'utf8'));
+      let section = 0;
+      const nonMap = marketHtml.replace(/<section\b[\s\S]*?<\/section>/g, part => section++ === 1 ? '<!-- market map -->' : part);
+      assert.equal(hash(nonMap), mapBaseline[`casablanca-${locale}`]);
+    }
+    if (citySlug === 'rabat') assert.equal(hash(marketHtml), baseline[`${citySlug}-market-${locale}`]);
   }
   assert.equal(publicNavigationEstimation('fr', '/fr/cities/casablanca', 'Estimer mon bien').href, '/fr/cities/casablanca/estimate');
   assert.equal(publicNavigationEstimation('fr', '/fr/cities/rabat', 'Estimer mon bien').href, null);

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib';
-import { getOverview, Period, periodDays } from '@/lib/admin/analytics';
+import { getOverview, resolvePeriod } from '@/lib/admin/analytics';
 import { adminGate } from '@/lib/admin/require';
 import { formatArea, formatCurrency, formatDate, formatInteger } from '@/lib/utils';
 
@@ -51,8 +51,13 @@ function barChart(page: PDFPage, rows: any[], x: number, y: number, width: numbe
 export async function GET(request: NextRequest) {
   const denied=await adminGate(request);if(denied)return denied;
   try {
-    const candidate = request.nextUrl.searchParams.get('period') as Period; const period = candidate in periodDays ? candidate : '30d';
-    const data: any = await getOverview(period); const k = data.kpis || {};
+    const period = resolvePeriod(request.nextUrl.searchParams.get('period'));
+    const params = request.nextUrl.searchParams;
+    const data: any = await getOverview(period, params.get('cityId') || undefined, params.get('modelId') || undefined, params.get('includeTests') === 'true');
+    if (!data.configured) return NextResponse.json({ error: 'ANALYTICS_DATABASE_UNAVAILABLE' }, { status: 503 });
+    const k = data.kpis || {};
+    const reportCities = (data.cities || []).map((city: any) => ({ ...city,
+      estimation_count: Number(data.activityByCity?.find((item: any) => String(item.id) === String(city.id))?.count || 0) }));
     const pdf = await PDFDocument.create(); const regular = await pdf.embedFont(StandardFonts.Helvetica); const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
     const pages: PDFPage[] = []; const addPage = () => { const page = pdf.addPage([W, H]); pages.push(page); return page; };
 
@@ -98,7 +103,7 @@ export async function GET(request: NextRequest) {
     }
     y = sectionTitle(page, 'Villes et territoires', y, bold);
     if (!data.cities?.length) { emptyState(page, y, regular, bold); y -= 100; }
-    else { barChart(page, data.cities, M, y - 124, CONTENT, 118, (row) => row.name, (row) => Number(row.estimation_count), regular); y -= 154; }
+    else { barChart(page, reportCities, M, y - 124, CONTENT, 118, (row) => row.name, (row) => Number(row.estimation_count), regular); y -= 154; }
     y = sectionTitle(page, 'Distribution des valeurs estimees', y, bold);
     if (!data.prices?.length) { emptyState(page, y, regular, bold); y -= 100; }
     else { barChart(page, data.prices, M, y - 112, CONTENT, 106, (row) => row.bucket, (row) => Number(row.count), regular); y -= 142; }
@@ -107,7 +112,7 @@ export async function GET(request: NextRequest) {
     else {
       page.drawRectangle({ x: M, y: y - 23, width: CONTENT, height: 23, color: navy });
       [['Ville', M + 10], ['Volume', 350], ['Part', 450]].forEach(([label, x]) => page.drawText(label as string, { x: x as number, y: y - 15, size: 8, font: bold, color: white }));
-      data.cities.slice(0, 7).forEach((row: any, index: number) => { const py = y - 45 - index * 22;
+      reportCities.slice(0, 7).forEach((row: any, index: number) => { const py = y - 45 - index * 22;
         if (index % 2 === 0) page.drawRectangle({ x: M, y: py - 5, width: CONTENT, height: 22, color: light });
         page.drawText(ascii(row.name).slice(0, 38), { x: M + 10, y: py, size: 8, font: regular, color: navy });
         page.drawText(formatInteger(row.estimation_count), { x: 350, y: py, size: 8, font: regular, color: navy });
@@ -117,12 +122,12 @@ export async function GET(request: NextRequest) {
 
     // Page 3 - model, method and governance.
     page = addPage(); y = 766; y = sectionTitle(page, 'Methodologie et modele', y, bold);
-    y = drawWrapped(page, `Les indicateurs synthetisent les estimations reussies pour la periode selectionnee. Les prix moyens et medians sont exprimes en dirhams marocains. Le prix au metre carre neutralise partiellement les ecarts de surface et n'est affiche par ville qu'a partir de trois observations.`, M, y, CONTENT, regular, 10, slate, 15) - 22;
+    y = drawWrapped(page, `Les indicateurs synthetisent les evenements enregistres pour la periode selectionnee. Les anciens evenements sans resultat sauvegarde ne prouvent pas une inference terminee. Les prix moyens et medians sont exprimes en dirhams marocains. Le prix au metre carre neutralise partiellement les ecarts de surface et n'est affiche par ville qu'a partir de trois observations.`, M, y, CONTENT, regular, 10, slate, 15) - 22;
     const registeredModel: any = data.models?.[0]; const metrics: any = registeredModel?.metrics || {};
     const modelRows = registeredModel ? [
       ['Modele', `${registeredModel.architecture || 'Non renseigne'} - ${registeredModel.version}`],
       ['Ville', registeredModel.city_name], ['Statut', registeredModel.status],
-      ['Inference publique', registeredModel.public_inference_enabled ? 'Active' : 'Inactive'],
+      ['Inference publique', registeredModel.public_inference_enabled ? 'Autorisee en base; service non verifie' : 'Non autorisee en base'],
       ['R2 test (non verifie independamment)', String(metrics.r2_test ?? '-')],
       ['MAE test (non verifie independamment)', formatCurrency(metrics.mae_test_mad)],
       ['RMSE test (non verifie independamment)', formatCurrency(metrics.rmse_test_mad)],
@@ -148,5 +153,5 @@ export async function GET(request: NextRequest) {
     pdf.setTitle('Rapport analytique MaisonDeLUX'); pdf.setAuthor('MaisonDeLUX'); pdf.setSubject('Analyse des estimations immobilieres');
     const bytes = await pdf.save(); const filename = `MaisonDeLUX_Rapport_${new Date().toISOString().slice(0,10)}.pdf`;
     return new NextResponse(bytes as BodyInit, { headers: { 'Content-Type': 'application/pdf', 'Content-Disposition': `attachment; filename="${filename}"` } });
-  } catch (error) { console.error('PDF report:', error); return NextResponse.json({ error: 'Rapport indisponible.' }, { status: 500 }); }
+  } catch { console.error('ADMIN_REPORT_UNAVAILABLE'); return NextResponse.json({ error: 'Rapport indisponible.' }, { status: 500 }); }
 }

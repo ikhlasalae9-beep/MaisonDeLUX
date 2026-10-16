@@ -18,12 +18,17 @@ import { CITY_MARKET_MAPS } from '../../config/city-market';
 const baseline = JSON.parse(readFileSync('reports/rabat-reference-hashes.json', 'utf8'));
 const hash = (html: string) => createHash('sha256').update(html).digest('hex');
 
-test('shared city and market renderers preserve pre-refactor Casablanca markup exactly in FR and AR', () => {
+test('shared city and market renderers preserve Casablanca markup outside the intentionally refined map and removed source badge in FR and AR', () => {
   for (const locale of ['fr', 'ar']) {
     assert.equal(hash(renderToStaticMarkup(CityPage({ params: { locale, citySlug: 'casablanca' } }))), baseline['city-' + locale]);
-    assert.equal(hash(renderToStaticMarkup(React.createElement(CityMarketIntelligence, {
+    const marketHtml = renderToStaticMarkup(React.createElement(CityMarketIntelligence, {
       data: getCasablancaMarketAnalytics(), locale, citySlug: 'casablanca', mapSummary: getCityMapSummary('casablanca'),
-    }))), baseline['market-' + locale]);
+    }));
+    assert.ok(!marketHtml.includes('Source : server-data/'));
+    const mapBaseline = JSON.parse(readFileSync('reports/market-map-non-map-hashes.json', 'utf8'));
+    let section = 0;
+    const nonMap = marketHtml.replace(/<section\b[\s\S]*?<\/section>/g, part => section++ === 1 ? '<!-- market map -->' : part);
+    assert.equal(hash(nonMap), mapBaseline[`casablanca-${locale}`]);
   }
 });
 

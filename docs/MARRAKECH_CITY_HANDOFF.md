@@ -1,5 +1,7 @@
 # Marrakech city instance — implementation and ML/data handoff
 
+Market update (15 October 2026): [Marrakech Market implementation](marrakech-market-implementation.md) supersedes this document's Market activation prerequisites. A conservative apartment-sale cohort now supports FR/AR descriptive analytics; administrative pricing remains unavailable. Historical implementation notes below are retained for traceability.
+
 Marrakech is the third published UI instance of the existing Casablanca/Rabat city system. This is a local repository implementation; nothing has been committed, pushed or deployed.
 
 ## Current state

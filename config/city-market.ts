@@ -8,7 +8,7 @@ export type CityMarketMapConfig = {
 };
 
 export const CITY_MARKET_MAPS: Record<string, CityMarketMapConfig> = {
-  marrakech: { citySlug: 'marrakech', geoJsonSource: '/maps/marrakech-boundaries.geojson', boundaryLevel: '10', metrics: [], neighborhoodMapping: {} },
+  marrakech: { citySlug: 'marrakech', geoJsonSource: '/maps/marrakech-boundaries.geojson', boundaryLevel: '10', metrics: ['medianPricePerM2', 'listingCount', 'medianArea'], neighborhoodMapping: {} /* Evidence-backed crosswalk loaded server-side by marrakech-geography.ts. */ },
   rabat: { citySlug: 'rabat', geoJsonSource: '/maps/rabat-boundaries.geojson', boundaryLevel: '10', metrics: [], neighborhoodMapping: {} },
   casablanca: {
     citySlug: 'casablanca', geoJsonSource: '/maps/casablanca-boundaries.geojson', boundaryLevel: '10',

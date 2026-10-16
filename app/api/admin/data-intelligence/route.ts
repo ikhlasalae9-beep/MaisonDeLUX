@@ -1,19 +1,15 @@
-import { NextResponse } from 'next/server';
-import { getCasablancaDataQuality, getCasablancaDrift, getCasablancaMarketAnalytics } from '@/lib/analytics/casablanca';
-import { getProductionInputFeatures } from '@/lib/admin/analytics';
-import { databaseConfigured } from '@/lib/admin/db';
+import { NextRequest, NextResponse } from 'next/server';
+import { getDataIntelligence, isIntelligenceCity } from '@/lib/admin/data-intelligence';
 import { adminGate } from '@/lib/admin/require';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
-  const denied=await adminGate();if(denied)return denied;
+export async function GET(request: NextRequest) {
+  const denied=await adminGate(request);if(denied)return denied;
+  const city = request.nextUrl.searchParams.get('city') || 'casablanca';
+  if (!isIntelligenceCity(city)) return NextResponse.json({ error: 'UNSUPPORTED_CITY' }, { status: 400 });
   try {
-    const inputs = await getProductionInputFeatures();
-    const market = getCasablancaMarketAnalytics();
-    return NextResponse.json({ configured: databaseConfigured(), quality: getCasablancaDataQuality(), drift: getCasablancaDrift(inputs),
-      market: { listingPriceLabel: market.listingPriceLabel, minimumNeighborhoodObservations: market.minimumNeighborhoodObservations,
-        eligibleNeighborhoods: market.neighborhoods.filter((item) => item.benchmarkEligible).length } });
+    return NextResponse.json({ ...await getDataIntelligence(city), readAt: new Date().toISOString(), sourceType: 'historical-file' }, { headers: { 'Cache-Control': 'private, no-store' } });
   } catch {
     return NextResponse.json({ error: 'DATA_INTELLIGENCE_UNAVAILABLE' }, { status: 500 });
   }

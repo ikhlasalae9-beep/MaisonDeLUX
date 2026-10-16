@@ -1,10 +1,14 @@
 import preprocessing from '@/models/casablanca/v1/preprocessing.json';
 import { CITY_REGISTRY } from '@/config/cities.config';
 import { modelRegistry } from './model';
+import { getModelIntegrity } from './model-integrity';
 import { databaseConfigured, logDatabaseError, query } from './db';
 
 export type Period = 'today' | '7d' | '30d' | '90d' | 'all';
 export const periodDays: Record<Period, number | null> = { today: 1, '7d': 7, '30d': 30, '90d': 90, all: null };
+export function resolvePeriod(value: string | null): Period {
+  return value && Object.prototype.hasOwnProperty.call(periodDays, value) ? value as Period : '30d';
+}
 
 export type StoredEvent = {
   event_key: string;
@@ -19,7 +23,8 @@ const modelInputs: Record<string, readonly string[]> = { 'casablanca-catboost-v1
 function filters(period: Period, cityId?: string, modelId?: string, includeTests = false) {
   const clauses: string[] = includeTests ? [] : ['e.is_test = false']; const values: unknown[] = [];
   const days = periodDays[period];
-  if (days) { values.push(days); clauses.push(`e.created_at >= NOW() - ($${values.length}::text || ' days')::interval`); }
+  if (period === 'today') clauses.push('e.created_at >= CURRENT_DATE');
+  else if (days) { values.push(days); clauses.push(`e.created_at >= NOW() - ($${values.length}::text || ' days')::interval`); }
   if (cityId) { values.push(cityId); clauses.push(`e.city_id = $${values.length}`); }
   if (modelId) { values.push(modelId); clauses.push(`e.model_version_id = $${values.length}`); }
   return { where: clauses.length ? `WHERE ${clauses.join(' AND ')}` : '', values };
@@ -80,7 +85,10 @@ export async function getOverview(period: Period, cityId?: string, modelId?: str
     analyticsQuery('overview.kpis', `SELECT COUNT(*)::int total,COUNT(*) FILTER (WHERE e.created_at>=CURRENT_DATE)::int today,
       COUNT(*) FILTER (WHERE e.created_at>=NOW()-INTERVAL '7 days')::int seven,COUNT(*) FILTER (WHERE e.created_at>=NOW()-INTERVAL '30 days')::int thirty,
       AVG(e.estimated_price_mad)::double precision avg_price,percentile_cont(0.5) WITHIN GROUP (ORDER BY e.estimated_price_mad::double precision) median_price,
-      AVG(NULLIF(e.input_features->>'area','')::double precision) avg_surface,COUNT(DISTINCT e.city_id)::int cities FROM public.estimation_events e ${f.where}`, f.values),
+      AVG(NULLIF(e.input_features->>'area','')::double precision) avg_surface,COUNT(DISTINCT e.city_id)::int cities,
+      MAX(e.created_at) AS latest_event_at,
+      COUNT(*) FILTER (WHERE EXISTS (SELECT 1 FROM public.estimation_passports p WHERE p.estimation_event_id=e.id))::int AS saved_results
+      FROM public.estimation_events e ${f.where}`, f.values),
     analyticsQuery('overview.platform', `SELECT
       (SELECT COUNT(*)::int FROM public.cities) AS registered_cities,
       (SELECT COUNT(*)::int FROM public.model_versions) AS registered_models,
@@ -116,12 +124,16 @@ export async function getOverview(period: Period, cityId?: string, modelId?: str
   const enrichedModels = models.rows.map((row: any) => ({ ...row, artifact_registered: Boolean(artifacts[row.version]),
     logical_inputs: artifacts[row.version]?.logicalInputs || [], supported_property_types: artifacts[row.version]?.supportedPropertyTypes || [],
     academic_approval: artifacts[row.version]?.academicApproval || null, lifecycle: artifacts[row.version]?.lifecycle || null,
-    documented_metadata: artifacts[row.version]?.metadata || null }));
-  return { configured: true, kpis: { total: 0, today: 0, seven: 0, thirty: 0, avg_price: null, median_price: null, avg_surface: null, cities: 0, ...(kpis.rows[0] || {}) },
+    documented_metadata: artifacts[row.version]?.metadata || null, integrity: getModelIntegrity(row.version),
+    deployment_status: 'unverified' as const }));
+  const scopedModels = enrichedModels.filter((model: any) => (!cityId || String(model.city_id) === cityId) && (!modelId || String(model.id) === modelId));
+  const scopedCities = cities.rows.filter((city: any) => (!cityId || String(city.id) === cityId) &&
+    (!modelId || scopedModels.some((model: any) => String(model.city_id) === String(city.id))));
+  return { configured: true, readAt: new Date().toISOString(), kpis: { total: 0, today: 0, seven: 0, thirty: 0, avg_price: null, median_price: null, avg_surface: null, cities: 0, ...(kpis.rows[0] || {}) },
     platform: platform.rows[0] || {}, activity: activity.rows, activityByCity: activityByCity.rows, recent: recent.rows,
-    cities: cities.rows.map((row: any) => ({ ...row, in_city_registry: registeredCities.has(row.slug),
+    cities: scopedCities.map((row: any) => ({ ...row, in_city_registry: registeredCities.has(row.slug),
       models: enrichedModels.filter((model: any) => String(model.city_id) === String(row.id)) })), prices: prices.rows,
-    scatter: scatter.rows, activityByModel: activityByModel.rows, options: { cities: options.rows, models: enrichedModels }, models: enrichedModels, includeTests };
+    scatter: scatter.rows, activityByModel: activityByModel.rows, options: { cities: options.rows, models: enrichedModels }, models: scopedModels, includeTests };
 }
 
 export async function getEstimations(period: Period, page = 1, search = '', cityId?: string, modelId?: string, includeTests = false) {
@@ -130,15 +142,16 @@ export async function getEstimations(period: Period, page = 1, search = '', city
   const count = await analyticsQuery('estimations.count', `SELECT COUNT(*)::int total FROM public.estimation_events e JOIN public.cities c ON c.id=e.city_id ${where}`, values);
   values.push(20, (Math.max(1, page) - 1) * 20);
   const rows = await analyticsQuery('estimations.rows', `SELECT e.id,e.event_key,e.created_at,e.input_features,e.estimated_price_mad::double precision estimated_price_mad,e.is_test,
-    c.id city_id,c.name city,mv.version model_version FROM public.estimation_events e JOIN public.cities c ON c.id=e.city_id
-    JOIN public.model_versions mv ON mv.id=e.model_version_id AND mv.city_id=e.city_id ${where} ORDER BY e.created_at DESC LIMIT $${values.length - 1} OFFSET $${values.length}`, values);
-  return { configured: true, rows: rows.rows, total: Number(count.rows[0]?.total || 0), includeTests };
+    c.id city_id,c.name city,mv.version model_version,p.estimation_event_id IS NOT NULL AS has_saved_result FROM public.estimation_events e JOIN public.cities c ON c.id=e.city_id
+    JOIN public.model_versions mv ON mv.id=e.model_version_id AND mv.city_id=e.city_id
+    LEFT JOIN public.estimation_passports p ON p.estimation_event_id=e.id ${where} ORDER BY e.created_at DESC LIMIT $${values.length - 1} OFFSET $${values.length}`, values);
+  return { configured: true, readAt: new Date().toISOString(), rows: rows.rows, total: Number(count.rows[0]?.total || 0), includeTests };
 }
 
 export async function getProductionInputFeatures(city = 'Casablanca', modelVersion = 'casablanca-catboost-v1') {
   if (!databaseConfigured()) return [];
   const result = await analyticsQuery('drift.inputs', `SELECT e.input_features FROM public.estimation_events e
     JOIN public.cities c ON c.id=e.city_id JOIN public.model_versions mv ON mv.id=e.model_version_id AND mv.city_id=e.city_id
-    WHERE e.is_test=false AND LOWER(c.name)=LOWER($1) AND mv.version=$2 ORDER BY e.created_at DESC LIMIT 5000`, [city, modelVersion]);
+    WHERE e.is_test=false AND c.slug=$1 AND mv.version=$2 ORDER BY e.created_at DESC LIMIT 5000`, [city.toLowerCase(), modelVersion]);
   return result.rows.map((row: any) => row.input_features).filter((features: unknown) => features && typeof features === 'object' && !Array.isArray(features));
 }

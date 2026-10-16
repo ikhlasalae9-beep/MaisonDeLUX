@@ -1,0 +1,2 @@
+# The release checksum covers physical bytes; keep the committed manifest on Windows.
+preprocessing.json text eol=lf
