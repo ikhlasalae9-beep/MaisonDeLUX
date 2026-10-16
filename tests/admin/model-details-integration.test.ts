@@ -71,7 +71,7 @@ test('protected model API maps the real Rabat row through manifests into the exi
   assert.match(html,/Types acceptés par le formulaire public/);
   assert.equal((html.match(/<code\b/g)||[]).length,8);
   assert.doesNotMatch(html,/0\.9521408362032084|673900|Types de biens<\/dt>.*?Non documentés/);
-  assert.match(html,/Aucune mesure indépendante de test documentée/);
+  assert.match(html,/Métriques de test indépendant indisponibles/);
   assert.match(html,/Non vérifié/);
   assert.match(html,/Diagnostics sur données d&#x27;entraînement/);
   assert.match(html,/700 observations/);
@@ -80,8 +80,12 @@ test('protected model API maps the real Rabat row through manifests into the exi
   assert.match(html,/1[\s\u202f\u00a0]546[\s\u202f\u00a0]508,58 MAD/);
   assert.match(html,/5,59955208 %/);
   assert.match(html,/docs\/rabat-model-audit.md/);
-  const independent=html.split('<section aria-label="Diagnostics')[0];
-  assert.doesNotMatch(independent,/0,9521408362|673[\s\u202f\u00a0]900,58/);
+  assert.doesNotMatch(html,/Évaluation non documentée|<section aria-label="Diagnostics/);
+  assert.equal((html.match(/role="group" aria-label="Diagnostics/g)||[]).length,1);
+  const performance=html.slice(html.indexOf('Performance du modèle'),html.indexOf('Fiche technique'));
+  for(const value of ['0,9521408362','673','1','5,59955208']) assert.ok(performance.includes(value));
+  assert.match(performance,/Diagnostics sur données d&#x27;entraînement — 700 observations/);
+  assert.equal((performance.match(/bg-slate-50\/70 p-4/g)||[]).length,4);
   const changed=render({...model,metrics:{...model.metrics,training_diagnostics:{...model.metrics.training_diagnostics,r2_mad:0.25,sample_count:17}}});
   assert.match(changed,/0,25/);assert.match(changed,/17 observations/);assert.doesNotMatch(changed,/0,9521408362/);
   const absent=render({...model,metrics:{}});
