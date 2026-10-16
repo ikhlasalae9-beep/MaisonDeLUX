@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "city": "Rabat",
+  "snapshotSha256": "322293c0ed044fb8504bde86345ef410d8c7a079bc9b378c00c4226ca8add86c",
+  "boundarySha256": "cbc10060f1f5cc35058ec64225e56ddb384e70e5739da5503c60cbc1948e6723",
+  "geonamesSha256": "6b14fad96d3cb5ce47718f9da9c421d04345a63eb8d6969608fcbf7fb64387cd",
+  "scope": "Conservative label attribution using exact Rabat GeoNames neighborhood names and unique containment in existing OSM administrative polygons. Neighborhood reference points are not listing coordinates; coverage does not certify each property address. Unresolved labels, aliases, peripheral localities and broad mixed labels remain unassigned. No official-price values used.",
+  "entries": [
+    {
+      "label": "Agdal",
+      "geonamesId": "2561545",
+      "coordinates": [
+        -6.84819,
+        33.99701
+      ],
+      "boundaryId": "relation/2799211",
+      "method": "exact-Rabat-label-and-point-in-polygon",
+      "evidence": "https://www.geonames.org/2561545/"
+    },
+    {
+      "label": "El Youssoufia",
+      "geonamesId": "8431710",
+      "coordinates": [
+        -6.82319,
+        33.99667
+      ],
+      "boundaryId": "relation/2799204",
+      "method": "exact-Rabat-label-and-point-in-polygon",
+      "evidence": "https://www.geonames.org/8431710/"
+    },
+    {
+      "label": "Hay Nahda",
+      "geonamesId": "10919013",
+      "coordinates": [
+        -6.81643,
+        33.9786
+      ],
+      "boundaryId": "relation/2799204",
+      "method": "exact-Rabat-label-and-point-in-polygon",
+      "evidence": "https://www.geonames.org/10919013/"
+    }
+  ]
+}

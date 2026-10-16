@@ -32,18 +32,19 @@ test('shared city and market renderers preserve Casablanca markup outside the in
   }
 });
 
-test('Rabat market uses the shared renderer without fake data, prices, counts, classes or a public CTA', () => {
+test('Rabat market publishes its validated mixed cohort and reuses the shared price explorer in FR/AR', () => {
   for (const locale of ['fr', 'ar']) {
     const html = renderToStaticMarkup(MarketPage({ params: { locale, citySlug: 'rabat' } }));
-    assert.ok(html.includes(locale === 'ar' ? 'الإحصاءات قيد الإعداد' : 'Statistiques en préparation'));
-    assert.ok(!html.includes('server-data/casablanca-market.csv'));
-    assert.ok(!html.includes('MAD/m²'));
-    assert.ok(!html.includes('<table'));
+    assert.ok(html.includes(locale === 'ar' ? 'ذكاء السوق — الرباط' : 'Intelligence du marché — Rabat'));
+    assert.match(html,/700|٧٠٠/);
+    assert.ok(html.includes('<table'));
+    assert.ok(!html.includes('Source : server-data/'));
     assert.ok(!html.includes('CasablancaCity'));
-    assert.deepEqual(generateMetadata({ params: { locale, citySlug: 'rabat' } }).robots, { index: false, follow: false });
-    const map = renderToStaticMarkup(React.createElement(CityMarketMap, { geography: CITY_MARKET_MAPS.rabat, locale }));
-    assert.ok(map.includes(locale === 'ar' ? 'مقاطعات الرباط' : 'Arrondissements de Rabat'));
-    assert.ok(!map.includes('268'));
+    assert.ok(!html.includes('Commune de Marrakech'));
+    assert.equal(generateMetadata({params:{locale,citySlug:'rabat'}}).robots,undefined);
+    const map=renderToStaticMarkup(React.createElement(CityMarketMap,{summary:getCityMapSummary('rabat'),locale}));
+    assert.ok(map.includes(locale==='ar'?'خريطة أسعار العقارات في الرباط':'Carte des prix immobiliers à Rabat'));
+    assert.match(map,/125|١٢٥/);
   }
 });
 

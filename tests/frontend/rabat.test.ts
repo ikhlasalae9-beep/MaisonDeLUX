@@ -19,20 +19,20 @@ test('Rabat is public, bilingual, and has its own estimator without fabricated a
   assert.ok(renderToStaticMarkup(CitiesPage({ params: { locale: 'fr' } })).includes('/fr/cities/rabat'));
   assert.ok(sitemap().some(entry => entry.url.endsWith('/fr/cities/rabat')));
   assert.ok(sitemap().some(entry => entry.url.endsWith('/rabat/estimate')));
-  assert.ok(!sitemap().some(entry => entry.url.endsWith('/rabat/market')));
+  assert.ok(sitemap().some(entry => entry.url.endsWith('/rabat/market')));
   const city = getCityBySlug('rabat')!;
   assert.equal(city.cityPage.publicVisible, true);
   assert.equal(city.estimation.publicEnabled, true);
   assert.equal(city.modelRef, 'rabat');
   assert.equal(city.estimation.backendStatusKey, 'rabat');
-  assert.equal(city.market.publicEnabled, false);
-  assert.equal(city.market.analyticsRef, null);
-  assert.deepEqual(cityCapabilityActions('fr', city).map(action=>action.kind), ['estimate']);
+  assert.equal(city.market.publicEnabled, true);
+  assert.equal(city.market.analyticsRef, 'rabat');
+  assert.deepEqual(cityCapabilityActions('fr', city).map(action=>action.kind), ['estimate', 'market']);
   assert.equal(publicEstimatePath('fr', city, { city: 'Casablanca', status: 'available' }), null);
-  assert.equal(analyticsForCity('rabat'), null);
-  assert.equal(getCityMapSummary('rabat'), null);
+  assert.equal(analyticsForCity('rabat')!.market()!.kpis.usableListings, 700);
+  assert.equal(getCityMapSummary('rabat')!.mappedListings,125);
   assert.deepEqual(CITY_MARKET_MAPS.rabat.neighborhoodMapping, {});
-  assert.deepEqual(CITY_MARKET_MAPS.rabat.metrics, []);
+  assert.deepEqual(CITY_MARKET_MAPS.rabat.metrics, ['medianPricePerM2','listingCount','medianArea']);
   for (const locale of ['fr', 'ar']) {
     const copy = getCityContent('rabat', locale);
     assert.equal(copy.neighborhoods.length, 5);
@@ -41,7 +41,7 @@ test('Rabat is public, bilingual, and has its own estimator without fabricated a
     assert.ok(html.includes(copy.title));
     assert.ok(html.includes(cityCapabilityActions(locale, city)[0].label));
     assert.ok(html.includes('/rabat/estimate'));
-    assert.ok(!html.includes('/rabat/market'));
+    assert.ok(html.includes('/rabat/market'));
     assert.equal((html.match(/fill-rule="evenodd"/g) || []).length, 0);
     assert.ok(html.includes(locale === 'ar' ? 'المصادر التحريرية' : 'Sources éditoriales'));
     assert.ok(html.includes('https://whc.unesco.org/en/list/1401/'));

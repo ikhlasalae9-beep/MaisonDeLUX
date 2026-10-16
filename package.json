@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "test:admin": "node --require ./tests/register-server-only.cjs --import tsx --test tests/admin/*.test.ts",
-    "test:market": "node --require ./tests/register-server-only.cjs --import tsx --test tests/market-analytics.test.ts tests/marrakech-market.test.ts tests/marrakech-geography.test.ts tests/arrondissement-market.test.ts tests/frontend/city-market.test.ts tests/frontend/marrakech.test.ts",
+    "test:market": "node --require ./tests/register-server-only.cjs --import tsx --test tests/market-analytics.test.ts tests/marrakech-market.test.ts tests/rabat-market.test.ts tests/marrakech-geography.test.ts tests/arrondissement-market.test.ts tests/frontend/city-market.test.ts tests/frontend/marrakech.test.ts",
     "test:security": "node --require ./tests/register-server-only.cjs --import tsx --test tests/auth-config.test.ts tests/security/*.test.ts tests/admin/*.test.ts tests/frontend/*.test.ts tests/arrondissement-market.test.ts tests/market-analytics.test.ts",
     "start": "next start",
     "lint": "next lint"

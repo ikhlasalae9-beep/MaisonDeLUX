@@ -12,7 +12,7 @@ test('capabilities support estimation, market only, and content only cities inde
   assert.equal(cityMarketPath('ar', 'casablanca'), '/ar/cities/casablanca/market');
   assert.deepEqual(cityCapabilityActions('fr', { ...casa, estimation: { ...casa.estimation, publicEnabled: false } }).map(action => action.kind), ['market']);
   assert.deepEqual(cityCapabilityActions('fr', { ...casa, estimation: { ...casa.estimation, publicEnabled: false }, market: { publicEnabled: false, analyticsRef: null } }), []);
-  assert.deepEqual(CITY_REGISTRY.filter(city => city.market.publicEnabled).map(city => city.slug), ['casablanca', 'marrakech']);
+  assert.deepEqual(CITY_REGISTRY.filter(city => city.market.publicEnabled).map(city => city.slug), ['casablanca', 'rabat', 'marrakech']);
 });
 
 test('real Casablanca boundaries render independently of market mapping and ignore helper points', () => {
@@ -32,7 +32,7 @@ test('real Casablanca boundaries render independently of market mapping and igno
   assert.equal(summary.mappedNeighborhoodCount, 7);
   assert.equal(summary.unmappedNeighborhoods.length, 93);
   assert.equal(summary.arrondissements.filter(item => item.eligible).length, 4);
-  assert.equal(getCityMapSummary('rabat'), null);
+  assert.equal(getCityMapSummary('rabat')!.boundaryCount, 5);
 });
 
 test('projection preserves MultiPolygon islands and polygon holes', () => {

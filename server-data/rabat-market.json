@@ -1,0 +1,4926 @@
+{
+  "schemaVersion": 1,
+  "city": "Rabat",
+  "sources": [
+    {
+      "path": "ml/notebooks/rabat/mubawab_properties (2).csv",
+      "sha256": "ec79b7b1634d0a9aefa1e96b68748fca7e7fe55f44a62445a2ac113db8f83d4d"
+    },
+    {
+      "path": "ml/notebooks/rabat/mubawab_clean.csv",
+      "sha256": "1d1daeceeb7bfe33e9bebd458d910f727fc58e2c2edcc86c37cb9c208af853b5"
+    }
+  ],
+  "sourceRows": 1165,
+  "cleanRows": 700,
+  "funnel": {
+    "raw": 1165,
+    "after_bounds": 1015,
+    "essential_complete": 880,
+    "deduplicated": 857,
+    "after_ppm2_iqr": 700
+  },
+  "scope": "Reproduced cleaned modelling cohort; source-labelled Rabat, not a geographically exhaustive census. No collection/publication dates or transaction status supplied. Original neighborhood labels retained, including unresolved peripheral labels.",
+  "rows": [
+    {
+      "id": "6829872",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1980000.0,
+      "area": 107.0
+    },
+    {
+      "id": "6897023",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8900000.0,
+      "area": 791.0
+    },
+    {
+      "id": "7002092",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 622.0
+    },
+    {
+      "id": "7121608",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7900000.0,
+      "area": 790.0
+    },
+    {
+      "id": "7133617",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5400000.0,
+      "area": 310.0
+    },
+    {
+      "id": "7149116",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 45000000.0,
+      "area": 2600.0
+    },
+    {
+      "id": "7266770",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8000000.0,
+      "area": 650.0
+    },
+    {
+      "id": "7271449",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 43000000.0,
+      "area": 2262.0
+    },
+    {
+      "id": "7329130",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3900000.0,
+      "area": 215.0
+    },
+    {
+      "id": "7332162",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7400000.0,
+      "area": 722.0
+    },
+    {
+      "id": "7342328",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5500000.0,
+      "area": 300.0
+    },
+    {
+      "id": "7363168",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5700000.0,
+      "area": 432.0
+    },
+    {
+      "id": "7365424",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8750000.0,
+      "area": 765.0
+    },
+    {
+      "id": "7376838",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 14000000.0,
+      "area": 2011.0
+    },
+    {
+      "id": "7395059",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 1400000.0,
+      "area": 70.0
+    },
+    {
+      "id": "7400830",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 26000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "7410972",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6800000.0,
+      "area": 450.0
+    },
+    {
+      "id": "7416581",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2450000.0,
+      "area": 147.0
+    },
+    {
+      "id": "7418392",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2650000.0,
+      "area": 130.0
+    },
+    {
+      "id": "7455060",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 5500000.0,
+      "area": 290.0
+    },
+    {
+      "id": "7480090",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3900000.0,
+      "area": 210.0
+    },
+    {
+      "id": "7492022",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2880000.0,
+      "area": 175.0
+    },
+    {
+      "id": "7499374",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 20000000.0,
+      "area": 1500.0
+    },
+    {
+      "id": "7512929",
+      "neighborhood": "L'Ocean",
+      "propertyType": "maison",
+      "price": 6000000.0,
+      "area": 540.0
+    },
+    {
+      "id": "7520964",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 145.0
+    },
+    {
+      "id": "7521024",
+      "neighborhood": "Les Orangers",
+      "propertyType": "villa",
+      "price": 4600000.0,
+      "area": 289.0
+    },
+    {
+      "id": "7525521",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1200.0
+    },
+    {
+      "id": "7532983",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4500000.0,
+      "area": 270.0
+    },
+    {
+      "id": "7554236",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 480.0
+    },
+    {
+      "id": "7559302",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4000000.0,
+      "area": 200.0
+    },
+    {
+      "id": "7584748",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2900000.0,
+      "area": 213.0
+    },
+    {
+      "id": "7587369",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 11500000.0,
+      "area": 1035.0
+    },
+    {
+      "id": "7588423",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 131.0
+    },
+    {
+      "id": "7603153",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 171.0
+    },
+    {
+      "id": "7606684",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 4000000.0,
+      "area": 248.0
+    },
+    {
+      "id": "7611930",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2700000.0,
+      "area": 112.0
+    },
+    {
+      "id": "7612278",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 6975000.0,
+      "area": 500.0
+    },
+    {
+      "id": "7614520",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 2450.0
+    },
+    {
+      "id": "7614699",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 25000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "7623326",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 35000000.0,
+      "area": 2200.0
+    },
+    {
+      "id": "7625902",
+      "neighborhood": "Rabat",
+      "propertyType": "maison",
+      "price": 7700000.0,
+      "area": 500.0
+    },
+    {
+      "id": "7628949",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 7300000.0,
+      "area": 492.0
+    },
+    {
+      "id": "7643066",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2450000.0,
+      "area": 135.0
+    },
+    {
+      "id": "7656826",
+      "neighborhood": "Rabat",
+      "propertyType": "maison",
+      "price": 2800000.0,
+      "area": 155.0
+    },
+    {
+      "id": "7656847",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 7100000.0,
+      "area": 623.0
+    },
+    {
+      "id": "7656854",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 189.0
+    },
+    {
+      "id": "7684526",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 182.0
+    },
+    {
+      "id": "7688205",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 5200000.0,
+      "area": 380.0
+    },
+    {
+      "id": "7692671",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 82.0
+    },
+    {
+      "id": "7698817",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 158.0
+    },
+    {
+      "id": "7712963",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 23000000.0,
+      "area": 1700.0
+    },
+    {
+      "id": "7712973",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 16500000.0,
+      "area": 1900.0
+    },
+    {
+      "id": "7713455",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 104.0
+    },
+    {
+      "id": "7713545",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7600000.0,
+      "area": 672.0
+    },
+    {
+      "id": "7714584",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1850.0
+    },
+    {
+      "id": "7717891",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1650000.0,
+      "area": 89.0
+    },
+    {
+      "id": "7717981",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4000000.0,
+      "area": 192.0
+    },
+    {
+      "id": "7722893",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 750.0
+    },
+    {
+      "id": "7723812",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 180.0
+    },
+    {
+      "id": "7724642",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2850000.0,
+      "area": 165.0
+    },
+    {
+      "id": "7728890",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8200000.0,
+      "area": 700.0
+    },
+    {
+      "id": "7731191",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7000000.0,
+      "area": 400.0
+    },
+    {
+      "id": "7732448",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 7700000.0,
+      "area": 1025.0
+    },
+    {
+      "id": "7739303",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 14000000.0,
+      "area": 1437.0
+    },
+    {
+      "id": "7742562",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 4700000.0,
+      "area": 198.0
+    },
+    {
+      "id": "7751439",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2900000.0,
+      "area": 112.0
+    },
+    {
+      "id": "7751448",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2912500.0,
+      "area": 233.0
+    },
+    {
+      "id": "7751764",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 176.0
+    },
+    {
+      "id": "7751799",
+      "neighborhood": "El Youssoufia",
+      "propertyType": "villa",
+      "price": 5000000.0,
+      "area": 360.0
+    },
+    {
+      "id": "7751881",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 4700000.0,
+      "area": 240.0
+    },
+    {
+      "id": "7752798",
+      "neighborhood": "Akkari",
+      "propertyType": "maison",
+      "price": 1480000.0,
+      "area": 105.0
+    },
+    {
+      "id": "7756968",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6300000.0,
+      "area": 630.0
+    },
+    {
+      "id": "7757215",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 20000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "7758455",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 136.0
+    },
+    {
+      "id": "7758596",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 10350000.0,
+      "area": 925.0
+    },
+    {
+      "id": "7758840",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 210.0
+    },
+    {
+      "id": "7765727",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 16000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "7766408",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 7800000.0,
+      "area": 645.0
+    },
+    {
+      "id": "7769584",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 130.0
+    },
+    {
+      "id": "7775958",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7000000.0,
+      "area": 540.0
+    },
+    {
+      "id": "7777645",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4100000.0,
+      "area": 176.0
+    },
+    {
+      "id": "7784273",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 183.0
+    },
+    {
+      "id": "7784274",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 4300000.0,
+      "area": 201.0
+    },
+    {
+      "id": "7785474",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 115.0
+    },
+    {
+      "id": "7787263",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "villa",
+      "price": 5500000.0,
+      "area": 338.0
+    },
+    {
+      "id": "7787326",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 1750000.0,
+      "area": 101.0
+    },
+    {
+      "id": "7788678",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2090000.0,
+      "area": 130.0
+    },
+    {
+      "id": "7789033",
+      "neighborhood": "Souissi",
+      "propertyType": "maison",
+      "price": 17000000.0,
+      "area": 900.0
+    },
+    {
+      "id": "7789643",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2850000.0,
+      "area": 140.0
+    },
+    {
+      "id": "7789752",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 9200000.0,
+      "area": 500.0
+    },
+    {
+      "id": "7792393",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2680000.0,
+      "area": 137.0
+    },
+    {
+      "id": "7795542",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 600.0
+    },
+    {
+      "id": "7797806",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9100000.0,
+      "area": 600.0
+    },
+    {
+      "id": "7801628",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 145.0
+    },
+    {
+      "id": "7803206",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3350000.0,
+      "area": 147.0
+    },
+    {
+      "id": "7803207",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1950000.0,
+      "area": 117.0
+    },
+    {
+      "id": "7803548",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 5600000.0,
+      "area": 330.0
+    },
+    {
+      "id": "7804063",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 4970000.0,
+      "area": 280.0
+    },
+    {
+      "id": "7805424",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 4700000.0,
+      "area": 300.0
+    },
+    {
+      "id": "7806060",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 22000000.0,
+      "area": 1780.0
+    },
+    {
+      "id": "7808359",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9400000.0,
+      "area": 900.0
+    },
+    {
+      "id": "7810439",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "appartement",
+      "price": 1540000.0,
+      "area": 110.0
+    },
+    {
+      "id": "7812268",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2350000.0,
+      "area": 140.0
+    },
+    {
+      "id": "7820652",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 3300000.0,
+      "area": 178.0
+    },
+    {
+      "id": "7821069",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 4800000.0,
+      "area": 399.0
+    },
+    {
+      "id": "7823327",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 5800000.0,
+      "area": 716.0
+    },
+    {
+      "id": "7823509",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3650000.0,
+      "area": 171.0
+    },
+    {
+      "id": "7824762",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2270000.0,
+      "area": 95.0
+    },
+    {
+      "id": "7825707",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7700000.0,
+      "area": 589.0
+    },
+    {
+      "id": "7826500",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2475000.0,
+      "area": 165.0
+    },
+    {
+      "id": "7827378",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 156.0
+    },
+    {
+      "id": "7827685",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 32000000.0,
+      "area": 2360.0
+    },
+    {
+      "id": "7827873",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 140.0
+    },
+    {
+      "id": "7829101",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3590000.0,
+      "area": 175.0
+    },
+    {
+      "id": "7830768",
+      "neighborhood": "Al Kamra",
+      "propertyType": "appartement",
+      "price": 1700000.0,
+      "area": 126.0
+    },
+    {
+      "id": "7835367",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 2900000.0,
+      "area": 167.0
+    },
+    {
+      "id": "7836754",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1970000.0,
+      "area": 115.0
+    },
+    {
+      "id": "7838412",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 2070000.0,
+      "area": 146.0
+    },
+    {
+      "id": "7838581",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 11000000.0,
+      "area": 811.0
+    },
+    {
+      "id": "7839070",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1650000.0,
+      "area": 125.0
+    },
+    {
+      "id": "7844027",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 11000000.0,
+      "area": 1752.0
+    },
+    {
+      "id": "7849067",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 118.0
+    },
+    {
+      "id": "7853986",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 8900000.0,
+      "area": 1079.0
+    },
+    {
+      "id": "7854872",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 834.0
+    },
+    {
+      "id": "7855147",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 27000000.0,
+      "area": 3000.0
+    },
+    {
+      "id": "7855576",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 5500000.0,
+      "area": 235.0
+    },
+    {
+      "id": "7856057",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 129.0
+    },
+    {
+      "id": "7859861",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 181.0
+    },
+    {
+      "id": "7862814",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1100000.0,
+      "area": 64.0
+    },
+    {
+      "id": "7863445",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 10700000.0,
+      "area": 725.0
+    },
+    {
+      "id": "7863484",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2650000.0,
+      "area": 173.0
+    },
+    {
+      "id": "7867531",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2350000.0,
+      "area": 108.0
+    },
+    {
+      "id": "7867537",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 500.0
+    },
+    {
+      "id": "7868804",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 1990000.0,
+      "area": 117.0
+    },
+    {
+      "id": "7869411",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 35000000.0,
+      "area": 2050.0
+    },
+    {
+      "id": "7869415",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15500000.0,
+      "area": 1900.0
+    },
+    {
+      "id": "7869423",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 16500000.0,
+      "area": 1800.0
+    },
+    {
+      "id": "7869470",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 18500000.0,
+      "area": 1400.0
+    },
+    {
+      "id": "7869480",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8200000.0,
+      "area": 940.0
+    },
+    {
+      "id": "7871490",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2850000.0,
+      "area": 140.0
+    },
+    {
+      "id": "7871555",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1740000.0,
+      "area": 93.0
+    },
+    {
+      "id": "7872871",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 13000000.0,
+      "area": 2009.0
+    },
+    {
+      "id": "7872878",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "7873013",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8500000.0,
+      "area": 700.0
+    },
+    {
+      "id": "7874664",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 1970000.0,
+      "area": 137.0
+    },
+    {
+      "id": "7875007",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 9950000.0,
+      "area": 910.0
+    },
+    {
+      "id": "7875692",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1500.0
+    },
+    {
+      "id": "7876443",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 16000000.0,
+      "area": 2400.0
+    },
+    {
+      "id": "7882123",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 10100000.0,
+      "area": 734.0
+    },
+    {
+      "id": "7883298",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 16500000.0,
+      "area": 2200.0
+    },
+    {
+      "id": "7883659",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 2330000.0,
+      "area": 141.0
+    },
+    {
+      "id": "7883969",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 38000000.0,
+      "area": 3000.0
+    },
+    {
+      "id": "7884932",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 6200000.0,
+      "area": 260.0
+    },
+    {
+      "id": "7887109",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15500000.0,
+      "area": 1551.0
+    },
+    {
+      "id": "7887991",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 138.0
+    },
+    {
+      "id": "7892531",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 17500000.0,
+      "area": 1200.0
+    },
+    {
+      "id": "7893469",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 4300000.0,
+      "area": 425.0
+    },
+    {
+      "id": "7901617",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 10200000.0,
+      "area": 800.0
+    },
+    {
+      "id": "7901631",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1350000.0,
+      "area": 120.0
+    },
+    {
+      "id": "7901660",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 10200000.0,
+      "area": 800.0
+    },
+    {
+      "id": "7902493",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 7600000.0,
+      "area": 1000.0
+    },
+    {
+      "id": "7906226",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 200.0
+    },
+    {
+      "id": "7906599",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 11800000.0,
+      "area": 1020.0
+    },
+    {
+      "id": "7907188",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 2600000.0,
+      "area": 139.0
+    },
+    {
+      "id": "7907580",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "maison",
+      "price": 2000000.0,
+      "area": 100.0
+    },
+    {
+      "id": "7908676",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 17000000.0,
+      "area": 2008.0
+    },
+    {
+      "id": "7911616",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2775000.0,
+      "area": 154.0
+    },
+    {
+      "id": "7911848",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 5800000.0,
+      "area": 248.0
+    },
+    {
+      "id": "7913080",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 2800.0
+    },
+    {
+      "id": "7913260",
+      "neighborhood": "Kébibat",
+      "propertyType": "maison",
+      "price": 2080000.0,
+      "area": 152.0
+    },
+    {
+      "id": "7913308",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 1450000.0,
+      "area": 87.0
+    },
+    {
+      "id": "7914996",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 165.0
+    },
+    {
+      "id": "7915123",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 1500000.0,
+      "area": 112.0
+    },
+    {
+      "id": "7915950",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 11000000.0,
+      "area": 1700.0
+    },
+    {
+      "id": "7916129",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 140.0
+    },
+    {
+      "id": "7916873",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 14000000.0,
+      "area": 1853.0
+    },
+    {
+      "id": "7917755",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 5500000.0,
+      "area": 476.0
+    },
+    {
+      "id": "7918687",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 127.0
+    },
+    {
+      "id": "7918697",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 127.0
+    },
+    {
+      "id": "7918843",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 142.0
+    },
+    {
+      "id": "7919088",
+      "neighborhood": "Quartier Administratif",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 122.0
+    },
+    {
+      "id": "7919128",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 95.0
+    },
+    {
+      "id": "7919738",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 850000.0,
+      "area": 60.0
+    },
+    {
+      "id": "7919770",
+      "neighborhood": "Hay Al Massira",
+      "propertyType": "appartement",
+      "price": 1060000.0,
+      "area": 78.0
+    },
+    {
+      "id": "7921074",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 5800000.0,
+      "area": 240.0
+    },
+    {
+      "id": "7921348",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 175.0
+    },
+    {
+      "id": "7921858",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 17000000.0,
+      "area": 2500.0
+    },
+    {
+      "id": "7922103",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3300000.0,
+      "area": 170.0
+    },
+    {
+      "id": "7922488",
+      "neighborhood": "Quartier Administratif",
+      "propertyType": "appartement",
+      "price": 2880000.0,
+      "area": 188.0
+    },
+    {
+      "id": "7923231",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7200000.0,
+      "area": 583.0
+    },
+    {
+      "id": "7924124",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7200000.0,
+      "area": 550.0
+    },
+    {
+      "id": "7924224",
+      "neighborhood": "L'Ocean",
+      "propertyType": "maison",
+      "price": 5800000.0,
+      "area": 540.0
+    },
+    {
+      "id": "7924225",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 16000000.0,
+      "area": 1900.0
+    },
+    {
+      "id": "7924931",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 16000000.0,
+      "area": 1437.0
+    },
+    {
+      "id": "7924958",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "maison",
+      "price": 2900000.0,
+      "area": 191.0
+    },
+    {
+      "id": "7925063",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 256.0
+    },
+    {
+      "id": "7925246",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "appartement",
+      "price": 1300000.0,
+      "area": 100.0
+    },
+    {
+      "id": "7928465",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 125.0
+    },
+    {
+      "id": "7929390",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 130.0
+    },
+    {
+      "id": "7931405",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1200000.0,
+      "area": 98.0
+    },
+    {
+      "id": "7931863",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "villa",
+      "price": 4500000.0,
+      "area": 213.0
+    },
+    {
+      "id": "7932011",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4000000.0,
+      "area": 250.0
+    },
+    {
+      "id": "7932907",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 26000000.0,
+      "area": 2278.0
+    },
+    {
+      "id": "7933946",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 2187.0
+    },
+    {
+      "id": "7935349",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "villa",
+      "price": 7200000.0,
+      "area": 533.0
+    },
+    {
+      "id": "7935661",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 4500000.0,
+      "area": 202.0
+    },
+    {
+      "id": "7935870",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6500000.0,
+      "area": 365.0
+    },
+    {
+      "id": "7936371",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "appartement",
+      "price": 960000.0,
+      "area": 77.0
+    },
+    {
+      "id": "7936533",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4500000.0,
+      "area": 202.0
+    },
+    {
+      "id": "7937503",
+      "neighborhood": "Hay Al Massira",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 118.0
+    },
+    {
+      "id": "7938198",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 5800000.0,
+      "area": 628.0
+    },
+    {
+      "id": "7938207",
+      "neighborhood": "Médina",
+      "propertyType": "maison",
+      "price": 2600000.0,
+      "area": 200.0
+    },
+    {
+      "id": "7938415",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 1720000.0,
+      "area": 110.0
+    },
+    {
+      "id": "7940344",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 5500000.0,
+      "area": 280.0
+    },
+    {
+      "id": "7941361",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 673.0
+    },
+    {
+      "id": "7941843",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9300000.0,
+      "area": 580.0
+    },
+    {
+      "id": "7944494",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 140.0
+    },
+    {
+      "id": "7945888",
+      "neighborhood": "Riyad Extension",
+      "propertyType": "villa",
+      "price": 7600000.0,
+      "area": 490.0
+    },
+    {
+      "id": "7948341",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "villa",
+      "price": 5950000.0,
+      "area": 574.0
+    },
+    {
+      "id": "7951366",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9400000.0,
+      "area": 1200.0
+    },
+    {
+      "id": "7952205",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "appartement",
+      "price": 1820000.0,
+      "area": 112.0
+    },
+    {
+      "id": "7954847",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 6400000.0,
+      "area": 271.0
+    },
+    {
+      "id": "7956196",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9600000.0,
+      "area": 928.0
+    },
+    {
+      "id": "7957052",
+      "neighborhood": "Hay Bouhlal",
+      "propertyType": "maison",
+      "price": 1600000.0,
+      "area": 76.0
+    },
+    {
+      "id": "7957293",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 19100000.0,
+      "area": 1781.0
+    },
+    {
+      "id": "7958079",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "villa",
+      "price": 11000000.0,
+      "area": 514.0
+    },
+    {
+      "id": "7958407",
+      "neighborhood": "Hay Al Massira",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 120.0
+    },
+    {
+      "id": "7959385",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1400000.0,
+      "area": 95.0
+    },
+    {
+      "id": "7959517",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 101.0
+    },
+    {
+      "id": "7959911",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 144.0
+    },
+    {
+      "id": "7960061",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1450000.0,
+      "area": 74.0
+    },
+    {
+      "id": "7960063",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1350000.0,
+      "area": 120.0
+    },
+    {
+      "id": "7962746",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 13000000.0,
+      "area": 650.0
+    },
+    {
+      "id": "7962988",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "appartement",
+      "price": 1200000.0,
+      "area": 92.0
+    },
+    {
+      "id": "7963237",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3300000.0,
+      "area": 144.0
+    },
+    {
+      "id": "7965277",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 160.0
+    },
+    {
+      "id": "7966182",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 137.0
+    },
+    {
+      "id": "7966456",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 95.0
+    },
+    {
+      "id": "7966750",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 155.0
+    },
+    {
+      "id": "7968602",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4150000.0,
+      "area": 195.0
+    },
+    {
+      "id": "7968613",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2750000.0,
+      "area": 120.0
+    },
+    {
+      "id": "7968619",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 127.0
+    },
+    {
+      "id": "7969019",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 25000000.0,
+      "area": 1985.0
+    },
+    {
+      "id": "7970234",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 870000.0,
+      "area": 60.0
+    },
+    {
+      "id": "7970340",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4800000.0,
+      "area": 212.0
+    },
+    {
+      "id": "7970528",
+      "neighborhood": "Hay Al Kora",
+      "propertyType": "appartement",
+      "price": 1200000.0,
+      "area": 97.0
+    },
+    {
+      "id": "7970964",
+      "neighborhood": "Hay Al Massira",
+      "propertyType": "appartement",
+      "price": 1350000.0,
+      "area": 118.0
+    },
+    {
+      "id": "7971010",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3700000.0,
+      "area": 158.0
+    },
+    {
+      "id": "7971591",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 940000.0,
+      "area": 80.0
+    },
+    {
+      "id": "7974302",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 140.0
+    },
+    {
+      "id": "7975350",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1950000.0,
+      "area": 125.0
+    },
+    {
+      "id": "7977131",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 135.0
+    },
+    {
+      "id": "7979291",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "villa",
+      "price": 5250000.0,
+      "area": 380.0
+    },
+    {
+      "id": "7979418",
+      "neighborhood": "Quartier Administratif",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 79.0
+    },
+    {
+      "id": "7983849",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2900000.0,
+      "area": 248.0
+    },
+    {
+      "id": "7984200",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2450000.0,
+      "area": 205.0
+    },
+    {
+      "id": "7984845",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 6200000.0,
+      "area": 260.0
+    },
+    {
+      "id": "7985176",
+      "neighborhood": "Agdal",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 365.0
+    },
+    {
+      "id": "7985461",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 8000000.0,
+      "area": 1200.0
+    },
+    {
+      "id": "7985953",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 93.0
+    },
+    {
+      "id": "7986335",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1475000.0,
+      "area": 78.0
+    },
+    {
+      "id": "7987114",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 70.0
+    },
+    {
+      "id": "7987464",
+      "neighborhood": "Al Kouass",
+      "propertyType": "maison",
+      "price": 1700000.0,
+      "area": 220.0
+    },
+    {
+      "id": "7989529",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 920000.0,
+      "area": 42.0
+    },
+    {
+      "id": "7990065",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1500000.0,
+      "area": 118.0
+    },
+    {
+      "id": "7991213",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 800000.0,
+      "area": 67.0
+    },
+    {
+      "id": "7992590",
+      "neighborhood": "Akkari",
+      "propertyType": "maison",
+      "price": 500000.0,
+      "area": 48.0
+    },
+    {
+      "id": "7994072",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 118.0
+    },
+    {
+      "id": "7994771",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 146.0
+    },
+    {
+      "id": "7995113",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 520000.0,
+      "area": 40.0
+    },
+    {
+      "id": "7995920",
+      "neighborhood": "Les Oudayas",
+      "propertyType": "maison",
+      "price": 4300000.0,
+      "area": 220.0
+    },
+    {
+      "id": "7996142",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "maison",
+      "price": 800000.0,
+      "area": 54.0
+    },
+    {
+      "id": "7999865",
+      "neighborhood": "Les Orangers",
+      "propertyType": "appartement",
+      "price": 1500000.0,
+      "area": 97.0
+    },
+    {
+      "id": "8000077",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 5000000.0,
+      "area": 326.0
+    },
+    {
+      "id": "8000920",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "villa",
+      "price": 5300000.0,
+      "area": 280.0
+    },
+    {
+      "id": "8002359",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 25000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8002642",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 160.0
+    },
+    {
+      "id": "8003135",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 6500000.0,
+      "area": 500.0
+    },
+    {
+      "id": "8003959",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 17000000.0,
+      "area": 1500.0
+    },
+    {
+      "id": "8004466",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 23000000.0,
+      "area": 1400.0
+    },
+    {
+      "id": "8004479",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3850000.0,
+      "area": 208.0
+    },
+    {
+      "id": "8006180",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1700000.0,
+      "area": 150.0
+    },
+    {
+      "id": "8006447",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2850000.0,
+      "area": 151.0
+    },
+    {
+      "id": "8006788",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 2170000.0,
+      "area": 141.0
+    },
+    {
+      "id": "8006982",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3850000.0,
+      "area": 220.0
+    },
+    {
+      "id": "8007731",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1750000.0,
+      "area": 120.0
+    },
+    {
+      "id": "8008042",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 114.0
+    },
+    {
+      "id": "8008364",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 18500000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8008604",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 871.0
+    },
+    {
+      "id": "8009887",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 116.0
+    },
+    {
+      "id": "8010470",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 20000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8011252",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "villa",
+      "price": 3900000.0,
+      "area": 370.0
+    },
+    {
+      "id": "8011405",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1150000.0,
+      "area": 84.0
+    },
+    {
+      "id": "8013934",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7800000.0,
+      "area": 562.0
+    },
+    {
+      "id": "8014230",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9800000.0,
+      "area": 1100.0
+    },
+    {
+      "id": "8014959",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 570.0
+    },
+    {
+      "id": "8016244",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7890000.0,
+      "area": 550.0
+    },
+    {
+      "id": "8016487",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 3800000.0,
+      "area": 250.0
+    },
+    {
+      "id": "8016692",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3600000.0,
+      "area": 226.0
+    },
+    {
+      "id": "8016804",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 137.0
+    },
+    {
+      "id": "8017006",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 137.0
+    },
+    {
+      "id": "8019211",
+      "neighborhood": "Al Irfane",
+      "propertyType": "appartement",
+      "price": 1870000.0,
+      "area": 138.0
+    },
+    {
+      "id": "8019869",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 151.0
+    },
+    {
+      "id": "8020209",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 1550000.0,
+      "area": 75.0
+    },
+    {
+      "id": "8020458",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 751.0
+    },
+    {
+      "id": "8020850",
+      "neighborhood": "Hay Al Farah",
+      "propertyType": "villa",
+      "price": 5400000.0,
+      "area": 380.0
+    },
+    {
+      "id": "8021000",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "studio",
+      "price": 750000.0,
+      "area": 50.0
+    },
+    {
+      "id": "8021117",
+      "neighborhood": "Souissi",
+      "propertyType": "maison",
+      "price": 27000000.0,
+      "area": 2010.0
+    },
+    {
+      "id": "8021142",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 5000000.0,
+      "area": 600.0
+    },
+    {
+      "id": "8021410",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "appartement",
+      "price": 910000.0,
+      "area": 70.0
+    },
+    {
+      "id": "8021461",
+      "neighborhood": "Riyad Extension",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 150.0
+    },
+    {
+      "id": "8021930",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2320000.0,
+      "area": 98.0
+    },
+    {
+      "id": "8023395",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6000000.0,
+      "area": 376.0
+    },
+    {
+      "id": "8023433",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 131.0
+    },
+    {
+      "id": "8025029",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 950000.0,
+      "area": 79.0
+    },
+    {
+      "id": "8025822",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1300000.0,
+      "area": 78.0
+    },
+    {
+      "id": "8026657",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2020000.0,
+      "area": 97.0
+    },
+    {
+      "id": "8026820",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 151.0
+    },
+    {
+      "id": "8027035",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3600000.0,
+      "area": 192.0
+    },
+    {
+      "id": "8027673",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 22000000.0,
+      "area": 1974.0
+    },
+    {
+      "id": "8028157",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1100000.0,
+      "area": 83.0
+    },
+    {
+      "id": "8028370",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 13000000.0,
+      "area": 1800.0
+    },
+    {
+      "id": "8029012",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4500000.0,
+      "area": 202.0
+    },
+    {
+      "id": "8029183",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 101.0
+    },
+    {
+      "id": "8029393",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1500000.0,
+      "area": 104.0
+    },
+    {
+      "id": "8029871",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "maison",
+      "price": 4200000.0,
+      "area": 185.0
+    },
+    {
+      "id": "8029991",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 7400000.0,
+      "area": 640.0
+    },
+    {
+      "id": "8030041",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 970000.0,
+      "area": 81.0
+    },
+    {
+      "id": "8030339",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 12500000.0,
+      "area": 1224.0
+    },
+    {
+      "id": "8031173",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "maison",
+      "price": 3900000.0,
+      "area": 250.0
+    },
+    {
+      "id": "8031247",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 202.0
+    },
+    {
+      "id": "8031925",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8032562",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5000000.0,
+      "area": 300.0
+    },
+    {
+      "id": "8032610",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 1770000.0,
+      "area": 95.0
+    },
+    {
+      "id": "8032653",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3400000.0,
+      "area": 167.0
+    },
+    {
+      "id": "8033141",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3250000.0,
+      "area": 181.0
+    },
+    {
+      "id": "8033610",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6500000.0,
+      "area": 309.0
+    },
+    {
+      "id": "8033617",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 5500000.0,
+      "area": 280.0
+    },
+    {
+      "id": "8033790",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8500000.0,
+      "area": 530.0
+    },
+    {
+      "id": "8033850",
+      "neighborhood": "Souissi",
+      "propertyType": "maison",
+      "price": 8000000.0,
+      "area": 950.0
+    },
+    {
+      "id": "8034281",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3800000.0,
+      "area": 210.0
+    },
+    {
+      "id": "8034579",
+      "neighborhood": "Souissi",
+      "propertyType": "maison",
+      "price": 12500000.0,
+      "area": 1150.0
+    },
+    {
+      "id": "8036415",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 168.0
+    },
+    {
+      "id": "8036497",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3300000.0,
+      "area": 147.0
+    },
+    {
+      "id": "8036711",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 118.0
+    },
+    {
+      "id": "8036866",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4800000.0,
+      "area": 216.0
+    },
+    {
+      "id": "8038147",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3400000.0,
+      "area": 181.0
+    },
+    {
+      "id": "8038183",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 118.0
+    },
+    {
+      "id": "8040905",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "villa",
+      "price": 4400000.0,
+      "area": 370.0
+    },
+    {
+      "id": "8041772",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 123.0
+    },
+    {
+      "id": "8042955",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 20500000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8043160",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 146.0
+    },
+    {
+      "id": "8043765",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 32000000.0,
+      "area": 2700.0
+    },
+    {
+      "id": "8045072",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 1590000.0,
+      "area": 98.0
+    },
+    {
+      "id": "8046888",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "villa",
+      "price": 6500000.0,
+      "area": 540.0
+    },
+    {
+      "id": "8046931",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 18000000.0,
+      "area": 1634.0
+    },
+    {
+      "id": "8047087",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 144.0
+    },
+    {
+      "id": "8047757",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 135.0
+    },
+    {
+      "id": "8047929",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "appartement",
+      "price": 1000000.0,
+      "area": 81.0
+    },
+    {
+      "id": "8048170",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1370000.0,
+      "area": 74.0
+    },
+    {
+      "id": "8049175",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 170.0
+    },
+    {
+      "id": "8049554",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 1260000.0,
+      "area": 76.0
+    },
+    {
+      "id": "8049745",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1950000.0,
+      "area": 120.0
+    },
+    {
+      "id": "8049945",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 112.0
+    },
+    {
+      "id": "8050144",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 722.0
+    },
+    {
+      "id": "8050170",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1350000.0,
+      "area": 60.0
+    },
+    {
+      "id": "8051122",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1050000.0,
+      "area": 70.0
+    },
+    {
+      "id": "8051468",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 130.0
+    },
+    {
+      "id": "8052355",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1900000.0,
+      "area": 141.0
+    },
+    {
+      "id": "8053102",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 120.0
+    },
+    {
+      "id": "8053373",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1900000.0,
+      "area": 106.0
+    },
+    {
+      "id": "8053784",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2450000.0,
+      "area": 98.0
+    },
+    {
+      "id": "8055681",
+      "neighborhood": "Hay Al Amal",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 140.0
+    },
+    {
+      "id": "8056338",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 136.0
+    },
+    {
+      "id": "8056443",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "appartement",
+      "price": 5300000.0,
+      "area": 239.0
+    },
+    {
+      "id": "8056712",
+      "neighborhood": "Skhirat",
+      "propertyType": "villa",
+      "price": 5500000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8057302",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 190.0
+    },
+    {
+      "id": "8057515",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 761.0
+    },
+    {
+      "id": "8057531",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 10000000.0,
+      "area": 486.0
+    },
+    {
+      "id": "8057534",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9700000.0,
+      "area": 811.0
+    },
+    {
+      "id": "8057538",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9700000.0,
+      "area": 929.0
+    },
+    {
+      "id": "8058248",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 840.0
+    },
+    {
+      "id": "8058788",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8500000.0,
+      "area": 443.0
+    },
+    {
+      "id": "8059767",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 129.0
+    },
+    {
+      "id": "8060075",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 90.0
+    },
+    {
+      "id": "8060172",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1700000.0,
+      "area": 94.0
+    },
+    {
+      "id": "8060297",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1700000.0,
+      "area": 75.0
+    },
+    {
+      "id": "8061375",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 12500000.0,
+      "area": 1059.0
+    },
+    {
+      "id": "8061566",
+      "neighborhood": "Takadoum",
+      "propertyType": "maison",
+      "price": 1450000.0,
+      "area": 70.0
+    },
+    {
+      "id": "8061567",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4400000.0,
+      "area": 212.0
+    },
+    {
+      "id": "8062358",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "villa",
+      "price": 7900000.0,
+      "area": 589.0
+    },
+    {
+      "id": "8062461",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1950.0
+    },
+    {
+      "id": "8063058",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2440000.0,
+      "area": 142.0
+    },
+    {
+      "id": "8063189",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 136.0
+    },
+    {
+      "id": "8064551",
+      "neighborhood": "Hay Al Massira",
+      "propertyType": "maison",
+      "price": 3900000.0,
+      "area": 330.0
+    },
+    {
+      "id": "8065892",
+      "neighborhood": "Les Orangers",
+      "propertyType": "villa",
+      "price": 14781000.0,
+      "area": 1137.0
+    },
+    {
+      "id": "8065923",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "villa",
+      "price": 7180000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8066082",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1050000.0,
+      "area": 62.0
+    },
+    {
+      "id": "8066087",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 12000000.0,
+      "area": 729.0
+    },
+    {
+      "id": "8066491",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 126.0
+    },
+    {
+      "id": "8066698",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8800000.0,
+      "area": 970.0
+    },
+    {
+      "id": "8067366",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 9800000.0,
+      "area": 920.0
+    },
+    {
+      "id": "8067718",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "villa",
+      "price": 3800000.0,
+      "area": 250.0
+    },
+    {
+      "id": "8067968",
+      "neighborhood": "Hay Al Kora",
+      "propertyType": "appartement",
+      "price": 1150000.0,
+      "area": 97.0
+    },
+    {
+      "id": "8067976",
+      "neighborhood": "Rabat",
+      "propertyType": "villa",
+      "price": 17000000.0,
+      "area": 1000.0
+    },
+    {
+      "id": "8068103",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3800000.0,
+      "area": 160.0
+    },
+    {
+      "id": "8068776",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 14000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8069156",
+      "neighborhood": "El Youssoufia",
+      "propertyType": "maison",
+      "price": 1780000.0,
+      "area": 190.0
+    },
+    {
+      "id": "8069302",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3900000.0,
+      "area": 173.0
+    },
+    {
+      "id": "8070796",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 92.0
+    },
+    {
+      "id": "8070911",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4800000.0,
+      "area": 250.0
+    },
+    {
+      "id": "8071547",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "maison",
+      "price": 3000000.0,
+      "area": 172.0
+    },
+    {
+      "id": "8072333",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1520000.0,
+      "area": 112.0
+    },
+    {
+      "id": "8073590",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1790000.0,
+      "area": 120.0
+    },
+    {
+      "id": "8073998",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8074243",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2580000.0,
+      "area": 136.0
+    },
+    {
+      "id": "8074392",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 130.0
+    },
+    {
+      "id": "8074395",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1850.0
+    },
+    {
+      "id": "8074639",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 4000000.0,
+      "area": 183.0
+    },
+    {
+      "id": "8074777",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1300000.0,
+      "area": 101.0
+    },
+    {
+      "id": "8074803",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 90.0
+    },
+    {
+      "id": "8075438",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4200000.0,
+      "area": 255.0
+    },
+    {
+      "id": "8075727",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 103.0
+    },
+    {
+      "id": "8075911",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 5100000.0,
+      "area": 212.0
+    },
+    {
+      "id": "8075954",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2050000.0,
+      "area": 134.0
+    },
+    {
+      "id": "8076353",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 840.0
+    },
+    {
+      "id": "8077267",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 140.0
+    },
+    {
+      "id": "8077316",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1650000.0,
+      "area": 65.0
+    },
+    {
+      "id": "8077748",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7800000.0,
+      "area": 450.0
+    },
+    {
+      "id": "8079515",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "appartement",
+      "price": 4950000.0,
+      "area": 239.0
+    },
+    {
+      "id": "8079761",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3450000.0,
+      "area": 156.0
+    },
+    {
+      "id": "8079976",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1480000.0,
+      "area": 90.0
+    },
+    {
+      "id": "8080235",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 4100000.0,
+      "area": 160.0
+    },
+    {
+      "id": "8080522",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 649.0
+    },
+    {
+      "id": "8080528",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 140.0
+    },
+    {
+      "id": "8080546",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 102.0
+    },
+    {
+      "id": "8081493",
+      "neighborhood": "Hay Al Kora",
+      "propertyType": "appartement",
+      "price": 1250000.0,
+      "area": 110.0
+    },
+    {
+      "id": "8081534",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1960000.0,
+      "area": 122.0
+    },
+    {
+      "id": "8081886",
+      "neighborhood": "Quartier Administratif",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 79.0
+    },
+    {
+      "id": "8081941",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2250000.0,
+      "area": 123.0
+    },
+    {
+      "id": "8082260",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 92.0
+    },
+    {
+      "id": "8082818",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2650000.0,
+      "area": 142.0
+    },
+    {
+      "id": "8082854",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8082892",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 142.0
+    },
+    {
+      "id": "8082946",
+      "neighborhood": "El Youssoufia",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 580.0
+    },
+    {
+      "id": "8083569",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "maison",
+      "price": 3000000.0,
+      "area": 297.0
+    },
+    {
+      "id": "8083590",
+      "neighborhood": "Agdal",
+      "propertyType": "bureau",
+      "price": 1740000.0,
+      "area": 110.0
+    },
+    {
+      "id": "8083805",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 12500000.0,
+      "area": 1700.0
+    },
+    {
+      "id": "8083978",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 11000000.0,
+      "area": 1700.0
+    },
+    {
+      "id": "8084018",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3250000.0,
+      "area": 144.0
+    },
+    {
+      "id": "8084286",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 109.0
+    },
+    {
+      "id": "8084469",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 14000000.0,
+      "area": 2109.0
+    },
+    {
+      "id": "8084485",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 12900000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8084504",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5200000.0,
+      "area": 280.0
+    },
+    {
+      "id": "8085201",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1850.0
+    },
+    {
+      "id": "8085335",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1340000.0,
+      "area": 98.0
+    },
+    {
+      "id": "8085421",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8800000.0,
+      "area": 500.0
+    },
+    {
+      "id": "8085442",
+      "neighborhood": "El Youssoufia",
+      "propertyType": "villa",
+      "price": 6200000.0,
+      "area": 568.0
+    },
+    {
+      "id": "8085560",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6400000.0,
+      "area": 447.0
+    },
+    {
+      "id": "8086176",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 2300000.0,
+      "area": 112.0
+    },
+    {
+      "id": "8086499",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 13000000.0,
+      "area": 650.0
+    },
+    {
+      "id": "8086541",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 140.0
+    },
+    {
+      "id": "8086888",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 101.0
+    },
+    {
+      "id": "8086997",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 7000000.0,
+      "area": 365.0
+    },
+    {
+      "id": "8087045",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3300000.0,
+      "area": 155.0
+    },
+    {
+      "id": "8087202",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 5500000.0,
+      "area": 235.0
+    },
+    {
+      "id": "8087398",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 137.0
+    },
+    {
+      "id": "8087760",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 20000000.0,
+      "area": 1721.0
+    },
+    {
+      "id": "8089016",
+      "neighborhood": "Al Irfane",
+      "propertyType": "appartement",
+      "price": 1900000.0,
+      "area": 130.0
+    },
+    {
+      "id": "8089061",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3400000.0,
+      "area": 170.0
+    },
+    {
+      "id": "8089278",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2550000.0,
+      "area": 109.0
+    },
+    {
+      "id": "8089335",
+      "neighborhood": "Riyad Extension",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 136.0
+    },
+    {
+      "id": "8089595",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "villa",
+      "price": 6400000.0,
+      "area": 630.0
+    },
+    {
+      "id": "8089843",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3250000.0,
+      "area": 170.0
+    },
+    {
+      "id": "8090290",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1530000.0,
+      "area": 110.0
+    },
+    {
+      "id": "8090347",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 87.0
+    },
+    {
+      "id": "8091093",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 2150000.0,
+      "area": 141.0
+    },
+    {
+      "id": "8091236",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8000000.0,
+      "area": 930.0
+    },
+    {
+      "id": "8091928",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "maison",
+      "price": 4800000.0,
+      "area": 250.0
+    },
+    {
+      "id": "8092392",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 87.0
+    },
+    {
+      "id": "8092883",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1660000.0,
+      "area": 81.0
+    },
+    {
+      "id": "8093179",
+      "neighborhood": "Al Irfane",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 130.0
+    },
+    {
+      "id": "8094272",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3700000.0,
+      "area": 170.0
+    },
+    {
+      "id": "8094599",
+      "neighborhood": "Hay Al Amal",
+      "propertyType": "maison",
+      "price": 1800000.0,
+      "area": 240.0
+    },
+    {
+      "id": "8095002",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1200000.0,
+      "area": 90.0
+    },
+    {
+      "id": "8095078",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4350000.0,
+      "area": 223.0
+    },
+    {
+      "id": "8095454",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1750000.0,
+      "area": 130.0
+    },
+    {
+      "id": "8095534",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8100000.0,
+      "area": 551.0
+    },
+    {
+      "id": "8095582",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 1400000.0,
+      "area": 93.0
+    },
+    {
+      "id": "8095611",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1380000.0,
+      "area": 98.0
+    },
+    {
+      "id": "8095978",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4100000.0,
+      "area": 180.0
+    },
+    {
+      "id": "8096178",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6500000.0,
+      "area": 320.0
+    },
+    {
+      "id": "8096349",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 128.0
+    },
+    {
+      "id": "8096368",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8096926",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 540.0
+    },
+    {
+      "id": "8097600",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 175.0
+    },
+    {
+      "id": "8097880",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4450000.0,
+      "area": 180.0
+    },
+    {
+      "id": "8098017",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "villa",
+      "price": 4800000.0,
+      "area": 440.0
+    },
+    {
+      "id": "8098173",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1990.0
+    },
+    {
+      "id": "8098278",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "villa",
+      "price": 7400000.0,
+      "area": 832.0
+    },
+    {
+      "id": "8098459",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 16300000.0,
+      "area": 1000.0
+    },
+    {
+      "id": "8098662",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1300000.0,
+      "area": 60.0
+    },
+    {
+      "id": "8098837",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8700000.0,
+      "area": 1000.0
+    },
+    {
+      "id": "8098944",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1860000.0,
+      "area": 118.0
+    },
+    {
+      "id": "8099060",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 151.0
+    },
+    {
+      "id": "8100444",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 105.0
+    },
+    {
+      "id": "8100449",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 89.0
+    },
+    {
+      "id": "8100536",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9900000.0,
+      "area": 850.0
+    },
+    {
+      "id": "8100716",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1300000.0,
+      "area": 73.0
+    },
+    {
+      "id": "8101041",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 33000000.0,
+      "area": 1700.0
+    },
+    {
+      "id": "8101373",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "villa",
+      "price": 4300000.0,
+      "area": 300.0
+    },
+    {
+      "id": "8103413",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 100.0
+    },
+    {
+      "id": "8103655",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1990000.0,
+      "area": 122.0
+    },
+    {
+      "id": "8104086",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5800000.0,
+      "area": 281.0
+    },
+    {
+      "id": "8104225",
+      "neighborhood": "Souissi",
+      "propertyType": "maison",
+      "price": 25000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8105033",
+      "neighborhood": "Souissi",
+      "propertyType": "maison",
+      "price": 14000000.0,
+      "area": 1500.0
+    },
+    {
+      "id": "8105039",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4500000.0,
+      "area": 202.0
+    },
+    {
+      "id": "8105382",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8105403",
+      "neighborhood": "Souissi",
+      "propertyType": "maison",
+      "price": 14500000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8105810",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1500000.0,
+      "area": 100.0
+    },
+    {
+      "id": "8105823",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1700000.0,
+      "area": 136.0
+    },
+    {
+      "id": "8105971",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 28000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8105977",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 156.0
+    },
+    {
+      "id": "8105995",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 139.0
+    },
+    {
+      "id": "8106113",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1120000.0,
+      "area": 61.0
+    },
+    {
+      "id": "8106521",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3900000.0,
+      "area": 189.0
+    },
+    {
+      "id": "8106726",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "villa",
+      "price": 5400000.0,
+      "area": 476.0
+    },
+    {
+      "id": "8106852",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 5200000.0,
+      "area": 250.0
+    },
+    {
+      "id": "8107153",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 5600000.0,
+      "area": 278.0
+    },
+    {
+      "id": "8107337",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6000000.0,
+      "area": 350.0
+    },
+    {
+      "id": "8107370",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 4200000.0,
+      "area": 200.0
+    },
+    {
+      "id": "8107746",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 2000000.0,
+      "area": 118.0
+    },
+    {
+      "id": "8107909",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 140.0
+    },
+    {
+      "id": "8108261",
+      "neighborhood": "Riyad Extension",
+      "propertyType": "villa",
+      "price": 8500000.0,
+      "area": 800.0
+    },
+    {
+      "id": "8108315",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "appartement",
+      "price": 2510000.0,
+      "area": 130.0
+    },
+    {
+      "id": "8108522",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7000000.0,
+      "area": 505.0
+    },
+    {
+      "id": "8108828",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2480000.0,
+      "area": 142.0
+    },
+    {
+      "id": "8109339",
+      "neighborhood": "Agdal",
+      "propertyType": "studio",
+      "price": 920000.0,
+      "area": 42.0
+    },
+    {
+      "id": "8109788",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 6500000.0,
+      "area": 550.0
+    },
+    {
+      "id": "8109851",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "appartement",
+      "price": 1400000.0,
+      "area": 96.0
+    },
+    {
+      "id": "8110222",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1750000.0,
+      "area": 118.0
+    },
+    {
+      "id": "8110396",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 1080.0
+    },
+    {
+      "id": "8110533",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 10000000.0,
+      "area": 550.0
+    },
+    {
+      "id": "8110570",
+      "neighborhood": "Quartier Administratif",
+      "propertyType": "appartement",
+      "price": 1650000.0,
+      "area": 112.0
+    },
+    {
+      "id": "8110599",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1200.0
+    },
+    {
+      "id": "8110606",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 1200.0
+    },
+    {
+      "id": "8110723",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 124.0
+    },
+    {
+      "id": "8110946",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 25000000.0,
+      "area": 2500.0
+    },
+    {
+      "id": "8111042",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3250000.0,
+      "area": 144.0
+    },
+    {
+      "id": "8111061",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 300.0
+    },
+    {
+      "id": "8111211",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1360000.0,
+      "area": 95.0
+    },
+    {
+      "id": "8111396",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5700000.0,
+      "area": 340.0
+    },
+    {
+      "id": "8111554",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8111560",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8000000.0,
+      "area": 551.0
+    },
+    {
+      "id": "8112017",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4250000.0,
+      "area": 200.0
+    },
+    {
+      "id": "8112066",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1950000.0,
+      "area": 120.0
+    },
+    {
+      "id": "8112068",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 150.0
+    },
+    {
+      "id": "8112109",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 104.0
+    },
+    {
+      "id": "8112111",
+      "neighborhood": "Rabat",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 134.0
+    },
+    {
+      "id": "8112176",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1750000.0,
+      "area": 93.0
+    },
+    {
+      "id": "8113287",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 146.0
+    },
+    {
+      "id": "8113445",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "villa",
+      "price": 3750000.0,
+      "area": 250.0
+    },
+    {
+      "id": "8113452",
+      "neighborhood": "Al Kamra",
+      "propertyType": "maison",
+      "price": 1500000.0,
+      "area": 165.0
+    },
+    {
+      "id": "8113540",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4400000.0,
+      "area": 180.0
+    },
+    {
+      "id": "8113609",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 1036.0
+    },
+    {
+      "id": "8113612",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8000000.0,
+      "area": 560.0
+    },
+    {
+      "id": "8113692",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 130.0
+    },
+    {
+      "id": "8113981",
+      "neighborhood": "Al Irfane",
+      "propertyType": "appartement",
+      "price": 1900000.0,
+      "area": 132.0
+    },
+    {
+      "id": "8114075",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 90.0
+    },
+    {
+      "id": "8114341",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 12900000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8114652",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 1500000.0,
+      "area": 65.0
+    },
+    {
+      "id": "8114679",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "appartement",
+      "price": 2150000.0,
+      "area": 115.0
+    },
+    {
+      "id": "8114684",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 167.0
+    },
+    {
+      "id": "8114859",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 23000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8115335",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 35000000.0,
+      "area": 2500.0
+    },
+    {
+      "id": "8115339",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 35000000.0,
+      "area": 3000.0
+    },
+    {
+      "id": "8115476",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 133.0
+    },
+    {
+      "id": "8115537",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 139.0
+    },
+    {
+      "id": "8115998",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 22500000.0,
+      "area": 1500.0
+    },
+    {
+      "id": "8116210",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 21000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8116323",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "villa",
+      "price": 4800000.0,
+      "area": 600.0
+    },
+    {
+      "id": "8116585",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 17000000.0,
+      "area": 2200.0
+    },
+    {
+      "id": "8116586",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 950000.0,
+      "area": 50.0
+    },
+    {
+      "id": "8117113",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 15000000.0,
+      "area": 900.0
+    },
+    {
+      "id": "8118492",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6200000.0,
+      "area": 430.0
+    },
+    {
+      "id": "8118637",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 101.0
+    },
+    {
+      "id": "8119157",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 5300000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8119211",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1450000.0,
+      "area": 77.0
+    },
+    {
+      "id": "8119213",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 8000000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8119331",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6000000.0,
+      "area": 280.0
+    },
+    {
+      "id": "8119830",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 690.0
+    },
+    {
+      "id": "8120271",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3400000.0,
+      "area": 200.0
+    },
+    {
+      "id": "8120431",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5600000.0,
+      "area": 289.0
+    },
+    {
+      "id": "8120511",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 750000.0,
+      "area": 35.0
+    },
+    {
+      "id": "8120635",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "villa",
+      "price": 4600000.0,
+      "area": 334.0
+    },
+    {
+      "id": "8120669",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4800000.0,
+      "area": 197.0
+    },
+    {
+      "id": "8120699",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "villa",
+      "price": 4300000.0,
+      "area": 300.0
+    },
+    {
+      "id": "8120748",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2200000.0,
+      "area": 137.0
+    },
+    {
+      "id": "8121087",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 28000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8121355",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 124.0
+    },
+    {
+      "id": "8121404",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2700000.0,
+      "area": 119.0
+    },
+    {
+      "id": "8121846",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 20000000.0,
+      "area": 1900.0
+    },
+    {
+      "id": "8121947",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1850000.0,
+      "area": 117.0
+    },
+    {
+      "id": "8122346",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3800000.0,
+      "area": 166.0
+    },
+    {
+      "id": "8122386",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5500000.0,
+      "area": 300.0
+    },
+    {
+      "id": "8122623",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 142.0
+    },
+    {
+      "id": "8123299",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2100000.0,
+      "area": 113.0
+    },
+    {
+      "id": "8123352",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "maison",
+      "price": 4000000.0,
+      "area": 360.0
+    },
+    {
+      "id": "8123364",
+      "neighborhood": "Quartier Des Ambassades",
+      "propertyType": "villa",
+      "price": 38000000.0,
+      "area": 2300.0
+    },
+    {
+      "id": "8123457",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4200000.0,
+      "area": 176.0
+    },
+    {
+      "id": "8123552",
+      "neighborhood": "Hay Al Massira",
+      "propertyType": "appartement",
+      "price": 960000.0,
+      "area": 80.0
+    },
+    {
+      "id": "8123851",
+      "neighborhood": "Agdal",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 550.0
+    },
+    {
+      "id": "8123868",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3950000.0,
+      "area": 180.0
+    },
+    {
+      "id": "8123884",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1150000.0,
+      "area": 71.0
+    },
+    {
+      "id": "8123953",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 14000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8123983",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 8400000.0,
+      "area": 960.0
+    },
+    {
+      "id": "8124048",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9100000.0,
+      "area": 500.0
+    },
+    {
+      "id": "8124198",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4600000.0,
+      "area": 230.0
+    },
+    {
+      "id": "8124370",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3300000.0,
+      "area": 170.0
+    },
+    {
+      "id": "8124469",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3500000.0,
+      "area": 192.0
+    },
+    {
+      "id": "8124658",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4400000.0,
+      "area": 178.0
+    },
+    {
+      "id": "8125408",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 1040.0
+    },
+    {
+      "id": "8125492",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 1400.0
+    },
+    {
+      "id": "8125533",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9800000.0,
+      "area": 760.0
+    },
+    {
+      "id": "8125848",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 25000000.0,
+      "area": 1250.0
+    },
+    {
+      "id": "8126068",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2350000.0,
+      "area": 95.0
+    },
+    {
+      "id": "8126098",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 111.0
+    },
+    {
+      "id": "8126145",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 1073.0
+    },
+    {
+      "id": "8126159",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 115.0
+    },
+    {
+      "id": "8126767",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "villa",
+      "price": 6500000.0,
+      "area": 440.0
+    },
+    {
+      "id": "8126788",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 4500000.0,
+      "area": 215.0
+    },
+    {
+      "id": "8126851",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1300000.0,
+      "area": 71.0
+    },
+    {
+      "id": "8126871",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 16500000.0,
+      "area": 1166.0
+    },
+    {
+      "id": "8126967",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 11400000.0,
+      "area": 1762.0
+    },
+    {
+      "id": "8127284",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1180000.0,
+      "area": 97.0
+    },
+    {
+      "id": "8127370",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1700000.0,
+      "area": 150.0
+    },
+    {
+      "id": "8128022",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "appartement",
+      "price": 2500000.0,
+      "area": 140.0
+    },
+    {
+      "id": "8128147",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 12500000.0,
+      "area": 1910.0
+    },
+    {
+      "id": "8128457",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 5600000.0,
+      "area": 222.0
+    },
+    {
+      "id": "8128487",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4200000.0,
+      "area": 172.0
+    },
+    {
+      "id": "8128609",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4200000.0,
+      "area": 176.0
+    },
+    {
+      "id": "8128687",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 5000000.0,
+      "area": 230.0
+    },
+    {
+      "id": "8128778",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2350000.0,
+      "area": 175.0
+    },
+    {
+      "id": "8128836",
+      "neighborhood": "Les Orangers",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 137.0
+    },
+    {
+      "id": "8128887",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 30000000.0,
+      "area": 2000.0
+    },
+    {
+      "id": "8128935",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 1000.0
+    },
+    {
+      "id": "8128983",
+      "neighborhood": "Kébibat",
+      "propertyType": "appartement",
+      "price": 1200000.0,
+      "area": 101.0
+    },
+    {
+      "id": "8129004",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 28000000.0,
+      "area": 2500.0
+    },
+    {
+      "id": "8129016",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 13000000.0,
+      "area": 1770.0
+    },
+    {
+      "id": "8129404",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 710000.0,
+      "area": 49.0
+    },
+    {
+      "id": "8130209",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "maison",
+      "price": 4600000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8130285",
+      "neighborhood": "Souissi",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 178.0
+    },
+    {
+      "id": "8130300",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 2300000.0,
+      "area": 112.0
+    },
+    {
+      "id": "8130485",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 13500000.0,
+      "area": 1700.0
+    },
+    {
+      "id": "8130794",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "villa",
+      "price": 4800000.0,
+      "area": 441.0
+    },
+    {
+      "id": "8130959",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 8500000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8130998",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 2400000.0,
+      "area": 110.0
+    },
+    {
+      "id": "8131056",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 3400000.0,
+      "area": 155.0
+    },
+    {
+      "id": "8131340",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 20000000.0,
+      "area": 1800.0
+    },
+    {
+      "id": "8131342",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "appartement",
+      "price": 1550000.0,
+      "area": 109.0
+    },
+    {
+      "id": "8131508",
+      "neighborhood": "Guich Oudaya",
+      "propertyType": "villa",
+      "price": 4600000.0,
+      "area": 334.0
+    },
+    {
+      "id": "8131710",
+      "neighborhood": "L'Ocean",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 87.0
+    },
+    {
+      "id": "8132072",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3200000.0,
+      "area": 151.0
+    },
+    {
+      "id": "8132074",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 81.0
+    },
+    {
+      "id": "8132090",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 5000000.0,
+      "area": 216.0
+    },
+    {
+      "id": "8132331",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 13600000.0,
+      "area": 1156.0
+    },
+    {
+      "id": "8132378",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "appartement",
+      "price": 2800000.0,
+      "area": 166.0
+    },
+    {
+      "id": "8132458",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1970000.0,
+      "area": 93.0
+    },
+    {
+      "id": "8132582",
+      "neighborhood": "Haut Agdal",
+      "propertyType": "appartement",
+      "price": 1550000.0,
+      "area": 100.0
+    },
+    {
+      "id": "8132822",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1600000.0,
+      "area": 94.0
+    },
+    {
+      "id": "8133218",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 3100000.0,
+      "area": 120.0
+    },
+    {
+      "id": "8133286",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7000000.0,
+      "area": 400.0
+    },
+    {
+      "id": "8133359",
+      "neighborhood": "Hay Al Fath",
+      "propertyType": "maison",
+      "price": 6050000.0,
+      "area": 440.0
+    },
+    {
+      "id": "8134030",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 12000000.0,
+      "area": 600.0
+    },
+    {
+      "id": "8134554",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 4300000.0,
+      "area": 200.0
+    },
+    {
+      "id": "8134599",
+      "neighborhood": "Hay Ach-chbanat",
+      "propertyType": "appartement",
+      "price": 1120000.0,
+      "area": 82.0
+    },
+    {
+      "id": "8134969",
+      "neighborhood": "Diour Jamaa",
+      "propertyType": "appartement",
+      "price": 1100000.0,
+      "area": 76.0
+    },
+    {
+      "id": "8135161",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1500000.0,
+      "area": 100.0
+    },
+    {
+      "id": "8135580",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 18000000.0,
+      "area": 1600.0
+    },
+    {
+      "id": "8136254",
+      "neighborhood": "Hay Nahda",
+      "propertyType": "maison",
+      "price": 2100000.0,
+      "area": 140.0
+    },
+    {
+      "id": "8136288",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 107.0
+    },
+    {
+      "id": "8136743",
+      "neighborhood": "Hay El Menzah",
+      "propertyType": "villa",
+      "price": 7200000.0,
+      "area": 600.0
+    },
+    {
+      "id": "8136810",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3000000.0,
+      "area": 157.0
+    },
+    {
+      "id": "8136910",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2600000.0,
+      "area": 137.0
+    },
+    {
+      "id": "8136923",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 5600000.0,
+      "area": 297.0
+    },
+    {
+      "id": "8136955",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 7500000.0,
+      "area": 800.0
+    },
+    {
+      "id": "8137092",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9500000.0,
+      "area": 840.0
+    },
+    {
+      "id": "8137114",
+      "neighborhood": "Souissi",
+      "propertyType": "villa",
+      "price": 13000000.0,
+      "area": 1900.0
+    },
+    {
+      "id": "8137354",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1800000.0,
+      "area": 92.0
+    },
+    {
+      "id": "8137419",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 5050000.0,
+      "area": 230.0
+    },
+    {
+      "id": "8137677",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 2700000.0,
+      "area": 145.0
+    },
+    {
+      "id": "8137682",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 3600000.0,
+      "area": 170.0
+    },
+    {
+      "id": "8137741",
+      "neighborhood": "Riyad",
+      "propertyType": "appartement",
+      "price": 4100000.0,
+      "area": 180.0
+    },
+    {
+      "id": "8138332",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 7200000.0,
+      "area": 580.0
+    },
+    {
+      "id": "8138615",
+      "neighborhood": "Agdal",
+      "propertyType": "appartement",
+      "price": 1950000.0,
+      "area": 92.0
+    },
+    {
+      "id": "8138820",
+      "neighborhood": "Hassan - Centre Ville",
+      "propertyType": "appartement",
+      "price": 1470000.0,
+      "area": 74.0
+    },
+    {
+      "id": "8138835",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 6600000.0,
+      "area": 447.0
+    },
+    {
+      "id": "8138851",
+      "neighborhood": "Riyad",
+      "propertyType": "villa",
+      "price": 9000000.0,
+      "area": 800.0
+    },
+    {
+      "id": "8138922",
+      "neighborhood": "El Youssoufia",
+      "propertyType": "villa",
+      "price": 3800000.0,
+      "area": 420.0
+    },
+    {
+      "id": "8138946",
+      "neighborhood": "Aviation - Mabella",
+      "propertyType": "villa",
+      "price": 5486000.0,
+      "area": 422.0
+    }
+  ]
+}

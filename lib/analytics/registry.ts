@@ -1,7 +1,9 @@
+import { getRabatMarketAnalytics } from './rabat';
 import { getCasablancaDataQuality, getCasablancaDrift, getCasablancaMarketAnalytics } from './casablanca';
 import { getMarrakechMarketAnalytics } from './marrakech';
 
 export const cityAnalyticsRegistry = {
+  rabat: { market: getRabatMarketAnalytics },
   marrakech: { market: getMarrakechMarketAnalytics },
   casablanca: {
     market: getCasablancaMarketAnalytics,

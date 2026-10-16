@@ -1,0 +1,109 @@
+{
+  "type": "FeatureCollection",
+  "source": "GeoNames MA.zip, existing project import",
+  "sourceUrl": "https://download.geonames.org/export/dump/MA.zip",
+  "license": "CC BY 4.0",
+  "originalProjectLayerSha256": "867d7b6a35ebe469877dbcaa1c3f02e6aeb839d15e8f3f34022c29201e641644",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "geonames:2561545",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.84819,
+          33.99701
+        ]
+      },
+      "properties": {
+        "geoname_id": "2561545",
+        "name": "Agdal",
+        "normalized_name": "agdal",
+        "ascii_name": "Agdal",
+        "alternative_names": [
+          "Agdal",
+          "Aguedal",
+          "Grand Aguedal"
+        ],
+        "feature_code": "PPLX",
+        "population": 0,
+        "parent_city": "Rabat",
+        "region_code": "04",
+        "province_code": "421",
+        "latitude": 33.99701,
+        "longitude": -6.84819,
+        "source": "GeoNames",
+        "source_url": "https://www.geonames.org/",
+        "license": "Creative Commons Attribution 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "modified_date": "2021-07-17",
+        "region": "Rabat-Salé-Kenitra",
+        "parent_city_geoname_id": "2538475"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "geonames:8431710",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.82319,
+          33.99667
+        ]
+      },
+      "properties": {
+        "geoname_id": "8431710",
+        "name": "El Youssoufia",
+        "normalized_name": "el youssoufia",
+        "ascii_name": "El Youssoufia",
+        "alternative_names": [],
+        "feature_code": "PPLX",
+        "population": 0,
+        "parent_city": "Rabat",
+        "region_code": "04",
+        "province_code": "421",
+        "latitude": 33.99667,
+        "longitude": -6.82319,
+        "source": "GeoNames",
+        "source_url": "https://www.geonames.org/",
+        "license": "Creative Commons Attribution 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "modified_date": "2021-07-17",
+        "region": "Rabat-Salé-Kenitra",
+        "parent_city_geoname_id": "2538475"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "geonames:10919013",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -6.81643,
+          33.9786
+        ]
+      },
+      "properties": {
+        "geoname_id": "10919013",
+        "name": "Hay Nahda",
+        "normalized_name": "hay nahda",
+        "ascii_name": "Hay Nahda",
+        "alternative_names": [],
+        "feature_code": "PPLX",
+        "population": 0,
+        "parent_city": "Rabat",
+        "region_code": "04",
+        "province_code": "421",
+        "latitude": 33.9786,
+        "longitude": -6.81643,
+        "source": "GeoNames",
+        "source_url": "https://www.geonames.org/",
+        "license": "Creative Commons Attribution 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "modified_date": "2021-07-17",
+        "region": "Rabat-Salé-Kenitra",
+        "parent_city_geoname_id": "2538475"
+      }
+    }
+  ]
+}

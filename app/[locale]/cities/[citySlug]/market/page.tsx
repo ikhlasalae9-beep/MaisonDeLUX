@@ -1,3 +1,4 @@
+import { getRabatMarketAnalytics } from '@/lib/analytics/rabat';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { CITY_REGISTRY } from '@/config/cities.config';
@@ -26,17 +27,17 @@ export default function CityMarketPage({ params }: { params: { locale: string; c
   const city = getCityBySlug(params.citySlug);
   if (!LOCALES.includes(params.locale as any) || !city?.cityPage.publicVisible) notFound();
   const geography = CITY_MARKET_MAPS[city.slug];
-  if (city.slug === 'marrakech' && city.market.publicEnabled) {
+  if ((city.slug === 'marrakech' || city.slug === 'rabat') && city.market.publicEnabled) {
     try {
-      const data = getMarrakechMarketAnalytics();
+      const data = city.slug === 'rabat' ? getRabatMarketAnalytics() : getMarrakechMarketAnalytics();
       let mapSummary = null;
-      try { mapSummary = getCityMapSummary('marrakech'); }
-      catch { console.error('Marrakech geographical attribution unavailable or invalid'); }
-      return <MarrakechMarketIntelligence data={data} locale={params.locale} mapSummary={mapSummary} />;
+      try { mapSummary = getCityMapSummary(city.slug); }
+      catch { console.error('City geographical attribution unavailable or invalid'); }
+      return <MarrakechMarketIntelligence citySlug={city.slug} data={data} locale={params.locale} mapSummary={mapSummary} />;
     } catch {
       // Fail closed: never substitute another city's cohort or zero-valued KPIs.
-      console.error('Marrakech market snapshot unavailable or invalid');
-      return <MarrakechMarketIntelligence data={null} locale={params.locale} />;
+      console.error('City market snapshot unavailable or invalid');
+      return <MarrakechMarketIntelligence citySlug={city.slug} data={null} locale={params.locale} />;
     }
   }
   if (!city.market.publicEnabled || !city.market.analyticsRef) {

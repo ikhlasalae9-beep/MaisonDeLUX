@@ -267,6 +267,7 @@ const CITY_FOUNDATION: Record<CitySlug, CityFoundation> = {
   },
   rabat: {
     ...unavailable(['Rabat', 'الرباط'], 'rabat'),
+    market: { publicEnabled: true, analyticsRef: 'rabat' },
     cityPage: { status: 'published', publicVisible: true },
     estimation: { status: 'available', publicEnabled: true, backendStatusKey: 'rabat' },
     modelRef: 'rabat',

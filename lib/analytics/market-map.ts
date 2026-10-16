@@ -5,6 +5,7 @@ import { getCasablancaMarketRows, MIN_NEIGHBORHOOD_OBSERVATIONS } from './casabl
 import { aggregateArrondissements } from './arrondissement-market';
 
 import { getMarrakechMapSummary } from './marrakech-geography';
+import { getRabatMapSummary } from './rabat-geography';
 import { selectMarketBoundaries } from './market-geometry';
 import type { BoundaryFeature } from './market-geometry';
 export { selectMarketBoundaries } from './market-geometry';
@@ -17,6 +18,7 @@ export function hasBoundaryOutline(feature: BoundaryFeature) {
 export function getCityMapSummary(citySlug: string): CityMapSummary | null {
   const config = CITY_MARKET_MAPS[citySlug];
   if (citySlug === 'marrakech') return getMarrakechMapSummary();
+  if (citySlug === 'rabat') return getRabatMapSummary();
   // Other cities remain independently gated; never reuse Casablanca records.
   if (!config || citySlug !== 'casablanca') return null;
   const source = JSON.parse(readFileSync(path.join(process.cwd(), 'public', config.geoJsonSource), 'utf8'));

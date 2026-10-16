@@ -115,6 +115,7 @@ export async function getOverview(period: Period, cityId?: string, modelId?: str
       FROM public.estimation_events e JOIN public.cities c ON c.id=e.city_id ${f.where} ORDER BY e.created_at DESC LIMIT 500`, f.values),
     analyticsQuery('overview.options', `SELECT id,slug,name,region,public_enabled FROM public.cities ORDER BY name`),
     analyticsQuery('overview.models', `SELECT mv.id,mv.city_id,c.name city_name,c.slug city_slug,mv.version,mv.architecture,mv.status,mv.public_inference_enabled,
+      to_jsonb(mv)->>'artifact_path' AS artifact_path,to_jsonb(mv)->>'model_identity' AS model_identity,
       mv.metrics,mv.trained_at,mv.created_at FROM public.model_versions mv JOIN public.cities c ON c.id=mv.city_id ORDER BY c.name,mv.created_at DESC`),
   ]);
   const registeredCities = new Set(CITY_REGISTRY.map((city) => city.slug));

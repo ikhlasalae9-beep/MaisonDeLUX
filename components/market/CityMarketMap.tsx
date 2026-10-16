@@ -52,7 +52,7 @@ export function CityMarketMap({ summary, geography, locale, geographyNotice, adm
     return `${name(feature)} — ${item?.eligible ? `${formatPricePerSquareMeter(item.medianPricePerM2!, locale)} · ${formatInteger(item.listingCount, locale)} ${ar ? 'إعلان' : 'annonces'}` : !available ? (ar ? 'الإحصاءات قيد الإعداد' : 'Statistiques en préparation') : ar ? 'تغطية محدودة' : 'Couverture limitée'}`;
   };
   if (!config) return null;
-  if (config.citySlug === 'casablanca' || config.citySlug === 'marrakech') return <MarketMapExplorer summary={summary} locale={locale} cityName={cityName} outlines={outlines} selected={selected} hovered={hovered} error={error} onSelect={setSelected} onHover={setHovered} />;
+  if (config.citySlug === 'casablanca' || config.citySlug === 'marrakech' || config.citySlug === 'rabat') return <MarketMapExplorer summary={summary} locale={locale} cityName={cityName} outlines={outlines} selected={selected} hovered={hovered} error={error} onSelect={setSelected} onHover={setHovered} />;
   return <Section className="pt-0"><PageContainer><CardSurface className="overflow-hidden">
     <div className="border-b border-border-subtle p-5 sm:p-7">
       <p className="text-xs font-bold uppercase tracking-wider text-brand-blue">{!available ? (ar ? 'المجال الجغرافي · حسب المقاطعة' : 'Géographie · Par arrondissement') : ar ? 'أسعار معروضة · حسب المقاطعة' : 'Prix affichés · Par arrondissement'}</p>

@@ -87,3 +87,7 @@ env.download.backup
 # Reproducible optimization caches
 reports/**/cache_*/
 ml/**/cache_*/
+
+# Reviewed Rabat Market geographical attribution is required at runtime.
+!data/geographic/rabat-market-crosswalk.json
+!data/geographic/rabat-market-reference-points.json
