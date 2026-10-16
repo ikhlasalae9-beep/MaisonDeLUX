@@ -45,9 +45,9 @@ const nextConfig = {
   experimental: {
     outputFileTracingIncludes: {
       '/api/admin/data-intelligence': ['./server-data/casablanca-market.csv', './server-data/marrakech-market.json'],
-      '/api/admin/overview': ['./models/marrakech/v1/model.pkl', './models/marrakech/v1/preprocessing.json'],
-      '/api/admin/model': ['./models/marrakech/v1/model.pkl', './models/marrakech/v1/preprocessing.json'],
-      '/api/admin/report': ['./models/marrakech/v1/model.pkl', './models/marrakech/v1/preprocessing.json'],
+      '/api/admin/overview': ['./models/marrakech/v1/model.pkl', './models/marrakech/v1/preprocessing.json', './models/rabat/v1/model.joblib', './models/rabat/v1/preprocessing.json'],
+      '/api/admin/model': ['./models/marrakech/v1/model.pkl', './models/marrakech/v1/preprocessing.json', './models/rabat/v1/model.joblib', './models/rabat/v1/preprocessing.json'],
+      '/api/admin/report': ['./models/marrakech/v1/model.pkl', './models/marrakech/v1/preprocessing.json', './models/rabat/v1/model.joblib', './models/rabat/v1/preprocessing.json'],
       '/[locale]/cities/[citySlug]/market': ['./server-data/casablanca-market.csv', './server-data/marrakech-market.json', './data/geographic/marrakech-market-crosswalk.json', './public/maps/marrakech-boundaries.geojson'],
     },
   },

@@ -56,6 +56,6 @@ test('Rabat article supplies the same three narrative slots, five neighborhoods,
     assert.deepEqual(copy.sections.map(section => section.imageIndex), [1, 0, 2]);
     assert.ok(copy.sources.every(source => source.note && source.href.startsWith('https://')));
   }
-  assert.equal(globalEstimationLabel('fr', '/fr/cities/rabat', 'Estimer mon bien'), 'Estimation bientôt disponible');
+  assert.equal(globalEstimationLabel('fr', '/fr/cities/rabat', 'Estimer mon bien'), 'Estimer mon bien');
   assert.equal(globalEstimationLabel('fr', '/fr/cities/casablanca', 'Estimer mon bien'), 'Estimer mon bien');
 });

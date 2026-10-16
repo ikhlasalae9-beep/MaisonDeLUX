@@ -1,6 +1,7 @@
 import manifest from '@/models/casablanca/v1/preprocessing.json';
-import type { CasablancaPredictPayload, CityPredictPayload, MarrakechPredictPayload } from '@/lib/api/types';
+import type { CasablancaPredictPayload, CityPredictPayload, MarrakechPredictPayload, RabatPredictPayload } from '@/lib/api/types';
 import marrakech from '@/models/marrakech/v1/preprocessing.json';
+import rabat from '@/models/rabat/v1/preprocessing.json';
 import { inferenceContract, requirePublicInference } from '@/lib/estimations/contracts';
 // Validation only: transforms and model mathematics remain exclusively in the approved Python pipeline.
 export function validateModelInput(value: unknown): CityPredictPayload {
@@ -14,8 +15,32 @@ export function validatePreparedModelInput(value: unknown): CityPredictPayload {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('INVALID_INPUT');
   const city = (value as Record<string, unknown>).city;
   inferenceContract(city);
+  if (city === 'Rabat') return validateRabat(value as Record<string, unknown>);
   if (city === 'Marrakech') return validateMarrakech(value as Record<string, unknown>);
   return validateCasablanca(value);
+}
+
+function validateRabat(input: Record<string, unknown>): RabatPredictPayload {
+  const fields = ['city','property_type','neighborhood','area','rooms','bedrooms','bathrooms','current_state','age'];
+  if (Object.keys(input).length !== fields.length || fields.some(key => !Object.prototype.hasOwnProperty.call(input, key))) throw new Error('INVALID_INPUT');
+  const categories: Record<string, readonly string[]> = {
+    property_type: rabat.categorical.Type, neighborhood: rabat.categorical.Localisation,
+    current_state: rabat.categorical.Current_state,
+  };
+  const rare = rabat.rare_neighborhood_map as Record<string, string>;
+  const location = typeof input.neighborhood === 'string' && Object.prototype.hasOwnProperty.call(rare, input.neighborhood)
+    ? rare[input.neighborhood] : input.neighborhood;
+  for (const [field, vocabulary] of Object.entries(categories)) {
+    const value = field === 'neighborhood' ? location : input[field];
+    if (typeof value !== 'string' || !vocabulary.includes(value)) throw new Error('INVALID_INPUT');
+  }
+  for (const [field, rule] of Object.entries(rabat.numerical)) {
+    const value = input[field.toLowerCase()];
+    if (typeof value !== 'number' || !Number.isFinite(value) || value < rule.minimum || value > rule.maximum || (rule.integer && !Number.isInteger(value))) throw new Error('INVALID_INPUT');
+  }
+  const ages = rabat.age_band_to_years as Record<string, number>;
+  if (typeof input.age !== 'number' || !Number.isFinite(input.age) || input.age !== ages[String(input.current_state)]) throw new Error('INVALID_INPUT');
+  return { ...input, neighborhood: location } as unknown as RabatPredictPayload;
 }
 
 function validateCasablanca(value: unknown): CasablancaPredictPayload {

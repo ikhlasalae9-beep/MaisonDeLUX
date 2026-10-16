@@ -10,6 +10,8 @@ import { securityDatabase, userA } from '../security/database';
 import { setDatabasePoolForTests } from '../../lib/admin/db';
 import { currentAdminData, readAdminJson, readAdminSnapshot } from '../../lib/admin/client-data';
 import { predictCasablanca } from '../../lib/api/client';
+import { estimatorFormInput } from '../../lib/estimations/form-input';
+import { createPassportExportData } from '../../lib/account/passport-export';
 
 (globalThis as any).React = React;
 const original = { ...process.env }, originalFetch = globalThis.fetch;
@@ -45,12 +47,16 @@ test.before(async () => {
   process.env.ADMIN_EMAIL = 'admin@example.test'; process.env.ADMIN_PASSWORD = 'isolated-test-password';
   process.env.ADMIN_SESSION_SECRET = 'test-only-admin-secret-with-at-least-32-characters';
   db = await securityDatabase();
-  for (const migration of ['005_phase_c_entitlements','006_prepared_city_inference','007_public_marrakech_activation'])
-    await db.exec(readFileSync(`supabase/migrations/${migration}.sql`, 'utf8'));
+  for (const migration of ['005_phase_c_entitlements','006_prepared_city_inference','007_public_marrakech_activation']) {
+    let sql = readFileSync(`supabase/migrations/${migration}.sql`, 'utf8');
+    if (migration === '006_prepared_city_inference') sql=sql.replace("('Marrakech','marrakech-stacking-v1','marrakech-stacking-alae'))", "('Marrakech','marrakech-stacking-v1','marrakech-stacking-alae'),('Rabat','rabat-random-forest-v1','rabat-random-forest'))").replace("expected_city='Marrakech'", "expected_city IN ('Marrakech','Rabat')");
+    await db.exec(sql); // Existing writer in an isolated fixture; do not run the new manual SQL files.
+  }
   // Add the actual production read columns missing from this minimal security fixture only.
   await db.exec(`ALTER TABLE model_versions ADD COLUMN metrics jsonb, ADD COLUMN trained_at timestamptz, ADD COLUMN created_at timestamptz DEFAULT now();
     ALTER TABLE auth.users ADD COLUMN created_at timestamptz DEFAULT now();
-    INSERT INTO cities(slug,name,public_enabled) VALUES ('rabat','Rabat',false);`);
+    INSERT INTO cities(slug,name,public_enabled) VALUES ('rabat','Rabat',true);
+    INSERT INTO model_versions(city_id,version,model_identity,architecture,artifact_path,status,public_inference_enabled) SELECT id,'rabat-random-forest-v1','rabat-random-forest','RandomForestRegressor','models/rabat/v1/model.joblib','registered',true FROM cities WHERE slug='rabat';`);
   setDatabasePoolForTests({ query: async (sql: string, values: unknown[] = []) => {
     if (failed) throw new Error('ISOLATED_DATABASE_FAILURE postgresql://fixture:must-not-leak@invalid/db');
     return await db.query(sql, values) as any;
@@ -220,4 +226,51 @@ test('Failed inference creates no successful-estimation event and does not inven
   assert.equal(after.overview.kpis.total, before.overview.kpis.total);
   assert.equal((await db.query('SELECT * FROM estimation_events WHERE city_id=$1', [await cityId('marrakech')])).rows.length, before.overview.kpis.total);
   assert.equal((await db.query<any>('SELECT trial_consumed_at,reserved_until FROM guest_trials')).rows[0].trial_consumed_at, null);
+});
+
+
+test('Rabat: real form payload → public API → signed Python HTTP → frozen RF → public RPC → Admin; guest/auth/replay and pending database', async t => {
+  identity={id:userA};
+  const form={property_type:'appartement',neighborhood:'Agdal',area:'110',rooms:'3',bedrooms:'2',bathrooms:'1',current_state:'5-10 ans',age:'ignored',floor:''};
+  const input=estimatorFormInput('Rabat',form);
+  assert.equal(input.age,7.5); assert.ok(!('floor' in input));
+  const transport=globalThis.fetch;
+  globalThis.fetch=(async (url: string | URL | Request, options?:RequestInit)=>{
+    if(String(url).startsWith('http://inference.fixture/')) {
+      inferenceCalls++;
+      const processResult=spawnSync(process.env.MDL_TEST_PYTHON||'python',['-B','-X','utf8','-c',
+        "import json,sys; from backend.app import app; r=json.load(sys.stdin); response=app.test_client().post('/api/ml/estimate',data=r['body'],headers=r['headers']); assert response.status_code==200,response.get_json(); print(json.dumps(response.get_json()))"],
+        {input:JSON.stringify({body:options!.body,headers:Object.fromEntries(new Headers(options?.headers))}),encoding:'utf8',timeout:60000});
+      if(processResult.status!==0)throw new Error(processResult.stderr);
+      return Response.json(JSON.parse(processResult.stdout));
+    }
+    return transport(url,options);
+  }) as typeof fetch;
+  try {
+    const before=await snapshot('rabat'); assert.equal(before.overview.kpis.total,0);
+    for(const locale of ['fr','ar']) {
+      const requestId=randomUUID(),prediction=await predictCasablanca(input,{requestId,locale});
+      assert.equal(prediction.city,'Rabat');assert.equal(prediction.model_version,'rabat-random-forest-v1');assert.equal(prediction.estimated_price_mad,1885593);
+      const calls=inferenceCalls;
+      assert.equal((await predictCasablanca(input,{requestId,locale})).estimation_event_id,prediction.estimation_event_id);
+      assert.equal(inferenceCalls,calls,'Owned replay must not call inference again');
+      const stored=(await db.query<any>('SELECT e.*,p.prediction FROM estimation_events e JOIN estimation_passports p ON p.estimation_event_id=e.id WHERE e.event_key=$1',[requestId])).rows[0];
+      assert.equal(stored.locale,locale);assert.equal(stored.user_id,userA);assert.deepEqual(stored.input_features,input);
+      assert.equal(stored.prediction.raw_price_mad,1885593.2799045164);
+      const exported=createPassportExportData(stored,locale);assert.equal(exported.city,locale==='ar'?'الرباط':'Rabat');assert.equal(exported.market,null);assert.deepEqual(exported.comparables,[]);
+    }
+    identity=null;
+    const guest=await predictCasablanca(input,{requestId:randomUUID(),locale:'fr'});assert.equal(guest.guest,true);
+    await assert.rejects(predictCasablanca(input,{requestId:randomUUID()}));
+    const after=await snapshot('rabat');assert.equal(after.overview.kpis.total,3);assert.equal(after.overview.kpis.saved_results,3);
+    assert.ok(after.overview.recent.every((row:any)=>row.city==='Rabat'));
+    assert.equal(after.overview.models[0].artifact_registered,true);assert.equal(after.overview.models[0].integrity.artifact,true);
+    assert.equal((await snapshot('casablanca')).overview.kpis.total,1);assert.equal((await snapshot('marrakech')).overview.kpis.total,1);
+    // Database not manually activated: actual main route must not return an unpersisted success.
+    identity={id:userA};await db.query("UPDATE model_versions SET public_inference_enabled=false WHERE version='rabat-random-forest-v1'");
+    const logged=t.mock.method(console,'error',()=>{});
+    await assert.rejects(predictCasablanca(input,{requestId:randomUUID()}));
+    assert.equal((await snapshot('rabat')).overview.kpis.total,3);
+    logged.mock.restore();
+  } finally {globalThis.fetch=transport;identity={id:userA};}
 });

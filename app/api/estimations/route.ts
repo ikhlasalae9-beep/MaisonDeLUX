@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       // Their authoritative database city/version still must match this request.
       if(stored.city_slug!==expected.slug || stored.model_version!==expected.version || result?.model_version!==expected.version ||
         (result.city!==undefined && result.city!==input.city) || (result.model_id!==undefined && result.model_id!==expected.modelId) ||
-        (input.city==='Marrakech' && (result.city!==input.city || result.model_id!==expected.modelId))) throw new PublicError('SERVICE_UNAVAILABLE',503);
+        (input.city!=='Casablanca' && (result.city!==input.city || result.model_id!==expected.modelId))) throw new PublicError('SERVICE_UNAVAILABLE',503);
       return safeResponse({ ...result,estimation_event_id:String(stored.id),guest:!user });
     }
     if (!user) {

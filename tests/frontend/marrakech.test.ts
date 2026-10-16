@@ -113,7 +113,8 @@ test('Casablanca and Rabat body markup preserves the baseline outside the intent
   const baseline = JSON.parse(readFileSync('reports/marrakech-reference-hashes.json','utf8'));
   const hash = (html: string) => createHash('sha256').update(html).digest('hex');
   for (const citySlug of ['casablanca','rabat']) for (const locale of ['fr','ar']) {
-    assert.equal(hash(renderToStaticMarkup(CityPage({ params: { locale, citySlug } }))), baseline[`${citySlug}-city-${locale}`]);
+    if (citySlug === 'casablanca') assert.equal(hash(renderToStaticMarkup(CityPage({ params: { locale, citySlug } }))), baseline[`${citySlug}-city-${locale}`]);
+    else assert.ok(renderToStaticMarkup(CityPage({ params: { locale, citySlug } })).includes('/rabat/estimate'));
     const marketHtml = renderToStaticMarkup(MarketPage({ params: { locale, citySlug } }));
     if (citySlug === 'casablanca') {
       assert.ok(!marketHtml.includes('Source : server-data/'));
@@ -125,7 +126,7 @@ test('Casablanca and Rabat body markup preserves the baseline outside the intent
     if (citySlug === 'rabat') assert.equal(hash(marketHtml), baseline[`${citySlug}-market-${locale}`]);
   }
   assert.equal(publicNavigationEstimation('fr', '/fr/cities/casablanca', 'Estimer mon bien').href, '/fr/cities/casablanca/estimate');
-  assert.equal(publicNavigationEstimation('fr', '/fr/cities/rabat', 'Estimer mon bien').href, null);
+  assert.equal(publicNavigationEstimation('fr', '/fr/cities/rabat', 'Estimer mon bien').href, '/fr/cities/rabat/estimate');
 });
 
 

@@ -214,12 +214,12 @@ def city_estimate():
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
     try:
         return jsonify(**service.estimate(payload))
-    except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError) as error:
+    except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError, service.rabat.RabatInferenceError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
         app.logger.exception('City inference failed')
         return jsonify(
-            error=("Le service d'estimation de Marrakech est momentanément indisponible." if str(payload.get('city', '')).strip().casefold() == 'marrakech' else "Le service d'estimation de Casablanca est momentanément indisponible."),
+            error=("Le service d'estimation de Rabat est momentanément indisponible." if str(payload.get('city', '')).strip().casefold() == 'rabat' else "Le service d'estimation de Marrakech est momentanément indisponible." if str(payload.get('city', '')).strip().casefold() == 'marrakech' else "Le service d'estimation de Casablanca est momentanément indisponible."),
             code='model_unavailable',
         ), 503
 
@@ -234,11 +234,11 @@ def city_estimate_context():
         return jsonify(error='Un objet JSON est requis.', code='invalid_request'), 400
     try:
         return jsonify(**service.context(payload))
-    except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError) as error:
+    except (CasablancaInferenceError, MarrakechInferenceError, ModelRegistryError, service.rabat.RabatInferenceError) as error:
         return jsonify(error=str(error), code='unsupported_request'), 400
     except Exception:
         app.logger.exception('Optional city context failed')
-        return jsonify(unavailable=['explanation', 'comparables', *(['market_context'] if str(payload.get('city', '')).strip().casefold() == 'marrakech' else [])]), 200
+        return jsonify(unavailable=['explanation', 'comparables', *(['market_context'] if str(payload.get('city', '')).strip().casefold() in ('marrakech', 'rabat') else [])]), 200
 
 
 @app.get('/api/ml/metadata')

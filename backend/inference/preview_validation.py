@@ -3,9 +3,24 @@ import hashlib
 import warnings
 import platform
 from concurrent.futures import ThreadPoolExecutor
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 from time import perf_counter
 from . import service, marrakech
+
+
+def xgboost_runtime():
+    """Report either supported distribution truthfully, without changing inference."""
+    installed = {}
+    expected = marrakech.load_metadata()['dependency_versions_proven_by_evidence']['xgboost']['version']
+    for name in ('xgboost-cpu', 'xgboost'):
+        try:
+            installed[name] = version(name)
+        except PackageNotFoundError:
+            continue
+    if not installed or any(value != expected for value in installed.values()):
+        raise RuntimeError('Preview requires a consistent supported XGBoost distribution')
+    name = 'xgboost-cpu' if 'xgboost-cpu' in installed else 'xgboost'
+    return {'distribution': name, 'version': installed[name]}
 
 
 def validate_preview_runtime():
@@ -50,7 +65,7 @@ def validate_preview_runtime():
         peak_memory = None
     return {'status':'PASS','goldens':results,'casablanca_mad':1217911,'warnings':0,
             'python':platform.python_version(),'platform':platform.system(),
-            'sklearn':version('scikit-learn'),'xgboost_cpu':version('xgboost-cpu'),
+            'sklearn':version('scikit-learn'),'xgboost_runtime':xgboost_runtime(),
             'repeated_requests':3,'warm_mean_seconds':warm_seconds,
             'concurrency_workers':2,'concurrency_seconds':concurrency_seconds,
             'total_seconds':perf_counter()-started,'peak_resident_bytes':peak_memory,

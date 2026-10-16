@@ -1,0 +1,701 @@
+Type,Localisation,Area,Rooms,Bedrooms,Bathrooms,Current_state,Age,city,Price
+appartement,Agdal,107.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,1980000.0
+villa,Riyad,791.0,8.0,5.0,3.0,20-30 ans,25.0,Rabat,8900000.0
+villa,Riyad,622.0,8.0,4.0,4.0,Inconnu,15.0,Rabat,7500000.0
+villa,Riyad,790.0,8.0,4.0,3.0,Inconnu,15.0,Rabat,7900000.0
+villa,Riyad,310.0,7.0,5.0,4.0,Inconnu,15.0,Rabat,5400000.0
+villa,Souissi,2600.0,8.0,5.0,6.0,Moins d'un an,0.5,Rabat,45000000.0
+villa,Riyad,650.0,7.0,5.0,4.0,Inconnu,15.0,Rabat,8000000.0
+villa,Souissi,2262.0,18.0,7.0,4.0,Inconnu,15.0,Rabat,43000000.0
+appartement,Riyad,215.0,6.0,3.0,3.0,5-10 ans,7.5,Rabat,3900000.0
+villa,Riyad,722.0,8.0,6.0,4.0,Inconnu,15.0,Rabat,7400000.0
+villa,Riyad,300.0,8.0,5.0,4.0,20-30 ans,25.0,Rabat,5500000.0
+villa,Riyad,432.0,6.0,4.0,3.0,Inconnu,15.0,Rabat,5700000.0
+villa,Riyad,765.0,8.0,5.0,4.0,Inconnu,15.0,Rabat,8750000.0
+villa,Souissi,2011.0,11.0,6.0,5.0,20-30 ans,25.0,Rabat,14000000.0
+appartement,Souissi,70.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,1400000.0
+villa,Quartier Des Ambassades,2000.0,9.0,6.0,6.0,5-10 ans,7.5,Rabat,26000000.0
+villa,Riyad,450.0,9.0,4.0,4.0,5-10 ans,7.5,Rabat,6800000.0
+appartement,Riyad,147.0,5.0,4.0,3.0,Inconnu,15.0,Rabat,2450000.0
+appartement,Riyad,130.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2650000.0
+appartement,Souissi,290.0,5.0,3.0,3.0,1-5 ans,3.0,Rabat,5500000.0
+appartement,Riyad,210.0,7.0,4.0,3.0,5-10 ans,7.5,Rabat,3900000.0
+appartement,Riyad,175.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2880000.0
+villa,Souissi,1500.0,8.0,6.0,4.0,5-10 ans,7.5,Rabat,20000000.0
+maison,L'Ocean,540.0,10.0,7.0,7.0,70-100 ans,85.0,Rabat,6000000.0
+appartement,Hassan - Centre Ville,145.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,3000000.0
+villa,Les Orangers,289.0,8.0,6.0,4.0,20-30 ans,25.0,Rabat,4600000.0
+villa,Souissi,1200.0,8.0,5.0,5.0,1-5 ans,3.0,Rabat,15000000.0
+appartement,Riyad,270.0,6.0,5.0,3.0,5-10 ans,7.5,Rabat,4500000.0
+villa,Riyad,480.0,3.0,5.0,3.0,20-30 ans,25.0,Rabat,9000000.0
+appartement,Riyad,200.0,7.0,4.0,4.0,5-10 ans,7.5,Rabat,4000000.0
+appartement,Agdal,213.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2900000.0
+villa,Souissi,1035.0,7.0,5.0,2.0,20-30 ans,25.0,Rabat,11500000.0
+appartement,Agdal,131.0,3.0,3.0,3.0,5-10 ans,7.5,Rabat,3000000.0
+appartement,Haut Agdal,171.0,6.0,2.0,3.0,20-30 ans,25.0,Rabat,3200000.0
+appartement,Souissi,248.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,4000000.0
+appartement,Hassan - Centre Ville,112.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2700000.0
+villa,Souissi,500.0,10.0,4.0,3.0,Inconnu,15.0,Rabat,6975000.0
+villa,Souissi,2450.0,9.0,6.0,7.0,Moins d'un an,0.5,Rabat,30000000.0
+villa,Souissi,2000.0,4.0,9.0,6.0,5-10 ans,7.5,Rabat,25000000.0
+villa,Souissi,2200.0,9.0,6.0,5.0,1-5 ans,3.0,Rabat,35000000.0
+maison,Rabat,500.0,7.0,5.0,3.0,Inconnu,15.0,Rabat,7700000.0
+villa,Aviation - Mabella,492.0,5.0,3.0,4.0,30-50 ans,40.0,Rabat,7300000.0
+appartement,Riyad,135.0,5.0,4.0,3.0,Inconnu,15.0,Rabat,2450000.0
+maison,Rabat,155.0,5.0,2.0,1.0,Inconnu,15.0,Rabat,2800000.0
+villa,Rabat,623.0,10.0,5.0,5.0,Inconnu,15.0,Rabat,7100000.0
+appartement,Agdal,189.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,2200000.0
+appartement,Haut Agdal,182.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,3200000.0
+villa,Aviation - Mabella,380.0,8.0,4.0,3.0,10-20 ans,15.0,Rabat,5200000.0
+appartement,Agdal,82.0,2.0,2.0,2.0,Inconnu,15.0,Rabat,1600000.0
+appartement,Agdal,158.0,3.0,3.0,2.0,5-10 ans,7.5,Rabat,2600000.0
+villa,Souissi,1700.0,8.0,5.0,6.0,Moins d'un an,0.5,Rabat,23000000.0
+villa,Souissi,1900.0,10.0,5.0,5.0,Inconnu,15.0,Rabat,16500000.0
+appartement,Agdal,104.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,2200000.0
+villa,Riyad,672.0,8.0,5.0,5.0,10-20 ans,15.0,Rabat,7600000.0
+villa,Souissi,1850.0,7.0,4.0,5.0,Moins d'un an,0.5,Rabat,15000000.0
+appartement,Agdal,89.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,1650000.0
+appartement,Riyad,192.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,4000000.0
+villa,Souissi,750.0,9.0,6.0,4.0,Moins d'un an,0.5,Rabat,9000000.0
+appartement,Haut Agdal,180.0,4.0,2.0,2.0,Inconnu,15.0,Rabat,2600000.0
+appartement,Riyad,165.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2850000.0
+villa,Riyad,700.0,9.0,5.0,5.0,Inconnu,15.0,Rabat,8200000.0
+villa,Riyad,400.0,15.0,4.0,4.0,20-30 ans,25.0,Rabat,7000000.0
+villa,Aviation - Mabella,1025.0,2.0,3.0,1.0,30-50 ans,40.0,Rabat,7700000.0
+villa,Souissi,1437.0,11.0,5.0,2.0,Inconnu,15.0,Rabat,14000000.0
+appartement,Rabat,198.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,4700000.0
+appartement,Hassan - Centre Ville,112.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2900000.0
+appartement,Agdal,233.0,5.0,2.0,2.0,Inconnu,15.0,Rabat,2912500.0
+appartement,Agdal,176.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,3500000.0
+villa,El Youssoufia,360.0,11.0,6.0,2.0,Inconnu,15.0,Rabat,5000000.0
+villa,Aviation - Mabella,240.0,8.0,5.0,2.0,Inconnu,15.0,Rabat,4700000.0
+maison,Akkari,105.0,10.0,6.0,2.0,10-20 ans,15.0,Rabat,1480000.0
+villa,Riyad,630.0,8.0,6.0,4.0,Inconnu,15.0,Rabat,6300000.0
+villa,Souissi,2000.0,5.0,4.0,4.0,5-10 ans,7.5,Rabat,20000000.0
+appartement,Riyad,136.0,4.0,2.0,2.0,Inconnu,15.0,Rabat,2500000.0
+villa,Quartier Des Ambassades,925.0,15.0,5.0,7.0,1-5 ans,3.0,Rabat,10350000.0
+appartement,Agdal,210.0,5.0,3.0,1.0,Inconnu,15.0,Rabat,3500000.0
+villa,Souissi,2000.0,8.0,4.0,5.0,Moins d'un an,0.5,Rabat,16000000.0
+villa,Rabat,645.0,8.0,4.0,3.0,Inconnu,15.0,Rabat,7800000.0
+appartement,Rabat,130.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2200000.0
+villa,Riyad,540.0,6.0,4.0,5.0,Inconnu,15.0,Rabat,7000000.0
+appartement,Riyad,176.0,3.0,3.0,3.0,10-20 ans,15.0,Rabat,4100000.0
+appartement,Rabat,183.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,3200000.0
+villa,Rabat,201.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,4300000.0
+appartement,Guich Oudaya,115.0,4.0,3.0,3.0,Moins d'un an,0.5,Rabat,2000000.0
+villa,Hay Al Fath,338.0,8.0,5.0,4.0,10-20 ans,15.0,Rabat,5500000.0
+appartement,Aviation - Mabella,101.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,1750000.0
+appartement,Riyad,130.0,3.0,2.0,2.0,5-10 ans,7.5,Rabat,2090000.0
+maison,Souissi,900.0,10.0,5.0,7.0,5-10 ans,7.5,Rabat,17000000.0
+appartement,Riyad,140.0,4.0,3.0,3.0,Inconnu,15.0,Rabat,2850000.0
+villa,Rabat,500.0,7.0,4.0,3.0,Inconnu,15.0,Rabat,9200000.0
+appartement,Agdal,137.0,5.0,3.0,3.0,20-30 ans,25.0,Rabat,2680000.0
+villa,Riyad,600.0,15.0,5.0,3.0,20-30 ans,25.0,Rabat,9500000.0
+villa,Riyad,600.0,12.0,7.0,4.0,Inconnu,15.0,Rabat,9100000.0
+appartement,Riyad,145.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,2300000.0
+appartement,Souissi,147.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,3350000.0
+appartement,Agdal,117.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,1950000.0
+villa,Rabat,330.0,9.0,4.0,3.0,Inconnu,15.0,Rabat,5600000.0
+villa,Riyad,280.0,7.0,4.0,3.0,10-20 ans,15.0,Rabat,4970000.0
+villa,Rabat,300.0,7.0,3.0,2.0,Inconnu,15.0,Rabat,4700000.0
+villa,Souissi,1780.0,6.0,5.0,5.0,Inconnu,15.0,Rabat,22000000.0
+villa,Riyad,900.0,10.0,4.0,4.0,20-30 ans,25.0,Rabat,9400000.0
+appartement,Hay Nahda,110.0,4.0,2.0,2.0,1-5 ans,3.0,Rabat,1540000.0
+appartement,Agdal,140.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,2350000.0
+appartement,Rabat,178.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,3300000.0
+villa,Aviation - Mabella,399.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,4800000.0
+villa,Rabat,716.0,6.0,4.0,2.0,Inconnu,15.0,Rabat,5800000.0
+appartement,Souissi,171.0,5.0,3.0,3.0,1-5 ans,3.0,Rabat,3650000.0
+appartement,Riyad,95.0,3.0,2.0,2.0,5-10 ans,7.5,Rabat,2270000.0
+villa,Riyad,589.0,9.0,6.0,4.0,20-30 ans,25.0,Rabat,7700000.0
+appartement,Agdal,165.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,2475000.0
+appartement,Hay Al Fath,156.0,4.0,3.0,2.0,1-5 ans,3.0,Rabat,2400000.0
+villa,Souissi,2360.0,7.0,5.0,6.0,1-5 ans,3.0,Rabat,32000000.0
+appartement,Rabat,140.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2400000.0
+appartement,Riyad,175.0,5.0,3.0,3.0,5-10 ans,7.5,Rabat,3590000.0
+appartement,Al Kamra,126.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,1700000.0
+appartement,Aviation - Mabella,167.0,5.0,4.0,3.0,Inconnu,15.0,Rabat,2900000.0
+appartement,Agdal,115.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1970000.0
+appartement,Aviation - Mabella,146.0,6.0,3.0,2.0,10-20 ans,15.0,Rabat,2070000.0
+villa,Rabat,811.0,8.0,6.0,2.0,Inconnu,15.0,Rabat,11000000.0
+appartement,Kébibat,125.0,4.0,3.0,2.0,5-10 ans,7.5,Rabat,1650000.0
+villa,Souissi,1752.0,7.0,4.0,3.0,Inconnu,15.0,Rabat,11000000.0
+appartement,Agdal,118.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1800000.0
+villa,Rabat,1079.0,7.0,6.0,3.0,Inconnu,15.0,Rabat,8900000.0
+villa,Riyad,834.0,7.0,4.0,2.0,Inconnu,15.0,Rabat,9500000.0
+villa,Souissi,3000.0,7.0,6.0,6.0,1-5 ans,3.0,Rabat,27000000.0
+appartement,Agdal,235.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,5500000.0
+appartement,Agdal,129.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2100000.0
+appartement,Agdal,181.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3500000.0
+appartement,L'Ocean,64.0,3.0,2.0,1.0,10-20 ans,15.0,Rabat,1100000.0
+villa,Souissi,725.0,15.0,5.0,7.0,1-5 ans,3.0,Rabat,10700000.0
+appartement,Agdal,173.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,2650000.0
+appartement,Riyad,108.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,2350000.0
+villa,Riyad,500.0,8.0,5.0,4.0,10-20 ans,15.0,Rabat,9500000.0
+appartement,Rabat,117.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,1990000.0
+villa,Souissi,2050.0,12.0,6.0,8.0,Moins d'un an,0.5,Rabat,35000000.0
+villa,Souissi,1900.0,13.0,8.0,10.0,10-20 ans,15.0,Rabat,15500000.0
+villa,Souissi,1800.0,7.0,4.0,5.0,5-10 ans,7.5,Rabat,16500000.0
+villa,Souissi,1400.0,12.0,6.0,8.0,5-10 ans,7.5,Rabat,18500000.0
+villa,Souissi,940.0,10.0,5.0,5.0,20-30 ans,25.0,Rabat,8200000.0
+appartement,Riyad,140.0,5.0,3.0,3.0,5-10 ans,7.5,Rabat,2850000.0
+appartement,Agdal,93.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1740000.0
+villa,Riyad,2009.0,8.0,6.0,4.0,Moins d'un an,0.5,Rabat,13000000.0
+villa,Souissi,2000.0,10.0,7.0,5.0,Inconnu,15.0,Rabat,15000000.0
+villa,Souissi,700.0,12.0,6.0,6.0,1-5 ans,3.0,Rabat,8500000.0
+appartement,Rabat,137.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,1970000.0
+villa,Souissi,910.0,14.0,5.0,7.0,1-5 ans,3.0,Rabat,9950000.0
+villa,Souissi,1500.0,7.0,4.0,3.0,5-10 ans,7.5,Rabat,15000000.0
+villa,Quartier Des Ambassades,2400.0,6.0,4.0,3.0,Inconnu,15.0,Rabat,16000000.0
+villa,Riyad,734.0,8.0,5.0,3.0,5-10 ans,7.5,Rabat,10100000.0
+villa,Quartier Des Ambassades,2200.0,8.0,5.0,5.0,Inconnu,15.0,Rabat,16500000.0
+appartement,Diour Jamaa,141.0,2.0,3.0,2.0,5-10 ans,7.5,Rabat,2330000.0
+villa,Souissi,3000.0,10.0,6.0,4.0,1-5 ans,3.0,Rabat,38000000.0
+appartement,Souissi,260.0,5.0,4.0,4.0,Inconnu,15.0,Rabat,6200000.0
+villa,Souissi,1551.0,7.0,2.0,3.0,10-20 ans,15.0,Rabat,15500000.0
+appartement,Haut Agdal,138.0,2.0,2.0,2.0,1-5 ans,3.0,Rabat,2800000.0
+villa,Souissi,1200.0,8.0,4.0,4.0,5-10 ans,7.5,Rabat,17500000.0
+villa,Aviation - Mabella,425.0,7.0,5.0,3.0,30-50 ans,40.0,Rabat,4300000.0
+villa,Riyad,800.0,9.0,6.0,4.0,Inconnu,15.0,Rabat,10200000.0
+appartement,Diour Jamaa,120.0,4.0,2.0,1.0,10-20 ans,15.0,Rabat,1350000.0
+villa,Riyad,800.0,8.0,5.0,4.0,Inconnu,15.0,Rabat,10200000.0
+villa,Souissi,1000.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,7600000.0
+appartement,Agdal,200.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3500000.0
+villa,Souissi,1020.0,3.0,3.0,2.0,Inconnu,15.0,Rabat,11800000.0
+villa,Aviation - Mabella,139.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2600000.0
+maison,Guich Oudaya,100.0,2.0,7.0,4.0,10-20 ans,15.0,Rabat,2000000.0
+villa,Souissi,2008.0,9.0,6.0,6.0,Moins d'un an,0.5,Rabat,17000000.0
+appartement,Hassan - Centre Ville,154.0,4.0,3.0,2.0,20-30 ans,25.0,Rabat,2775000.0
+appartement,Souissi,248.0,5.0,3.0,4.0,Inconnu,15.0,Rabat,5800000.0
+villa,Souissi,2800.0,13.0,8.0,12.0,10-20 ans,15.0,Rabat,30000000.0
+maison,Kébibat,152.0,3.0,1.0,2.0,30-50 ans,40.0,Rabat,2080000.0
+appartement,Aviation - Mabella,87.0,3.0,2.0,2.0,20-30 ans,25.0,Rabat,1450000.0
+appartement,Agdal,165.0,5.0,3.0,3.0,20-30 ans,25.0,Rabat,3000000.0
+appartement,Hay Al Fath,112.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,1500000.0
+villa,Souissi,1700.0,9.0,6.0,5.0,Inconnu,15.0,Rabat,11000000.0
+appartement,Guich Oudaya,140.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2500000.0
+villa,Souissi,1853.0,8.0,4.0,3.0,1-5 ans,3.0,Rabat,14000000.0
+villa,Souissi,476.0,8.0,3.0,3.0,Inconnu,15.0,Rabat,5500000.0
+appartement,Agdal,127.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2400000.0
+appartement,Riyad,127.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3200000.0
+appartement,Riyad,142.0,3.0,3.0,3.0,5-10 ans,7.5,Rabat,3200000.0
+appartement,Quartier Administratif,122.0,2.0,2.0,2.0,10-20 ans,15.0,Rabat,2400000.0
+appartement,Riyad,95.0,4.0,2.0,2.0,10-20 ans,15.0,Rabat,2200000.0
+appartement,Hay Al Fath,60.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,850000.0
+appartement,Hay Al Massira,78.0,2.0,2.0,1.0,20-30 ans,25.0,Rabat,1060000.0
+appartement,Souissi,240.0,5.0,4.0,4.0,1-5 ans,3.0,Rabat,5800000.0
+appartement,Riyad,175.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3500000.0
+villa,Souissi,2500.0,9.0,5.0,8.0,Inconnu,15.0,Rabat,17000000.0
+appartement,Haut Agdal,170.0,5.0,3.0,3.0,30-50 ans,40.0,Rabat,3300000.0
+appartement,Quartier Administratif,188.0,3.0,3.0,2.0,5-10 ans,7.5,Rabat,2880000.0
+villa,Riyad,583.0,8.0,5.0,3.0,Inconnu,15.0,Rabat,7200000.0
+villa,Riyad,550.0,9.0,5.0,3.0,Inconnu,15.0,Rabat,7200000.0
+maison,L'Ocean,540.0,7.0,7.0,7.0,10-20 ans,15.0,Rabat,5800000.0
+villa,Souissi,1900.0,9.0,6.0,6.0,10-20 ans,15.0,Rabat,16000000.0
+villa,Souissi,1437.0,8.0,5.0,3.0,5-10 ans,7.5,Rabat,16000000.0
+maison,Hay El Menzah,191.0,6.0,4.0,2.0,20-30 ans,25.0,Rabat,2900000.0
+appartement,Agdal,256.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,3500000.0
+appartement,Hay Nahda,100.0,4.0,2.0,1.0,20-30 ans,25.0,Rabat,1300000.0
+appartement,Agdal,125.0,1.0,3.0,2.0,10-20 ans,15.0,Rabat,2100000.0
+appartement,Riyad,130.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2600000.0
+appartement,Guich Oudaya,98.0,2.0,2.0,2.0,10-20 ans,15.0,Rabat,1200000.0
+villa,Hay Al Fath,213.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,4500000.0
+appartement,Riyad,250.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,4000000.0
+villa,Souissi,2278.0,8.0,5.0,6.0,1-5 ans,3.0,Rabat,26000000.0
+villa,Souissi,2187.0,12.0,6.0,7.0,Inconnu,15.0,Rabat,30000000.0
+villa,Hay El Menzah,533.0,3.0,5.0,5.0,Moins d'un an,0.5,Rabat,7200000.0
+appartement,Rabat,202.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,4500000.0
+villa,Riyad,365.0,8.0,6.0,3.0,Inconnu,15.0,Rabat,6500000.0
+appartement,Hay Nahda,77.0,3.0,2.0,1.0,10-20 ans,15.0,Rabat,960000.0
+appartement,Riyad,202.0,6.0,4.0,3.0,Moins d'un an,0.5,Rabat,4500000.0
+appartement,Hay Al Massira,118.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,1850000.0
+villa,Aviation - Mabella,628.0,10.0,6.0,4.0,Inconnu,15.0,Rabat,5800000.0
+maison,Médina,200.0,6.0,4.0,1.0,30-50 ans,40.0,Rabat,2600000.0
+appartement,Aviation - Mabella,110.0,4.0,2.0,2.0,5-10 ans,7.5,Rabat,1720000.0
+villa,Aviation - Mabella,280.0,12.0,4.0,4.0,10-20 ans,15.0,Rabat,5500000.0
+villa,Riyad,673.0,6.0,6.0,3.0,20-30 ans,25.0,Rabat,7500000.0
+villa,Riyad,580.0,9.0,7.0,6.0,5-10 ans,7.5,Rabat,9300000.0
+appartement,Riyad,140.0,6.0,4.0,3.0,20-30 ans,25.0,Rabat,2600000.0
+villa,Riyad Extension,490.0,10.0,7.0,6.0,Inconnu,15.0,Rabat,7600000.0
+villa,Hassan - Centre Ville,574.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,5950000.0
+villa,Riyad,1200.0,10.0,7.0,6.0,10-20 ans,15.0,Rabat,9400000.0
+appartement,Hay El Menzah,112.0,4.0,3.0,2.0,Moins d'un an,0.5,Rabat,1820000.0
+appartement,Riyad,271.0,5.0,3.0,5.0,Inconnu,15.0,Rabat,6400000.0
+villa,Riyad,928.0,8.0,5.0,4.0,10-20 ans,15.0,Rabat,9600000.0
+maison,Hay Bouhlal,76.0,6.0,6.0,3.0,30-50 ans,40.0,Rabat,1600000.0
+villa,Quartier Des Ambassades,1781.0,8.0,5.0,12.0,Inconnu,15.0,Rabat,19100000.0
+villa,Haut Agdal,514.0,8.0,5.0,4.0,Inconnu,15.0,Rabat,11000000.0
+appartement,Hay Al Massira,120.0,6.0,4.0,2.0,10-20 ans,15.0,Rabat,2000000.0
+appartement,Hassan - Centre Ville,95.0,1.0,3.0,1.0,30-50 ans,40.0,Rabat,1400000.0
+appartement,Hassan - Centre Ville,101.0,4.0,2.0,2.0,20-30 ans,25.0,Rabat,2200000.0
+appartement,Agdal,144.0,5.0,3.0,1.0,Inconnu,15.0,Rabat,2500000.0
+appartement,Agdal,74.0,2.0,2.0,2.0,Inconnu,15.0,Rabat,1450000.0
+appartement,Guich Oudaya,120.0,3.0,3.0,1.0,Inconnu,15.0,Rabat,1350000.0
+villa,Souissi,650.0,10.0,7.0,3.0,Inconnu,15.0,Rabat,13000000.0
+appartement,Hay Ach-chbanat,92.0,3.0,1.0,1.0,30-50 ans,40.0,Rabat,1200000.0
+appartement,Riyad,144.0,5.0,3.0,3.0,5-10 ans,7.5,Rabat,3300000.0
+appartement,Agdal,160.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,3200000.0
+appartement,Hassan - Centre Ville,137.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,1850000.0
+appartement,Riyad,95.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2200000.0
+appartement,Riyad,155.0,3.0,2.0,3.0,Inconnu,15.0,Rabat,3200000.0
+appartement,Riyad,195.0,5.0,3.0,3.0,5-10 ans,7.5,Rabat,4150000.0
+appartement,Riyad,120.0,5.0,2.0,2.0,10-20 ans,15.0,Rabat,2750000.0
+appartement,Riyad,127.0,4.0,2.0,2.0,10-20 ans,15.0,Rabat,2600000.0
+villa,Souissi,1985.0,7.0,6.0,5.0,10-20 ans,15.0,Rabat,25000000.0
+appartement,Agdal,60.0,2.0,1.0,1.0,20-30 ans,25.0,Rabat,870000.0
+appartement,Riyad,212.0,4.0,4.0,2.0,5-10 ans,7.5,Rabat,4800000.0
+appartement,Hay Al Kora,97.0,5.0,4.0,2.0,30-50 ans,40.0,Rabat,1200000.0
+appartement,Hay Al Massira,118.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,1350000.0
+appartement,Agdal,158.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,3700000.0
+appartement,Guich Oudaya,80.0,2.0,2.0,2.0,1-5 ans,3.0,Rabat,940000.0
+appartement,Agdal,140.0,3.0,3.0,2.0,10-20 ans,15.0,Rabat,2400000.0
+appartement,Kébibat,125.0,7.0,3.0,2.0,1-5 ans,3.0,Rabat,1950000.0
+appartement,Agdal,135.0,4.0,3.0,2.0,Moins d'un an,0.5,Rabat,2600000.0
+villa,Hay Al Fath,380.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,5250000.0
+appartement,Quartier Administratif,79.0,3.0,2.0,2.0,Moins d'un an,0.5,Rabat,1800000.0
+appartement,Agdal,248.0,5.0,4.0,3.0,5-10 ans,7.5,Rabat,2900000.0
+appartement,Hassan - Centre Ville,205.0,3.0,2.0,2.0,30-50 ans,40.0,Rabat,2450000.0
+appartement,Hassan - Centre Ville,260.0,4.0,2.0,1.0,Moins d'un an,0.5,Rabat,6200000.0
+villa,Agdal,365.0,7.0,4.0,4.0,Inconnu,15.0,Rabat,7500000.0
+villa,Aviation - Mabella,1200.0,5.0,3.0,1.0,30-50 ans,40.0,Rabat,8000000.0
+appartement,Agdal,93.0,4.0,3.0,1.0,5-10 ans,7.5,Rabat,1600000.0
+appartement,L'Ocean,78.0,3.0,2.0,2.0,Moins d'un an,0.5,Rabat,1475000.0
+appartement,Agdal,70.0,3.0,2.0,2.0,20-30 ans,25.0,Rabat,1600000.0
+maison,Al Kouass,220.0,7.0,7.0,3.0,10-20 ans,15.0,Rabat,1700000.0
+appartement,Agdal,42.0,1.0,1.0,1.0,Inconnu,15.0,Rabat,920000.0
+appartement,Guich Oudaya,118.0,2.0,3.0,2.0,1-5 ans,3.0,Rabat,1500000.0
+appartement,Hay Al Fath,67.0,2.0,2.0,1.0,Inconnu,15.0,Rabat,800000.0
+maison,Akkari,48.0,5.0,3.0,1.0,50-70 ans,60.0,Rabat,500000.0
+appartement,Agdal,118.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,2000000.0
+appartement,Diour Jamaa,146.0,5.0,3.0,2.0,20-30 ans,25.0,Rabat,2100000.0
+appartement,Diour Jamaa,40.0,1.0,1.0,1.0,5-10 ans,7.5,Rabat,520000.0
+maison,Les Oudayas,220.0,5.0,7.0,3.0,Inconnu,15.0,Rabat,4300000.0
+maison,Aviation - Mabella,54.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,800000.0
+appartement,Les Orangers,97.0,4.0,2.0,2.0,30-50 ans,40.0,Rabat,1500000.0
+appartement,Riyad,326.0,7.0,4.0,3.0,5-10 ans,7.5,Rabat,5000000.0
+villa,Hay Al Fath,280.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,5300000.0
+villa,Souissi,2000.0,8.0,5.0,6.0,Inconnu,15.0,Rabat,25000000.0
+appartement,Agdal,160.0,4.0,2.0,2.0,5-10 ans,7.5,Rabat,2200000.0
+villa,Souissi,500.0,6.0,5.0,3.0,1-5 ans,3.0,Rabat,6500000.0
+villa,Souissi,1500.0,8.0,4.0,5.0,Inconnu,15.0,Rabat,17000000.0
+villa,Souissi,1400.0,8.0,6.0,6.0,Inconnu,15.0,Rabat,23000000.0
+appartement,Souissi,208.0,4.0,2.0,3.0,Inconnu,15.0,Rabat,3850000.0
+appartement,Diour Jamaa,150.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,1700000.0
+appartement,Agdal,151.0,4.0,3.0,3.0,Inconnu,15.0,Rabat,2850000.0
+appartement,Guich Oudaya,141.0,5.0,3.0,3.0,5-10 ans,7.5,Rabat,2170000.0
+appartement,Riyad,220.0,7.0,3.0,2.0,Inconnu,15.0,Rabat,3850000.0
+appartement,Diour Jamaa,120.0,4.0,3.0,2.0,5-10 ans,7.5,Rabat,1750000.0
+appartement,Hassan - Centre Ville,114.0,6.0,2.0,2.0,10-20 ans,15.0,Rabat,1850000.0
+villa,Souissi,2000.0,7.0,4.0,5.0,Inconnu,15.0,Rabat,18500000.0
+villa,Riyad,871.0,6.0,5.0,4.0,Inconnu,15.0,Rabat,9500000.0
+appartement,Kébibat,116.0,5.0,3.0,3.0,1-5 ans,3.0,Rabat,2000000.0
+villa,Souissi,2000.0,7.0,5.0,7.0,Inconnu,15.0,Rabat,20000000.0
+villa,Hay Nahda,370.0,6.0,4.0,3.0,Inconnu,15.0,Rabat,3900000.0
+appartement,Guich Oudaya,84.0,2.0,2.0,2.0,Inconnu,15.0,Rabat,1150000.0
+villa,Riyad,562.0,5.0,5.0,3.0,5-10 ans,7.5,Rabat,7800000.0
+villa,Riyad,1100.0,16.0,14.0,4.0,Inconnu,15.0,Rabat,9800000.0
+villa,Riyad,570.0,8.0,4.0,3.0,Inconnu,15.0,Rabat,7500000.0
+villa,Riyad,550.0,8.0,5.0,4.0,20-30 ans,25.0,Rabat,7890000.0
+appartement,Hassan - Centre Ville,250.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3800000.0
+appartement,Agdal,226.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3600000.0
+appartement,Agdal,137.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2100000.0
+appartement,Agdal,137.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2400000.0
+appartement,Al Irfane,138.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1870000.0
+appartement,Agdal,151.0,1.0,3.0,2.0,Inconnu,15.0,Rabat,2800000.0
+appartement,Haut Agdal,75.0,2.0,1.0,1.0,20-30 ans,25.0,Rabat,1550000.0
+villa,Riyad,751.0,8.0,4.0,3.0,20-30 ans,25.0,Rabat,9000000.0
+villa,Hay Al Farah,380.0,7.0,4.0,4.0,Inconnu,15.0,Rabat,5400000.0
+studio,Hassan - Centre Ville,50.0,2.0,1.0,1.0,Inconnu,15.0,Rabat,750000.0
+maison,Souissi,2010.0,4.0,5.0,6.0,Inconnu,15.0,Rabat,27000000.0
+villa,Aviation - Mabella,600.0,8.0,4.0,2.0,Inconnu,15.0,Rabat,5000000.0
+appartement,Hay Ach-chbanat,70.0,3.0,2.0,1.0,10-20 ans,15.0,Rabat,910000.0
+appartement,Riyad Extension,150.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,3500000.0
+appartement,Riyad,98.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2320000.0
+villa,Riyad,376.0,10.0,5.0,4.0,10-20 ans,15.0,Rabat,6000000.0
+appartement,Riyad,131.0,4.0,3.0,2.0,Moins d'un an,0.5,Rabat,3000000.0
+appartement,Guich Oudaya,79.0,3.0,2.0,2.0,10-20 ans,15.0,Rabat,950000.0
+appartement,Guich Oudaya,78.0,3.0,2.0,2.0,10-20 ans,15.0,Rabat,1300000.0
+appartement,Agdal,97.0,3.0,2.0,1.0,20-30 ans,25.0,Rabat,2020000.0
+appartement,Haut Agdal,151.0,2.0,3.0,1.0,Inconnu,15.0,Rabat,2800000.0
+appartement,Agdal,192.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,3600000.0
+villa,Souissi,1974.0,4.0,4.0,4.0,Inconnu,15.0,Rabat,22000000.0
+appartement,Guich Oudaya,83.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,1100000.0
+villa,Souissi,1800.0,10.0,5.0,6.0,10-20 ans,15.0,Rabat,13000000.0
+appartement,Riyad,202.0,5.0,3.0,3.0,Moins d'un an,0.5,Rabat,4500000.0
+appartement,Hay Al Fath,101.0,5.0,3.0,2.0,20-30 ans,25.0,Rabat,1600000.0
+appartement,L'Ocean,104.0,5.0,4.0,1.0,30-50 ans,40.0,Rabat,1500000.0
+maison,Hay El Menzah,185.0,2.0,6.0,2.0,20-30 ans,25.0,Rabat,4200000.0
+villa,Quartier Des Ambassades,640.0,7.0,4.0,4.0,Inconnu,15.0,Rabat,7400000.0
+appartement,Diour Jamaa,81.0,1.0,2.0,1.0,20-30 ans,25.0,Rabat,970000.0
+villa,Souissi,1224.0,6.0,4.0,3.0,Inconnu,15.0,Rabat,12500000.0
+maison,Hay Al Fath,250.0,2.0,7.0,5.0,20-30 ans,25.0,Rabat,3900000.0
+appartement,Haut Agdal,202.0,4.0,3.0,3.0,20-30 ans,25.0,Rabat,3500000.0
+villa,Souissi,2000.0,6.0,4.0,5.0,Moins d'un an,0.5,Rabat,30000000.0
+villa,Riyad,300.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,5000000.0
+appartement,Hay Al Fath,95.0,3.0,2.0,2.0,5-10 ans,7.5,Rabat,1770000.0
+appartement,Riyad,167.0,1.0,4.0,3.0,10-20 ans,15.0,Rabat,3400000.0
+appartement,Agdal,181.0,2.0,2.0,3.0,Inconnu,15.0,Rabat,3250000.0
+villa,Riyad,309.0,7.0,4.0,3.0,Inconnu,15.0,Rabat,6500000.0
+appartement,Haut Agdal,280.0,5.0,3.0,3.0,1-5 ans,3.0,Rabat,5500000.0
+villa,Souissi,530.0,4.0,4.0,6.0,Inconnu,15.0,Rabat,8500000.0
+maison,Souissi,950.0,8.0,4.0,5.0,1-5 ans,3.0,Rabat,8000000.0
+appartement,Souissi,210.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3800000.0
+maison,Souissi,1150.0,8.0,5.0,5.0,Inconnu,15.0,Rabat,12500000.0
+appartement,Agdal,168.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,3000000.0
+appartement,Riyad,147.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,3300000.0
+appartement,Agdal,118.0,3.0,3.0,2.0,Inconnu,15.0,Rabat,2200000.0
+appartement,Riyad,216.0,5.0,3.0,3.0,1-5 ans,3.0,Rabat,4800000.0
+appartement,Agdal,181.0,2.0,3.0,2.0,20-30 ans,25.0,Rabat,3400000.0
+appartement,Agdal,118.0,4.0,3.0,2.0,Moins d'un an,0.5,Rabat,2000000.0
+villa,Hay Nahda,370.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,4400000.0
+appartement,Hay El Menzah,123.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,1800000.0
+villa,Souissi,2000.0,8.0,5.0,4.0,Inconnu,15.0,Rabat,20500000.0
+appartement,Diour Jamaa,146.0,4.0,4.0,2.0,10-20 ans,15.0,Rabat,2300000.0
+villa,Souissi,2700.0,10.0,6.0,5.0,Inconnu,15.0,Rabat,32000000.0
+appartement,Haut Agdal,98.0,1.0,1.0,1.0,10-20 ans,15.0,Rabat,1590000.0
+villa,Hay Ach-chbanat,540.0,9.0,6.0,3.0,5-10 ans,7.5,Rabat,6500000.0
+villa,Quartier Des Ambassades,1634.0,10.0,8.0,4.0,1-5 ans,3.0,Rabat,18000000.0
+appartement,Riyad,144.0,4.0,2.0,2.0,10-20 ans,15.0,Rabat,3000000.0
+appartement,Agdal,135.0,4.0,3.0,2.0,50-70 ans,60.0,Rabat,2200000.0
+appartement,Hay Nahda,81.0,1.0,2.0,1.0,70-100 ans,85.0,Rabat,1000000.0
+appartement,Diour Jamaa,74.0,3.0,2.0,2.0,1-5 ans,3.0,Rabat,1370000.0
+appartement,Agdal,170.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2500000.0
+appartement,Rabat,76.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,1260000.0
+appartement,Agdal,120.0,4.0,3.0,2.0,20-30 ans,25.0,Rabat,1950000.0
+appartement,Hassan - Centre Ville,112.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2600000.0
+villa,Riyad,722.0,8.0,5.0,5.0,10-20 ans,15.0,Rabat,7500000.0
+appartement,Agdal,60.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,1350000.0
+appartement,Guich Oudaya,70.0,3.0,2.0,1.0,5-10 ans,7.5,Rabat,1050000.0
+appartement,Agdal,130.0,2.0,2.0,2.0,Inconnu,15.0,Rabat,1600000.0
+appartement,Guich Oudaya,141.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,1900000.0
+appartement,Kébibat,120.0,4.0,3.0,1.0,10-20 ans,15.0,Rabat,1600000.0
+appartement,Agdal,106.0,3.0,2.0,1.0,5-10 ans,7.5,Rabat,1900000.0
+appartement,Riyad,98.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2450000.0
+appartement,Hay Al Amal,140.0,5.0,3.0,2.0,20-30 ans,25.0,Rabat,2600000.0
+appartement,Agdal,136.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2100000.0
+appartement,Hay Ach-chbanat,239.0,5.0,3.0,3.0,Moins d'un an,0.5,Rabat,5300000.0
+villa,Skhirat,400.0,8.0,5.0,3.0,Inconnu,15.0,Rabat,5500000.0
+appartement,Souissi,190.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,3000000.0
+villa,Riyad,761.0,5.0,5.0,5.0,10-20 ans,15.0,Rabat,9000000.0
+villa,Riyad,486.0,9.0,5.0,3.0,Inconnu,15.0,Rabat,10000000.0
+villa,Riyad,811.0,7.0,5.0,3.0,20-30 ans,25.0,Rabat,9700000.0
+villa,Riyad,929.0,7.0,5.0,3.0,10-20 ans,15.0,Rabat,9700000.0
+villa,Riyad,840.0,10.0,8.0,4.0,Inconnu,15.0,Rabat,9500000.0
+villa,Riyad,443.0,7.0,5.0,3.0,10-20 ans,15.0,Rabat,8500000.0
+appartement,Agdal,129.0,3.0,3.0,2.0,Inconnu,15.0,Rabat,2100000.0
+appartement,Hassan - Centre Ville,90.0,3.0,2.0,2.0,Moins d'un an,0.5,Rabat,1800000.0
+appartement,Agdal,94.0,2.0,1.0,2.0,Inconnu,15.0,Rabat,1700000.0
+appartement,Agdal,75.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,1700000.0
+villa,Souissi,1059.0,6.0,3.0,4.0,Inconnu,15.0,Rabat,12500000.0
+maison,Takadoum,70.0,4.0,4.0,4.0,20-30 ans,25.0,Rabat,1450000.0
+appartement,Riyad,212.0,7.0,4.0,3.0,Moins d'un an,0.5,Rabat,4400000.0
+villa,Hay El Menzah,589.0,6.0,6.0,5.0,1-5 ans,3.0,Rabat,7900000.0
+villa,Quartier Des Ambassades,1950.0,7.0,4.0,5.0,Inconnu,15.0,Rabat,15000000.0
+appartement,Agdal,142.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2440000.0
+appartement,Souissi,136.0,2.0,2.0,3.0,1-5 ans,3.0,Rabat,3500000.0
+maison,Hay Al Massira,330.0,1.0,9.0,4.0,20-30 ans,25.0,Rabat,3900000.0
+villa,Les Orangers,1137.0,3.0,5.0,3.0,70-100 ans,85.0,Rabat,14781000.0
+villa,Hay Ach-chbanat,400.0,10.0,6.0,5.0,5-10 ans,7.5,Rabat,7180000.0
+appartement,Guich Oudaya,62.0,3.0,2.0,1.0,1-5 ans,3.0,Rabat,1050000.0
+villa,Riyad,729.0,9.0,5.0,5.0,Inconnu,15.0,Rabat,12000000.0
+appartement,Kébibat,126.0,4.0,2.0,2.0,5-10 ans,7.5,Rabat,1800000.0
+villa,Souissi,970.0,8.0,5.0,4.0,Inconnu,15.0,Rabat,8800000.0
+villa,Souissi,920.0,3.0,4.0,4.0,10-20 ans,15.0,Rabat,9800000.0
+villa,Guich Oudaya,250.0,7.0,4.0,4.0,20-30 ans,25.0,Rabat,3800000.0
+appartement,Hay Al Kora,97.0,5.0,4.0,2.0,30-50 ans,40.0,Rabat,1150000.0
+villa,Rabat,1000.0,10.0,7.0,6.0,Inconnu,15.0,Rabat,17000000.0
+appartement,Agdal,160.0,6.0,3.0,3.0,10-20 ans,15.0,Rabat,3800000.0
+villa,Souissi,2000.0,8.0,5.0,3.0,5-10 ans,7.5,Rabat,14000000.0
+maison,El Youssoufia,190.0,2.0,2.0,3.0,Inconnu,15.0,Rabat,1780000.0
+appartement,Riyad,173.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,3900000.0
+appartement,Hay Al Fath,92.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1600000.0
+appartement,Riyad,250.0,5.0,4.0,3.0,Inconnu,15.0,Rabat,4800000.0
+maison,Hay El Menzah,172.0,3.0,5.0,2.0,10-20 ans,15.0,Rabat,3000000.0
+appartement,Guich Oudaya,112.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,1520000.0
+appartement,Agdal,120.0,5.0,3.0,2.0,30-50 ans,40.0,Rabat,1790000.0
+villa,Souissi,2000.0,6.0,5.0,4.0,Inconnu,15.0,Rabat,15000000.0
+appartement,Riyad,136.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2580000.0
+appartement,Agdal,130.0,3.0,3.0,2.0,10-20 ans,15.0,Rabat,2800000.0
+villa,Souissi,1850.0,7.0,4.0,4.0,Inconnu,15.0,Rabat,15000000.0
+appartement,Agdal,183.0,4.0,3.0,2.0,5-10 ans,7.5,Rabat,4000000.0
+appartement,Kébibat,101.0,4.0,2.0,2.0,Inconnu,15.0,Rabat,1300000.0
+appartement,Agdal,90.0,4.0,2.0,2.0,5-10 ans,7.5,Rabat,2100000.0
+appartement,Riyad,255.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,4200000.0
+appartement,Hassan - Centre Ville,103.0,3.0,2.0,2.0,10-20 ans,15.0,Rabat,1850000.0
+appartement,Riyad,212.0,5.0,4.0,3.0,Inconnu,15.0,Rabat,5100000.0
+appartement,Agdal,134.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,2050000.0
+villa,Riyad,840.0,6.0,4.0,3.0,1-5 ans,3.0,Rabat,9000000.0
+appartement,Agdal,140.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,2000000.0
+appartement,Diour Jamaa,65.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,1650000.0
+villa,Riyad,450.0,5.0,4.0,4.0,10-20 ans,15.0,Rabat,7800000.0
+appartement,Hay El Menzah,239.0,5.0,3.0,4.0,Moins d'un an,0.5,Rabat,4950000.0
+appartement,Souissi,156.0,3.0,2.0,3.0,5-10 ans,7.5,Rabat,3450000.0
+appartement,L'Ocean,90.0,4.0,3.0,2.0,5-10 ans,7.5,Rabat,1480000.0
+appartement,Agdal,160.0,4.0,3.0,3.0,Inconnu,15.0,Rabat,4100000.0
+villa,Riyad,649.0,8.0,5.0,4.0,30-50 ans,40.0,Rabat,9500000.0
+appartement,Souissi,140.0,3.0,2.0,2.0,Moins d'un an,0.5,Rabat,3200000.0
+appartement,Diour Jamaa,102.0,3.0,2.0,2.0,20-30 ans,25.0,Rabat,1600000.0
+appartement,Hay Al Kora,110.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,1250000.0
+appartement,Diour Jamaa,122.0,2.0,2.0,2.0,5-10 ans,7.5,Rabat,1960000.0
+appartement,Quartier Administratif,79.0,3.0,2.0,2.0,1-5 ans,3.0,Rabat,1850000.0
+appartement,Hassan - Centre Ville,123.0,3.0,2.0,2.0,1-5 ans,3.0,Rabat,2250000.0
+appartement,Agdal,92.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,1600000.0
+appartement,Agdal,142.0,4.0,3.0,2.0,5-10 ans,7.5,Rabat,2650000.0
+villa,Souissi,2000.0,6.0,4.0,5.0,Inconnu,15.0,Rabat,15000000.0
+appartement,Riyad,142.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,3200000.0
+villa,El Youssoufia,580.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,9500000.0
+maison,Hay Nahda,297.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,3000000.0
+bureau,Agdal,110.0,4.0,2.0,1.0,10-20 ans,15.0,Rabat,1740000.0
+villa,Souissi,1700.0,7.0,6.0,4.0,5-10 ans,7.5,Rabat,12500000.0
+villa,Riyad,1700.0,8.0,4.0,5.0,Inconnu,15.0,Rabat,11000000.0
+appartement,Riyad,144.0,4.0,2.0,2.0,Moins d'un an,0.5,Rabat,3250000.0
+appartement,Hassan - Centre Ville,109.0,3.0,3.0,2.0,5-10 ans,7.5,Rabat,2600000.0
+villa,Souissi,2109.0,6.0,4.0,3.0,20-30 ans,25.0,Rabat,14000000.0
+villa,Souissi,2000.0,8.0,5.0,4.0,20-30 ans,25.0,Rabat,12900000.0
+villa,Riyad,280.0,7.0,4.0,3.0,20-30 ans,25.0,Rabat,5200000.0
+villa,Souissi,1850.0,8.0,4.0,4.0,1-5 ans,3.0,Rabat,15000000.0
+appartement,Kébibat,98.0,4.0,2.0,2.0,Inconnu,15.0,Rabat,1340000.0
+villa,Souissi,500.0,4.0,3.0,4.0,1-5 ans,3.0,Rabat,8800000.0
+villa,El Youssoufia,568.0,8.0,5.0,3.0,20-30 ans,25.0,Rabat,6200000.0
+villa,Riyad,447.0,8.0,6.0,4.0,10-20 ans,15.0,Rabat,6400000.0
+villa,Riyad,112.0,4.0,3.0,2.0,20-30 ans,25.0,Rabat,2300000.0
+villa,Riyad,650.0,8.0,4.0,5.0,1-5 ans,3.0,Rabat,13000000.0
+appartement,Agdal,140.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2400000.0
+appartement,Hassan - Centre Ville,101.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,2200000.0
+appartement,Haut Agdal,365.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,7000000.0
+appartement,Riyad,155.0,5.0,3.0,3.0,10-20 ans,15.0,Rabat,3300000.0
+appartement,Agdal,235.0,6.0,3.0,3.0,Inconnu,15.0,Rabat,5500000.0
+appartement,Agdal,137.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,2400000.0
+villa,Souissi,1721.0,9.0,6.0,6.0,1-5 ans,3.0,Rabat,20000000.0
+appartement,Al Irfane,130.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1900000.0
+appartement,Haut Agdal,170.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,3400000.0
+appartement,Hassan - Centre Ville,109.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2550000.0
+appartement,Riyad Extension,136.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2100000.0
+villa,Hay El Menzah,630.0,7.0,4.0,5.0,Inconnu,15.0,Rabat,6400000.0
+appartement,Haut Agdal,170.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,3250000.0
+appartement,Kébibat,110.0,1.0,3.0,2.0,10-20 ans,15.0,Rabat,1530000.0
+appartement,Riyad,87.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2100000.0
+appartement,Guich Oudaya,141.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2150000.0
+villa,Souissi,930.0,8.0,4.0,5.0,Inconnu,15.0,Rabat,8000000.0
+maison,Hay Al Fath,250.0,6.0,4.0,2.0,20-30 ans,25.0,Rabat,4800000.0
+appartement,Riyad,87.0,2.0,2.0,1.0,5-10 ans,7.5,Rabat,1850000.0
+appartement,Hassan - Centre Ville,81.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,1660000.0
+appartement,Al Irfane,130.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2000000.0
+appartement,Riyad,170.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,3700000.0
+maison,Hay Al Amal,240.0,7.0,4.0,3.0,Inconnu,15.0,Rabat,1800000.0
+appartement,L'Ocean,90.0,3.0,2.0,1.0,20-30 ans,25.0,Rabat,1200000.0
+appartement,Riyad,223.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,4350000.0
+appartement,Diour Jamaa,130.0,5.0,3.0,2.0,1-5 ans,3.0,Rabat,1750000.0
+villa,Riyad,551.0,5.0,5.0,2.0,Inconnu,15.0,Rabat,8100000.0
+appartement,Aviation - Mabella,93.0,4.0,3.0,1.0,10-20 ans,15.0,Rabat,1400000.0
+appartement,Kébibat,98.0,4.0,2.0,1.0,10-20 ans,15.0,Rabat,1380000.0
+appartement,Riyad,180.0,5.0,4.0,3.0,Inconnu,15.0,Rabat,4100000.0
+villa,Riyad,320.0,6.0,3.0,4.0,10-20 ans,15.0,Rabat,6500000.0
+appartement,Agdal,128.0,5.0,2.0,1.0,Inconnu,15.0,Rabat,2500000.0
+villa,Quartier Des Ambassades,2000.0,8.0,5.0,6.0,Inconnu,15.0,Rabat,30000000.0
+villa,Riyad,540.0,8.0,5.0,5.0,Inconnu,15.0,Rabat,9000000.0
+appartement,Agdal,175.0,10.0,3.0,2.0,30-50 ans,40.0,Rabat,2300000.0
+appartement,Riyad,180.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,4450000.0
+villa,Hassan - Centre Ville,440.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,4800000.0
+villa,Souissi,1990.0,1.0,2.0,2.0,30-50 ans,40.0,Rabat,15000000.0
+villa,Hay El Menzah,832.0,8.0,4.0,3.0,Inconnu,15.0,Rabat,7400000.0
+villa,Souissi,1000.0,9.0,5.0,5.0,Inconnu,15.0,Rabat,16300000.0
+appartement,Agdal,60.0,3.0,2.0,2.0,10-20 ans,15.0,Rabat,1300000.0
+villa,Souissi,1000.0,6.0,4.0,2.0,5-10 ans,7.5,Rabat,8700000.0
+appartement,Agdal,118.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,1860000.0
+appartement,Agdal,151.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,3000000.0
+appartement,Diour Jamaa,105.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2100000.0
+appartement,Diour Jamaa,89.0,3.0,2.0,2.0,1-5 ans,3.0,Rabat,1800000.0
+villa,Riyad,850.0,8.0,5.0,4.0,Inconnu,15.0,Rabat,9900000.0
+appartement,Hassan - Centre Ville,73.0,2.0,1.0,2.0,Inconnu,15.0,Rabat,1300000.0
+villa,Souissi,1700.0,7.0,4.0,5.0,Inconnu,15.0,Rabat,33000000.0
+villa,Hay Nahda,300.0,8.0,5.0,3.0,Inconnu,15.0,Rabat,4300000.0
+appartement,Kébibat,100.0,4.0,3.0,2.0,5-10 ans,7.5,Rabat,1600000.0
+appartement,Diour Jamaa,122.0,7.0,3.0,2.0,5-10 ans,7.5,Rabat,1990000.0
+villa,Riyad,281.0,7.0,4.0,4.0,5-10 ans,7.5,Rabat,5800000.0
+maison,Souissi,2000.0,10.0,4.0,4.0,1-5 ans,3.0,Rabat,25000000.0
+maison,Souissi,1500.0,12.0,4.0,4.0,10-20 ans,15.0,Rabat,14000000.0
+appartement,Riyad,202.0,4.0,3.0,3.0,5-10 ans,7.5,Rabat,4500000.0
+villa,Quartier Des Ambassades,2000.0,9.0,5.0,6.0,1-5 ans,3.0,Rabat,30000000.0
+maison,Souissi,2000.0,9.0,4.0,5.0,1-5 ans,3.0,Rabat,14500000.0
+appartement,Diour Jamaa,100.0,2.0,3.0,1.0,Inconnu,15.0,Rabat,1500000.0
+appartement,Diour Jamaa,136.0,2.0,3.0,1.0,Inconnu,15.0,Rabat,1700000.0
+villa,Souissi,2000.0,8.0,5.0,6.0,Moins d'un an,0.5,Rabat,28000000.0
+appartement,Hay Al Fath,156.0,5.0,3.0,2.0,10-20 ans,15.0,Rabat,2200000.0
+appartement,Souissi,139.0,4.0,2.0,3.0,1-5 ans,3.0,Rabat,3200000.0
+appartement,Agdal,61.0,2.0,1.0,1.0,Inconnu,15.0,Rabat,1120000.0
+appartement,Haut Agdal,189.0,7.0,4.0,2.0,Inconnu,15.0,Rabat,3900000.0
+villa,Hay El Menzah,476.0,8.0,3.0,3.0,Inconnu,15.0,Rabat,5400000.0
+appartement,Riyad,250.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,5200000.0
+appartement,Haut Agdal,278.0,5.0,3.0,3.0,1-5 ans,3.0,Rabat,5600000.0
+villa,Riyad,350.0,8.0,4.0,4.0,10-20 ans,15.0,Rabat,6000000.0
+villa,Riyad,200.0,7.0,4.0,4.0,20-30 ans,25.0,Rabat,4200000.0
+appartement,L'Ocean,118.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2000000.0
+appartement,Souissi,140.0,3.0,2.0,3.0,Moins d'un an,0.5,Rabat,3200000.0
+villa,Riyad Extension,800.0,7.0,3.0,3.0,Inconnu,15.0,Rabat,8500000.0
+appartement,Hay Ach-chbanat,130.0,4.0,3.0,2.0,5-10 ans,7.5,Rabat,2510000.0
+villa,Riyad,505.0,9.0,4.0,4.0,5-10 ans,7.5,Rabat,7000000.0
+appartement,Agdal,142.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2480000.0
+studio,Agdal,42.0,2.0,1.0,1.0,10-20 ans,15.0,Rabat,920000.0
+villa,Aviation - Mabella,550.0,5.0,4.0,2.0,10-20 ans,15.0,Rabat,6500000.0
+appartement,Hay El Menzah,96.0,1.0,3.0,1.0,Inconnu,15.0,Rabat,1400000.0
+appartement,Kébibat,118.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1750000.0
+villa,Riyad,1080.0,3.0,4.0,3.0,Inconnu,15.0,Rabat,9500000.0
+villa,Riyad,550.0,7.0,4.0,3.0,Inconnu,15.0,Rabat,10000000.0
+appartement,Quartier Administratif,112.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,1650000.0
+villa,Souissi,1200.0,10.0,4.0,4.0,Inconnu,15.0,Rabat,15000000.0
+villa,Souissi,1200.0,8.0,4.0,4.0,Inconnu,15.0,Rabat,15000000.0
+appartement,Guich Oudaya,124.0,5.0,3.0,2.0,Moins d'un an,0.5,Rabat,1850000.0
+villa,Quartier Des Ambassades,2500.0,17.0,7.0,4.0,Inconnu,15.0,Rabat,25000000.0
+appartement,Riyad,144.0,4.0,2.0,2.0,Inconnu,15.0,Rabat,3250000.0
+appartement,Agdal,300.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,3500000.0
+appartement,Hassan - Centre Ville,95.0,1.0,2.0,1.0,Inconnu,15.0,Rabat,1360000.0
+villa,Riyad,340.0,8.0,5.0,3.0,10-20 ans,15.0,Rabat,5700000.0
+villa,Riyad,400.0,9.0,5.0,2.0,Inconnu,15.0,Rabat,7500000.0
+villa,Riyad,551.0,8.0,5.0,3.0,Inconnu,15.0,Rabat,8000000.0
+appartement,Riyad,200.0,4.0,4.0,3.0,10-20 ans,15.0,Rabat,4250000.0
+appartement,Agdal,120.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,1950000.0
+appartement,Agdal,150.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2500000.0
+appartement,Riyad,104.0,4.0,2.0,1.0,Inconnu,15.0,Rabat,2100000.0
+appartement,Rabat,134.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2600000.0
+appartement,Agdal,93.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,1750000.0
+appartement,Hassan - Centre Ville,146.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,2800000.0
+villa,Guich Oudaya,250.0,7.0,4.0,3.0,10-20 ans,15.0,Rabat,3750000.0
+maison,Al Kamra,165.0,4.0,6.0,3.0,20-30 ans,25.0,Rabat,1500000.0
+appartement,Riyad,180.0,6.0,4.0,4.0,Inconnu,15.0,Rabat,4400000.0
+villa,Souissi,1036.0,3.0,4.0,3.0,Inconnu,15.0,Rabat,9000000.0
+villa,Riyad,560.0,13.0,4.0,4.0,Inconnu,15.0,Rabat,8000000.0
+appartement,Hassan - Centre Ville,130.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2500000.0
+appartement,Al Irfane,132.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,1900000.0
+appartement,Riyad,90.0,3.0,3.0,2.0,Inconnu,15.0,Rabat,2300000.0
+villa,Quartier Des Ambassades,2000.0,8.0,4.0,3.0,5-10 ans,7.5,Rabat,12900000.0
+appartement,Aviation - Mabella,65.0,2.0,1.0,2.0,1-5 ans,3.0,Rabat,1500000.0
+appartement,Hay Nahda,115.0,6.0,3.0,2.0,10-20 ans,15.0,Rabat,2150000.0
+appartement,Hassan - Centre Ville,167.0,5.0,3.0,3.0,5-10 ans,7.5,Rabat,3500000.0
+villa,Souissi,2000.0,6.0,4.0,3.0,Moins d'un an,0.5,Rabat,23000000.0
+villa,Souissi,2500.0,9.0,7.0,5.0,5-10 ans,7.5,Rabat,35000000.0
+villa,Souissi,3000.0,6.0,6.0,6.0,1-5 ans,3.0,Rabat,35000000.0
+appartement,Souissi,133.0,3.0,3.0,2.0,1-5 ans,3.0,Rabat,2300000.0
+appartement,Souissi,139.0,3.0,2.0,3.0,1-5 ans,3.0,Rabat,3200000.0
+villa,Riyad,1500.0,8.0,6.0,3.0,20-30 ans,25.0,Rabat,22500000.0
+villa,Souissi,2000.0,9.0,6.0,5.0,Inconnu,15.0,Rabat,21000000.0
+villa,Hay Nahda,600.0,6.0,4.0,3.0,Inconnu,15.0,Rabat,4800000.0
+villa,Souissi,2200.0,8.0,5.0,4.0,1-5 ans,3.0,Rabat,17000000.0
+appartement,Agdal,50.0,2.0,1.0,1.0,Inconnu,15.0,Rabat,950000.0
+villa,Souissi,900.0,7.0,5.0,5.0,1-5 ans,3.0,Rabat,15000000.0
+villa,Riyad,430.0,9.0,4.0,3.0,Inconnu,15.0,Rabat,6200000.0
+appartement,Riyad,101.0,4.0,2.0,2.0,Inconnu,15.0,Rabat,2300000.0
+villa,Aviation - Mabella,400.0,3.0,6.0,3.0,Inconnu,15.0,Rabat,5300000.0
+appartement,L'Ocean,77.0,2.0,1.0,1.0,1-5 ans,3.0,Rabat,1450000.0
+villa,Riyad,400.0,7.0,4.0,3.0,10-20 ans,15.0,Rabat,8000000.0
+villa,Riyad,280.0,4.0,4.0,4.0,Inconnu,15.0,Rabat,6000000.0
+villa,Riyad,690.0,10.0,4.0,4.0,Inconnu,15.0,Rabat,7500000.0
+appartement,Agdal,200.0,7.0,4.0,3.0,Inconnu,15.0,Rabat,3400000.0
+villa,Riyad,289.0,7.0,4.0,3.0,Inconnu,15.0,Rabat,5600000.0
+appartement,Aviation - Mabella,35.0,1.0,1.0,1.0,Inconnu,15.0,Rabat,750000.0
+villa,Guich Oudaya,334.0,7.0,4.0,3.0,10-20 ans,15.0,Rabat,4600000.0
+appartement,Riyad,197.0,6.0,3.0,3.0,10-20 ans,15.0,Rabat,4800000.0
+villa,Hay Nahda,300.0,8.0,5.0,2.0,Inconnu,15.0,Rabat,4300000.0
+appartement,Agdal,137.0,2.0,3.0,1.0,Inconnu,15.0,Rabat,2200000.0
+villa,Souissi,2000.0,7.0,4.0,5.0,1-5 ans,3.0,Rabat,28000000.0
+appartement,Riyad,124.0,3.0,3.0,2.0,1-5 ans,3.0,Rabat,2600000.0
+appartement,Hassan - Centre Ville,119.0,7.0,3.0,2.0,5-10 ans,7.5,Rabat,2700000.0
+villa,Souissi,1900.0,10.0,4.0,4.0,Inconnu,15.0,Rabat,20000000.0
+appartement,Hassan - Centre Ville,117.0,2.0,2.0,1.0,Inconnu,15.0,Rabat,1850000.0
+appartement,Souissi,166.0,5.0,3.0,2.0,5-10 ans,7.5,Rabat,3800000.0
+villa,Riyad,300.0,7.0,5.0,4.0,Inconnu,15.0,Rabat,5500000.0
+appartement,Riyad,142.0,5.0,4.0,1.0,30-50 ans,40.0,Rabat,2300000.0
+appartement,Agdal,113.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,2100000.0
+maison,Hay El Menzah,360.0,6.0,7.0,3.0,20-30 ans,25.0,Rabat,4000000.0
+villa,Quartier Des Ambassades,2300.0,8.0,5.0,7.0,1-5 ans,3.0,Rabat,38000000.0
+appartement,Riyad,176.0,6.0,3.0,3.0,5-10 ans,7.5,Rabat,4200000.0
+appartement,Hay Al Massira,80.0,3.0,2.0,2.0,30-50 ans,40.0,Rabat,960000.0
+villa,Agdal,550.0,7.0,5.0,5.0,Inconnu,15.0,Rabat,9500000.0
+appartement,Agdal,180.0,4.0,3.0,3.0,Inconnu,15.0,Rabat,3950000.0
+appartement,Guich Oudaya,71.0,3.0,2.0,2.0,1-5 ans,3.0,Rabat,1150000.0
+villa,Souissi,2000.0,8.0,5.0,6.0,10-20 ans,15.0,Rabat,14000000.0
+villa,Souissi,960.0,8.0,4.0,4.0,Moins d'un an,0.5,Rabat,8400000.0
+villa,Riyad,500.0,4.0,6.0,2.0,30-50 ans,40.0,Rabat,9100000.0
+appartement,Riyad,230.0,6.0,3.0,3.0,10-20 ans,15.0,Rabat,4600000.0
+appartement,Riyad,170.0,4.0,3.0,3.0,5-10 ans,7.5,Rabat,3300000.0
+appartement,Riyad,192.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,3500000.0
+appartement,Riyad,178.0,6.0,4.0,2.0,Inconnu,15.0,Rabat,4400000.0
+villa,Souissi,1040.0,8.0,5.0,3.0,Inconnu,15.0,Rabat,9000000.0
+villa,Souissi,1400.0,13.0,8.0,8.0,10-20 ans,15.0,Rabat,30000000.0
+villa,Riyad,760.0,9.0,4.0,4.0,1-5 ans,3.0,Rabat,9800000.0
+villa,Souissi,1250.0,9.0,7.0,6.0,1-5 ans,3.0,Rabat,25000000.0
+appartement,Riyad,95.0,2.0,2.0,2.0,Inconnu,15.0,Rabat,2350000.0
+appartement,Agdal,111.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,2800000.0
+villa,Souissi,1073.0,2.0,5.0,4.0,Inconnu,15.0,Rabat,9000000.0
+appartement,Riyad,115.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2800000.0
+villa,Hay Al Fath,440.0,15.0,10.0,6.0,20-30 ans,25.0,Rabat,6500000.0
+appartement,Souissi,215.0,6.0,4.0,2.0,5-10 ans,7.5,Rabat,4500000.0
+appartement,L'Ocean,71.0,2.0,1.0,2.0,1-5 ans,3.0,Rabat,1300000.0
+villa,Souissi,1166.0,4.0,5.0,6.0,1-5 ans,3.0,Rabat,16500000.0
+villa,Souissi,1762.0,6.0,4.0,3.0,Inconnu,15.0,Rabat,11400000.0
+appartement,Agdal,97.0,3.0,2.0,2.0,10-20 ans,15.0,Rabat,1180000.0
+appartement,Guich Oudaya,150.0,4.0,3.0,3.0,10-20 ans,15.0,Rabat,1700000.0
+appartement,Hay Ach-chbanat,140.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2500000.0
+villa,Souissi,1910.0,7.0,5.0,3.0,20-30 ans,25.0,Rabat,12500000.0
+appartement,Souissi,222.0,4.0,3.0,2.0,Inconnu,15.0,Rabat,5600000.0
+appartement,Riyad,172.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,4200000.0
+appartement,Riyad,176.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,4200000.0
+appartement,Riyad,230.0,6.0,3.0,2.0,Inconnu,15.0,Rabat,5000000.0
+appartement,Agdal,175.0,5.0,3.0,1.0,Inconnu,15.0,Rabat,2350000.0
+appartement,Les Orangers,137.0,4.0,2.0,1.0,30-50 ans,40.0,Rabat,1600000.0
+villa,Souissi,2000.0,9.0,6.0,5.0,Inconnu,15.0,Rabat,30000000.0
+villa,Hay El Menzah,1000.0,9.0,7.0,6.0,Inconnu,15.0,Rabat,9500000.0
+appartement,Kébibat,101.0,3.0,2.0,2.0,10-20 ans,15.0,Rabat,1200000.0
+villa,Souissi,2500.0,8.0,5.0,5.0,Inconnu,15.0,Rabat,28000000.0
+villa,Souissi,1770.0,9.0,5.0,4.0,10-20 ans,15.0,Rabat,13000000.0
+appartement,Guich Oudaya,49.0,1.0,1.0,1.0,1-5 ans,3.0,Rabat,710000.0
+maison,Hay Nahda,400.0,3.0,5.0,4.0,Inconnu,15.0,Rabat,4600000.0
+appartement,Souissi,178.0,5.0,3.0,3.0,5-10 ans,7.5,Rabat,3000000.0
+appartement,Riyad,112.0,4.0,3.0,2.0,Moins d'un an,0.5,Rabat,2300000.0
+villa,Souissi,1700.0,9.0,4.0,4.0,Inconnu,15.0,Rabat,13500000.0
+villa,Guich Oudaya,441.0,1.0,8.0,8.0,Inconnu,15.0,Rabat,4800000.0
+villa,Aviation - Mabella,400.0,10.0,4.0,3.0,Inconnu,15.0,Rabat,8500000.0
+appartement,Hassan - Centre Ville,110.0,3.0,2.0,3.0,Inconnu,15.0,Rabat,2400000.0
+appartement,Haut Agdal,155.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,3400000.0
+villa,Souissi,1800.0,4.0,5.0,7.0,Inconnu,15.0,Rabat,20000000.0
+appartement,Guich Oudaya,109.0,2.0,2.0,2.0,Inconnu,15.0,Rabat,1550000.0
+villa,Guich Oudaya,334.0,6.0,4.0,2.0,10-20 ans,15.0,Rabat,4600000.0
+appartement,L'Ocean,87.0,2.0,2.0,2.0,1-5 ans,3.0,Rabat,1800000.0
+appartement,Riyad,151.0,5.0,3.0,3.0,Moins d'un an,0.5,Rabat,3200000.0
+appartement,Hassan - Centre Ville,81.0,3.0,2.0,2.0,Moins d'un an,0.5,Rabat,1800000.0
+appartement,Riyad,216.0,6.0,3.0,3.0,Moins d'un an,0.5,Rabat,5000000.0
+villa,Riyad,1156.0,10.0,5.0,5.0,Inconnu,15.0,Rabat,13600000.0
+appartement,Aviation - Mabella,166.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,2800000.0
+appartement,Agdal,93.0,3.0,2.0,1.0,Inconnu,15.0,Rabat,1970000.0
+appartement,Haut Agdal,100.0,2.0,1.0,1.0,10-20 ans,15.0,Rabat,1550000.0
+appartement,Diour Jamaa,94.0,4.0,3.0,2.0,10-20 ans,15.0,Rabat,1600000.0
+appartement,Agdal,120.0,5.0,3.0,3.0,1-5 ans,3.0,Rabat,3100000.0
+villa,Riyad,400.0,8.0,4.0,3.0,20-30 ans,25.0,Rabat,7000000.0
+maison,Hay Al Fath,440.0,10.0,4.0,3.0,5-10 ans,7.5,Rabat,6050000.0
+villa,Souissi,600.0,10.0,4.0,4.0,Moins d'un an,0.5,Rabat,12000000.0
+villa,Riyad,200.0,4.0,3.0,3.0,20-30 ans,25.0,Rabat,4300000.0
+appartement,Hay Ach-chbanat,82.0,3.0,2.0,2.0,20-30 ans,25.0,Rabat,1120000.0
+appartement,Diour Jamaa,76.0,3.0,2.0,2.0,Moins d'un an,0.5,Rabat,1100000.0
+appartement,Agdal,100.0,3.0,2.0,2.0,5-10 ans,7.5,Rabat,1500000.0
+villa,Souissi,1600.0,9.0,5.0,5.0,Inconnu,15.0,Rabat,18000000.0
+maison,Hay Nahda,140.0,7.0,5.0,2.0,20-30 ans,25.0,Rabat,2100000.0
+appartement,Agdal,107.0,4.0,3.0,1.0,Inconnu,15.0,Rabat,1800000.0
+villa,Hay El Menzah,600.0,7.0,4.0,4.0,1-5 ans,3.0,Rabat,7200000.0
+appartement,Riyad,157.0,6.0,4.0,3.0,Inconnu,15.0,Rabat,3000000.0
+appartement,Agdal,137.0,2.0,2.0,2.0,20-30 ans,25.0,Rabat,2600000.0
+villa,Riyad,297.0,6.0,4.0,3.0,10-20 ans,15.0,Rabat,5600000.0
+villa,Souissi,800.0,7.0,4.0,3.0,5-10 ans,7.5,Rabat,7500000.0
+villa,Riyad,840.0,9.0,6.0,3.0,Inconnu,15.0,Rabat,9500000.0
+villa,Souissi,1900.0,9.0,4.0,3.0,Inconnu,15.0,Rabat,13000000.0
+appartement,Agdal,92.0,2.0,2.0,1.0,Inconnu,15.0,Rabat,1800000.0
+appartement,Riyad,230.0,6.0,4.0,3.0,10-20 ans,15.0,Rabat,5050000.0
+appartement,Agdal,145.0,5.0,3.0,3.0,Inconnu,15.0,Rabat,2700000.0
+appartement,Riyad,170.0,2.0,3.0,2.0,Inconnu,15.0,Rabat,3600000.0
+appartement,Riyad,180.0,2.0,3.0,3.0,10-20 ans,15.0,Rabat,4100000.0
+villa,Riyad,580.0,5.0,3.0,2.0,Inconnu,15.0,Rabat,7200000.0
+appartement,Agdal,92.0,3.0,2.0,2.0,Inconnu,15.0,Rabat,1950000.0
+appartement,Hassan - Centre Ville,74.0,1.0,2.0,2.0,10-20 ans,15.0,Rabat,1470000.0
+villa,Riyad,447.0,7.0,5.0,3.0,30-50 ans,40.0,Rabat,6600000.0
+villa,Riyad,800.0,8.0,6.0,4.0,20-30 ans,25.0,Rabat,9000000.0
+villa,El Youssoufia,420.0,6.0,3.0,4.0,10-20 ans,15.0,Rabat,3800000.0
+villa,Aviation - Mabella,422.0,4.0,7.0,2.0,70-100 ans,85.0,Rabat,5486000.0

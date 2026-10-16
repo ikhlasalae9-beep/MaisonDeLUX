@@ -2,16 +2,19 @@ import casablanca from '@/models/casablanca/v1/metadata.json';
 import marrakech from '@/models/marrakech/v1/metadata.json';
 import c from '@/models/casablanca/v1/preprocessing.json';
 import m from '@/models/marrakech/v1/preprocessing.json';
+import rabat from '@/models/rabat/v1/metadata.json';
+import r from '@/models/rabat/v1/preprocessing.json';
 import { getCityBySlug } from '@/lib/cities/registry';
 import type { CityMetadata, CityPredictPayload } from '@/lib/api/types';
 
 export const INFERENCE_CONTRACTS = {
+  Rabat: { slug: 'rabat', version: rabat.model_version, modelId: rabat.model_id },
   Casablanca: { slug: 'casablanca', version: casablanca.model_version, modelId: casablanca.model_id },
   Marrakech: { slug: 'marrakech', version: marrakech.model_version, modelId: marrakech.model_id },
 } as const;
 
 export function inferenceContract(city: unknown) {
-  if (city !== 'Casablanca' && city !== 'Marrakech') throw new Error('INVALID_CITY');
+  if (city !== 'Casablanca' && city !== 'Marrakech' && city !== 'Rabat') throw new Error('INVALID_CITY');
   return INFERENCE_CONTRACTS[city];
 }
 export function requirePublicInference(city: unknown) {
@@ -25,8 +28,14 @@ export function verifyPrediction(input: CityPredictPayload, result: Record<strin
       typeof result.estimated_price_mad !== 'number' || !Number.isFinite(result.estimated_price_mad) || result.estimated_price_mad <= 0) throw new Error('INVALID_MODEL_RESULT');
   return result;
 }
-export function estimatorMetadata(city: 'Casablanca' | 'Marrakech'): CityMetadata {
+export function estimatorMetadata(city: CityPredictPayload['city']): CityMetadata {
   const identity = inferenceContract(city);
+  if (city === 'Rabat') return {
+    city, status: 'available', public_enabled: !!getCityBySlug(identity.slug)?.estimation.publicEnabled, model_version: identity.version,
+    supported: { property_types: [...r.categorical.Type], neighborhoods: [...r.categorical.Localisation, ...Object.keys(r.rare_neighborhood_map)],
+      current_states: [...r.categorical.Current_state], ages: [] },
+    age_band_to_years: r.age_band_to_years,
+  };
   const supported = city === 'Casablanca' ? {
     property_types: Object.keys(c.categorical.Type.accepted), neighborhoods: [...c.categorical.Localisation.accepted],
     current_states: [...c.categorical.Current_state.accepted], ages: [...c.categorical.Age.accepted],

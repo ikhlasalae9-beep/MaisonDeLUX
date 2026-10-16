@@ -91,7 +91,7 @@ def test_extra_features_and_spoofed_interaction_fail(payload, field):
         m.transform({**payload, field: "Casablanca|Villa"})
 
 
-@pytest.mark.parametrize("city", ["Rabat", "unknown", "", None, 10])
+@pytest.mark.parametrize("city", ["Tanger", "unknown", "", None, 10])
 def test_unsupported_city_has_no_fallback(payload, city, monkeypatch):
     def forbidden(_payload):
         pytest.fail("Unsupported city reached a handler")

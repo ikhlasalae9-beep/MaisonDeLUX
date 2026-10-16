@@ -13,7 +13,7 @@ export interface PredictPayload {
 }
 
 export interface PredictResponse {
-  city?: 'Casablanca' | 'Marrakech';
+  city?: 'Casablanca' | 'Marrakech' | 'Rabat';
   model_id?: string;
   raw_price_mad?: number;
   display_price_mad?: number;
@@ -92,8 +92,15 @@ export interface MarrakechPredictPayload {
   current_state: string;
   age: string;
 }
-export type CityPredictPayload = CasablancaPredictPayload | MarrakechPredictPayload;
-export type CityMetadata = Omit<CasablancaMetadata, 'city'> & { city: 'Casablanca' | 'Marrakech' };
+export interface RabatPredictPayload extends Omit<MarrakechPredictPayload, 'city' | 'age'> {
+  city: 'Rabat';
+  age: number;
+}
+export type CityPredictPayload = CasablancaPredictPayload | MarrakechPredictPayload | RabatPredictPayload;
+export type CityMetadata = Omit<CasablancaMetadata, 'city'> & {
+  city: CityPredictPayload['city'];
+  age_band_to_years?: Record<string, number>;
+};
 
 export interface CasablancaMetadata {
   city: 'Casablanca';

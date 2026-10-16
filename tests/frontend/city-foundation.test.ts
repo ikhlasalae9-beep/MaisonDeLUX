@@ -24,7 +24,7 @@ test('the registry preserves 16 cities with three published city instances', () 
   assert.equal(CITY_REGISTRY.length, 16);
   assert.equal(new Set(CITY_REGISTRY.map((city) => city.slug)).size, 16);
   assert.deepEqual(CITY_REGISTRY.filter((city) => city.cityPage.publicVisible).map((city) => city.slug), ['casablanca', 'rabat', 'marrakech']);
-  assert.equal(CITY_REGISTRY.filter((city) => city.estimation.publicEnabled).map((city) => city.slug).join(','), 'casablanca,marrakech');
+  assert.equal(CITY_REGISTRY.filter((city) => city.estimation.publicEnabled).map((city) => city.slug).join(','), 'casablanca,rabat,marrakech');
 });
 
 test('Casablanca retains its publicly enabled model', () => {

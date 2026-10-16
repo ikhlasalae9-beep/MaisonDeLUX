@@ -31,6 +31,6 @@ test('public Marrakech form renders its exact FR/AR fields in the shared respons
     const header=renderToStaticMarkup(React.createElement(AppRouterContext.Provider,{value:{push:()=>{}} as any},React.createElement(CompactHeader,{locale,variant:'product',citySlug:'marrakech'})));
     assert.ok(header.includes(`/${locale}/cities/marrakech`));
     assert.ok(header.includes(locale === 'ar' ? 'العودة إلى مراكش' : 'Retour à Marrakech'));
-    assert.deepEqual(generateStaticParams(),[{citySlug:'casablanca'},{citySlug:'marrakech'}]);
+    assert.deepEqual(generateStaticParams(),[{citySlug:'casablanca'},{citySlug:'marrakech'},{citySlug:'rabat'}]);
   }
 });

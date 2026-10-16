@@ -3,6 +3,7 @@ import { createHmac } from 'node:crypto';
 import { siteOrigin } from '@/lib/auth/config';
 import type { CityPredictPayload } from '@/lib/api/types';
 import { requirePublicInference, verifyPrediction } from '@/lib/estimations/contracts';
+import { validatePreparedModelInput } from '@/lib/security/model-input';
 
 function gatewaySecret() {
   // Transitional compatibility for installations that predate the dedicated
@@ -12,13 +13,22 @@ function gatewaySecret() {
   return secret;
 }
 
+// Server-only signing primitive for the registered contracts. Signing is not
+// public authorization: invokeInference and the Python HTTP service still gate it.
+export function createSignedInferenceRequest(kind: 'estimate' | 'context', input: CityPredictPayload) {
+  if (kind !== 'estimate' && kind !== 'context') throw new Error('INVALID_INFERENCE_KIND');
+  const normalized = validatePreparedModelInput(input);
+  const secret = gatewaySecret();
+  const path = `/api/ml/${kind}`, body = JSON.stringify(normalized), timestamp = String(Math.floor(Date.now()/1000));
+  const signature = createHmac('sha256',secret).update(`${timestamp}\n${path}\n${body}`).digest('hex');
+  return { path, body, headers: { 'Content-Type': 'application/json', 'X-MDL-Timestamp': timestamp, 'X-MDL-Signature': signature } };
+}
+
 export async function invokeInference(kind: 'estimate' | 'context', input: CityPredictPayload) {
   requirePublicInference(input.city);
-  const secret = gatewaySecret();
-  const path = `/api/ml/${kind}`, body = JSON.stringify(input), timestamp = String(Math.floor(Date.now()/1000));
-  const signature = createHmac('sha256',secret).update(`${timestamp}\n${path}\n${body}`).digest('hex');
+  const { path, body, headers } = createSignedInferenceRequest(kind, input);
   const response = await fetch(`${process.env.ML_BACKEND_URL || (process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:5000' : siteOrigin())}${path}`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json', 'X-MDL-Timestamp': timestamp, 'X-MDL-Signature': signature },
+    method: 'POST', headers,
     body,
     cache: 'no-store',
     // Context is optional enrichment after the base prediction. Keep it from

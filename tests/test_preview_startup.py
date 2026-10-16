@@ -63,7 +63,8 @@ def test_existing_preview_runtime_harness_results():
     assert result['python'].startswith('3.12.')
     assert result['platform'] == platform.system()
     assert result['sklearn'] == '1.9.0'
-    assert result['xgboost_cpu'] == '3.4.1'
+    assert result['xgboost_runtime']['version'] == '3.4.1'
+    assert result['xgboost_runtime']['distribution'] in ('xgboost-cpu', 'xgboost')
     assert result['repeated_requests'] == 3
     assert result['concurrency_workers'] == 2
     for key in ['warm_mean_seconds', 'concurrency_seconds', 'total_seconds']:

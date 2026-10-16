@@ -15,18 +15,19 @@ import { analyticsForCity } from '../../lib/analytics/registry';
 import { getCityMapSummary } from '../../lib/analytics/market-map';
 import { selectMarketBoundaries, projectMarketBoundaries } from '../../lib/analytics/market-geometry';
 
-test('Rabat is public, bilingual, and has no estimator or analytics provider', () => {
+test('Rabat is public, bilingual, and has its own estimator without fabricated analytics', () => {
   assert.ok(renderToStaticMarkup(CitiesPage({ params: { locale: 'fr' } })).includes('/fr/cities/rabat'));
   assert.ok(sitemap().some(entry => entry.url.endsWith('/fr/cities/rabat')));
-  assert.ok(!sitemap().some(entry => entry.url.endsWith('/rabat/estimate') || entry.url.endsWith('/rabat/market')));
+  assert.ok(sitemap().some(entry => entry.url.endsWith('/rabat/estimate')));
+  assert.ok(!sitemap().some(entry => entry.url.endsWith('/rabat/market')));
   const city = getCityBySlug('rabat')!;
   assert.equal(city.cityPage.publicVisible, true);
-  assert.equal(city.estimation.publicEnabled, false);
-  assert.equal(city.modelRef, null);
-  assert.equal(city.estimation.backendStatusKey, null);
+  assert.equal(city.estimation.publicEnabled, true);
+  assert.equal(city.modelRef, 'rabat');
+  assert.equal(city.estimation.backendStatusKey, 'rabat');
   assert.equal(city.market.publicEnabled, false);
   assert.equal(city.market.analyticsRef, null);
-  assert.deepEqual(cityCapabilityActions('fr', city), []);
+  assert.deepEqual(cityCapabilityActions('fr', city).map(action=>action.kind), ['estimate']);
   assert.equal(publicEstimatePath('fr', city, { city: 'Casablanca', status: 'available' }), null);
   assert.equal(analyticsForCity('rabat'), null);
   assert.equal(getCityMapSummary('rabat'), null);
@@ -38,8 +39,8 @@ test('Rabat is public, bilingual, and has no estimator or analytics provider', (
     assert.equal(copy.imageDescriptions.length, 4);
     const html = renderToStaticMarkup(CityPage({ params: { locale, citySlug: 'rabat' } }));
     assert.ok(html.includes(copy.title));
-    assert.ok(html.includes(copy.estimationCta));
-    assert.ok(!html.includes('/rabat/estimate'));
+    assert.ok(html.includes(cityCapabilityActions(locale, city)[0].label));
+    assert.ok(html.includes('/rabat/estimate'));
     assert.ok(!html.includes('/rabat/market'));
     assert.equal((html.match(/fill-rule="evenodd"/g) || []).length, 0);
     assert.ok(html.includes(locale === 'ar' ? 'المصادر التحريرية' : 'Sources éditoriales'));
@@ -68,4 +69,3 @@ test('Rabat geometry preserves five real administrative shapes and ignores five 
   assert.ok(boundaries.every(f => f.properties['name:fr'] && f.properties['name:ar'] && f.properties['ref:MA:HCP']));
   assert.ok(projectMarketBoundaries(boundaries).every(p => !/NaN|Infinity/.test(p.path)));
 });
-

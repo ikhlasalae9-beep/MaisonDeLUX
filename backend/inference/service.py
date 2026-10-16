@@ -3,14 +3,15 @@
 HTTP handlers never accept or forward a caller's allow_prepared field.
 """
 from typing import Mapping
-from . import casablanca, marrakech, registry
+from . import casablanca, marrakech, rabat, registry
 
 MARRAKECH_FIELDS = {
     "property_type": "Type", "neighborhood": "Localisation", "area": "Area",
     "rooms": "Rooms", "bedrooms": "Bedrooms", "bathrooms": "Bathrooms",
     "current_state": "Current_state", "age": "Age",
 }
-ADAPTERS = {"casablanca": casablanca, "marrakech": marrakech}
+RABAT_FIELDS = dict(MARRAKECH_FIELDS)  # Same application names; different value/age semantics.
+ADAPTERS = {"casablanca": casablanca, "marrakech": marrakech, "rabat": rabat}
 
 
 def entry_for(payload, *, allow_prepared=False):
@@ -20,6 +21,13 @@ def entry_for(payload, *, allow_prepared=False):
 def normalized_input(payload, *, allow_prepared=False):
     entry = entry_for(payload, allow_prepared=allow_prepared)
     key = entry["city"].casefold()
+    if key == "rabat":
+        if set(payload) != {"city", *RABAT_FIELDS}:
+            raise rabat.RabatInferenceError("Missing required or unsupported Rabat fields")
+        prepared = {"city": entry["city"], **{target: payload[source] for source, target in RABAT_FIELDS.items()}}
+        row = rabat._prepared_row(prepared)
+        normalized = {"city": entry["city"], **{source: row[target] for source, target in RABAT_FIELDS.items()}}
+        return entry, prepared, normalized
     if key == "marrakech":
         if set(payload) != {"city", *MARRAKECH_FIELDS}:
             raise marrakech.MarrakechInferenceError("Missing required or unsupported Marrakech fields")
@@ -39,7 +47,9 @@ def estimate(payload, *, allow_prepared=False):
     result = registry.predict_for_city(prepared, allow_prepared=allow_prepared)
     if (result.get("model_version") != entry["version"]
             or result.get("city", entry["city"]) != entry["city"]
-            or result.get("model_id", entry["model_id"]) != entry["model_id"]):
+            or result.get("model_id", entry["model_id"]) != entry["model_id"]
+            or (entry["city"] == "Rabat" and
+                (result.get("city") != entry["city"] or result.get("model_id") != entry["model_id"]))):
         raise RuntimeError("City/model identity mismatch")
     return {**result, "city": entry["city"], "model_id": entry["model_id"]}
 
@@ -55,6 +65,9 @@ def model_metadata(city="Casablanca", *, check_ready=False):
     manifest = adapter.load_manifest()
     supported = {}
     for field, output in [("Type", "property_types"), ("Localisation", "neighborhoods"), ("Current_state", "current_states"), ("Age", "ages")]:
+        if entry["city"] == "Rabat" and field == "Age":
+            supported[output] = []  # Numeric years, validated against age_band_to_years below.
+            continue
         rule = manifest["categorical"][field]
         supported[output] = list(rule["accepted"] if isinstance(rule, Mapping) else rule)
     if entry["city"] == "Marrakech":
@@ -64,6 +77,10 @@ def model_metadata(city="Casablanca", *, check_ready=False):
     if check_ready:
         adapter.load_model()
         ready = True
-    return {"city": entry["city"], "status": entry["status"], "public_enabled": entry["public_enabled"],
+    result = {"city": entry["city"], "status": entry["status"], "public_enabled": entry["public_enabled"],
             "model_version": entry["version"], "model_id": entry["model_id"],
             "artifact_present": present, "inference_ready": ready, "supported": supported}
+    if entry["city"] == "Rabat":
+        supported["neighborhoods"] += list(manifest["rare_neighborhood_map"])
+        result.update(operationally_deployed=False, age_band_to_years=manifest["age_band_to_years"])
+    return result

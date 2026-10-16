@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "artifact_role": "internal_prepared_inference_contract",
+  "city": "Rabat",
+  "public_enabled": false,
+  "model_feature_names": [
+    "Type",
+    "Localisation",
+    "Area",
+    "Rooms",
+    "Bedrooms",
+    "Bathrooms",
+    "Current_state",
+    "Age"
+  ],
+  "required_prepared_fields": [
+    "Type",
+    "Localisation",
+    "Area",
+    "Rooms",
+    "Bedrooms",
+    "Bathrooms",
+    "Current_state",
+    "Age"
+  ],
+  "categorical": {
+    "Type": [
+      "appartement",
+      "bureau",
+      "maison",
+      "studio",
+      "villa"
+    ],
+    "Localisation": [
+      "Agdal",
+      "Al Irfane",
+      "Autre",
+      "Aviation - Mabella",
+      "Diour Jamaa",
+      "El Youssoufia",
+      "Guich Oudaya",
+      "Hassan - Centre Ville",
+      "Haut Agdal",
+      "Hay Ach-chbanat",
+      "Hay Al Fath",
+      "Hay Al Kora",
+      "Hay Al Massira",
+      "Hay El Menzah",
+      "Hay Nahda",
+      "Kébibat",
+      "L'Ocean",
+      "Les Orangers",
+      "Quartier Administratif",
+      "Quartier Des Ambassades",
+      "Rabat",
+      "Riyad",
+      "Riyad Extension",
+      "Souissi"
+    ],
+    "Current_state": [
+      "1-5 ans",
+      "10-20 ans",
+      "20-30 ans",
+      "30-50 ans",
+      "5-10 ans",
+      "50-70 ans",
+      "70-100 ans",
+      "Inconnu",
+      "Moins d'un an"
+    ]
+  },
+  "age_band_to_years": {
+    "Moins d'un an": 0.5,
+    "1-5 ans": 3,
+    "5-10 ans": 7.5,
+    "10-20 ans": 15,
+    "20-30 ans": 25,
+    "30-50 ans": 40,
+    "50-70 ans": 60,
+    "70-100 ans": 85,
+    "Inconnu": 15
+  },
+  "age_policy": "All eight fields required. Explicit Inconnu maps to the reproduced cohort median 15. Reject inconsistent numeric Age; no silent missing-input imputation.",
+  "rare_neighborhood_map": {
+    "Al Kamra": "Autre",
+    "Akkari": "Autre",
+    "Hay Al Amal": "Autre",
+    "Médina": "Autre",
+    "Hay Bouhlal": "Autre",
+    "Al Kouass": "Autre",
+    "Les Oudayas": "Autre",
+    "Hay Al Farah": "Autre",
+    "Skhirat": "Autre",
+    "Takadoum": "Autre"
+  },
+  "rare_neighborhood_evidence": "Notebook JSON cell 62: frequency < 3 in the 700-row clean cohort; mapping is outside the saved pipeline.",
+  "numerical": {
+    "Area": {
+      "minimum": 35,
+      "maximum": 3000,
+      "integer": false,
+      "unit": "m2"
+    },
+    "Rooms": {
+      "minimum": 1,
+      "maximum": 18,
+      "integer": true
+    },
+    "Bedrooms": {
+      "minimum": 1,
+      "maximum": 14,
+      "integer": true
+    },
+    "Bathrooms": {
+      "minimum": 1,
+      "maximum": 12,
+      "integer": true
+    }
+  },
+  "numeric_policy": "Conservative internal envelope from observed cleaned-data extrema, not a certified public range. Reject outside values; never clip, scale or log raw features.",
+  "external_transforms": [
+    "Map only the ten known rare neighborhoods to Autre",
+    "Require numeric Age consistent with age_band_to_years"
+  ],
+  "embedded_preprocessing": {
+    "class": "sklearn.compose._column_transformer.ColumnTransformer",
+    "categorical_features": [
+      "Type",
+      "Localisation",
+      "Current_state"
+    ],
+    "encoder": "sklearn.preprocessing._encoders.OneHotEncoder",
+    "handle_unknown": "ignore; adapter rejects unrecognized labels before encoder",
+    "numeric_passthrough": [
+      "Area",
+      "Rooms",
+      "Bedrooms",
+      "Bathrooms",
+      "Age"
+    ],
+    "encoded_feature_names": [
+      "cat__Type_appartement",
+      "cat__Type_bureau",
+      "cat__Type_maison",
+      "cat__Type_studio",
+      "cat__Type_villa",
+      "cat__Localisation_Agdal",
+      "cat__Localisation_Al Irfane",
+      "cat__Localisation_Autre",
+      "cat__Localisation_Aviation - Mabella",
+      "cat__Localisation_Diour Jamaa",
+      "cat__Localisation_El Youssoufia",
+      "cat__Localisation_Guich Oudaya",
+      "cat__Localisation_Hassan - Centre Ville",
+      "cat__Localisation_Haut Agdal",
+      "cat__Localisation_Hay Ach-chbanat",
+      "cat__Localisation_Hay Al Fath",
+      "cat__Localisation_Hay Al Kora",
+      "cat__Localisation_Hay Al Massira",
+      "cat__Localisation_Hay El Menzah",
+      "cat__Localisation_Hay Nahda",
+      "cat__Localisation_Kébibat",
+      "cat__Localisation_L'Ocean",
+      "cat__Localisation_Les Orangers",
+      "cat__Localisation_Quartier Administratif",
+      "cat__Localisation_Quartier Des Ambassades",
+      "cat__Localisation_Rabat",
+      "cat__Localisation_Riyad",
+      "cat__Localisation_Riyad Extension",
+      "cat__Localisation_Souissi",
+      "cat__Current_state_1-5 ans",
+      "cat__Current_state_10-20 ans",
+      "cat__Current_state_20-30 ans",
+      "cat__Current_state_30-50 ans",
+      "cat__Current_state_5-10 ans",
+      "cat__Current_state_50-70 ans",
+      "cat__Current_state_70-100 ans",
+      "cat__Current_state_Inconnu",
+      "cat__Current_state_Moins d'un an",
+      "remainder__Area",
+      "remainder__Rooms",
+      "remainder__Bedrooms",
+      "remainder__Bathrooms",
+      "remainder__Age"
+    ],
+    "encoded_dimension": 43
+  },
+  "target": {
+    "stored_prediction": "log1p(Price MAD)",
+    "inverse_transform": "numpy.expm1 exactly once",
+    "estimated_price_mad_rounding": "Python round to whole MAD; preserve raw_price_mad"
+  },
+  "unsupported_features": [
+    "Floor",
+    "floor",
+    "Loc_Type",
+    "region"
+  ],
+  "unsupported_age_bands": [
+    "Plus de 100 ans"
+  ],
+  "unsupported_context": [
+    "explanation",
+    "comparables",
+    "market_context"
+  ]
+}

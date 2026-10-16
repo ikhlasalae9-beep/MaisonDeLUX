@@ -1,0 +1,535 @@
+{
+  "schema_version": 1,
+  "city": "Rabat",
+  "model_id": "rabat-random-forest",
+  "model_version": "rabat-random-forest-v1",
+  "identity_provenance": "Application-owned internal package identifiers assigned in Phase 1; not recovered training identifiers.",
+  "source_model_id": null,
+  "trained_at": null,
+  "status": "prepared_internal_only",
+  "public_enabled": false,
+  "operationally_deployed": false,
+  "algorithm": "RandomForestRegressor",
+  "object_class": "sklearn.pipeline.Pipeline",
+  "artifact": "models/rabat/v1/model.joblib",
+  "artifact_sha256": "e2d7355966d5424e09e9b2f3afb8f381dc4b1b2be183a2e4f31fdda17880ab60",
+  "artifact_size_bytes": 13870138,
+  "packaging_method": "Byte-for-byte copy of verified artifact; no fit, reserialization or dataset modification.",
+  "preprocessing": "models/rabat/v1/preprocessing.json",
+  "preprocessing_sha256": "37d2ea1a6ec1fb2e531818a648ca885b32fe21fae50f090ace1b276ce98c1f74",
+  "source_artifact": "ml/notebooks/rabat/rf_price_model.joblib",
+  "source_commit": "62a1db64024306021e86d836f8239f5e3ff3cfd6",
+  "source_notebook": "ml/notebooks/rabat/mubawab_rabat_notebook_plotly.ipynb",
+  "source_datasets": [
+    "ml/notebooks/rabat/mubawab_properties (2).csv",
+    "ml/notebooks/rabat/mubawab_clean.csv"
+  ],
+  "model_feature_names": [
+    "Type",
+    "Localisation",
+    "Area",
+    "Rooms",
+    "Bedrooms",
+    "Bathrooms",
+    "Current_state",
+    "Age"
+  ],
+  "forest_parameters": {
+    "n_estimators": 500,
+    "min_samples_leaf": 2,
+    "random_state": 42,
+    "bootstrap": true,
+    "max_features": 1.0,
+    "max_depth": null,
+    "serialized_n_jobs": -1,
+    "runtime_n_jobs": 1
+  },
+  "training_cohort_evidence": {
+    "rows": 700,
+    "all_500_tree_weighted_node_counts_match": true,
+    "maximum_log_target_node_mean_error": 3.197442310920451e-14,
+    "method": "Saved tree decision paths/bootstrap weights reconciled with the ordered clean cohort and log1p targets; no training."
+  },
+  "dependency_versions_proven_by_evidence": {
+    "scikit-learn": {
+      "version": "1.9.0",
+      "evidence": "Serialized sklearn object version; no warnings during matched-version audit."
+    }
+  },
+  "tested_runtime": {
+    "python_major_minor": "3.12",
+    "python_patch_tested": "3.12.10",
+    "packages": {
+      "scikit-learn": "1.9.0",
+      "numpy": "2.4.4",
+      "pandas": "2.2.3",
+      "scipy": "1.17.1",
+      "joblib": "1.5.3"
+    },
+    "provenance": "Compatibility test environment. Historical training versions other than sklearn are unknown."
+  },
+  "metrics_status": "no_independent_holdout_validation",
+  "independent_test_metrics": null,
+  "training_diagnostics": {
+    "scope": "Resubstitution on all 700 training rows; not holdout/CV or production accuracy.",
+    "r2_mad": 0.9521408361979615,
+    "mae_mad": 673900.5779142826,
+    "rmse_mad": 1546508.577672531,
+    "median_absolute_percentage_error": 5.599552084218977
+  },
+  "golden_case_provenance": "Frozen source pipeline predictions under the matched audit runtime, generated before adapter implementation. Compatibility fixtures, not accuracy evidence.",
+  "golden_absolute_tolerance_mad": 1e-06,
+  "golden_prediction_cases": [
+    {
+      "id": "notebook-agdal-apartment",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Agdal",
+        "Area": 110.0,
+        "Rooms": 3.0,
+        "Bedrooms": 2.0,
+        "Bathrooms": 1.0,
+        "Current_state": "5-10 ans",
+        "Age": 7.5
+      },
+      "expected_log": 14.449753597031636,
+      "expected_mad": 1885593.2799045164,
+      "expected_estimated_price_mad": 1885593,
+      "expected_location": "Agdal"
+    },
+    {
+      "id": "Type-appartement",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Agdal",
+        "Area": 107.0,
+        "Rooms": 3.0,
+        "Bedrooms": 2.0,
+        "Bathrooms": 1.0,
+        "Current_state": "Inconnu",
+        "Age": 15.0
+      },
+      "expected_log": 14.469951991994693,
+      "expected_mad": 1924066.4985419807,
+      "expected_estimated_price_mad": 1924066,
+      "expected_location": "Agdal"
+    },
+    {
+      "id": "Type-villa",
+      "input": {
+        "Type": "villa",
+        "Localisation": "Riyad",
+        "Area": 791.0,
+        "Rooms": 8.0,
+        "Bedrooms": 5.0,
+        "Bathrooms": 3.0,
+        "Current_state": "20-30 ans",
+        "Age": 25.0
+      },
+      "expected_log": 16.030247579467115,
+      "expected_mad": 9158999.174771955,
+      "expected_estimated_price_mad": 9158999,
+      "expected_location": "Riyad"
+    },
+    {
+      "id": "Type-maison",
+      "input": {
+        "Type": "maison",
+        "Localisation": "L'Ocean",
+        "Area": 540.0,
+        "Rooms": 10.0,
+        "Bedrooms": 7.0,
+        "Bathrooms": 7.0,
+        "Current_state": "70-100 ans",
+        "Age": 85.0
+      },
+      "expected_log": 15.718240116884298,
+      "expected_mad": 6704167.914370531,
+      "expected_estimated_price_mad": 6704168,
+      "expected_location": "L'Ocean"
+    },
+    {
+      "id": "Type-studio",
+      "input": {
+        "Type": "studio",
+        "Localisation": "Hassan - Centre Ville",
+        "Area": 50.0,
+        "Rooms": 2.0,
+        "Bedrooms": 1.0,
+        "Bathrooms": 1.0,
+        "Current_state": "Inconnu",
+        "Age": 15.0
+      },
+      "expected_log": 13.558400219625767,
+      "expected_mad": 773281.8863092195,
+      "expected_estimated_price_mad": 773282,
+      "expected_location": "Hassan - Centre Ville"
+    },
+    {
+      "id": "Type-bureau",
+      "input": {
+        "Type": "bureau",
+        "Localisation": "Agdal",
+        "Area": 110.0,
+        "Rooms": 4.0,
+        "Bedrooms": 2.0,
+        "Bathrooms": 1.0,
+        "Current_state": "10-20 ans",
+        "Age": 15.0
+      },
+      "expected_log": 14.413192010515912,
+      "expected_mad": 1817898.0252600221,
+      "expected_estimated_price_mad": 1817898,
+      "expected_location": "Agdal"
+    },
+    {
+      "id": "Current_state-Inconnu",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Agdal",
+        "Area": 107.0,
+        "Rooms": 3.0,
+        "Bedrooms": 2.0,
+        "Bathrooms": 1.0,
+        "Current_state": "Inconnu",
+        "Age": 15.0
+      },
+      "expected_log": 14.469951991994693,
+      "expected_mad": 1924066.4985419807,
+      "expected_estimated_price_mad": 1924066,
+      "expected_location": "Agdal"
+    },
+    {
+      "id": "Current_state-20-30 ans",
+      "input": {
+        "Type": "villa",
+        "Localisation": "Riyad",
+        "Area": 791.0,
+        "Rooms": 8.0,
+        "Bedrooms": 5.0,
+        "Bathrooms": 3.0,
+        "Current_state": "20-30 ans",
+        "Age": 25.0
+      },
+      "expected_log": 16.030247579467115,
+      "expected_mad": 9158999.174771955,
+      "expected_estimated_price_mad": 9158999,
+      "expected_location": "Riyad"
+    },
+    {
+      "id": "Current_state-Moins d'un an",
+      "input": {
+        "Type": "villa",
+        "Localisation": "Souissi",
+        "Area": 2600.0,
+        "Rooms": 8.0,
+        "Bedrooms": 5.0,
+        "Bathrooms": 6.0,
+        "Current_state": "Moins d'un an",
+        "Age": 0.5
+      },
+      "expected_log": 17.345494427565303,
+      "expected_mad": 34123416.18598158,
+      "expected_estimated_price_mad": 34123416,
+      "expected_location": "Souissi"
+    },
+    {
+      "id": "Current_state-5-10 ans",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Riyad",
+        "Area": 215.0,
+        "Rooms": 6.0,
+        "Bedrooms": 3.0,
+        "Bathrooms": 3.0,
+        "Current_state": "5-10 ans",
+        "Age": 7.5
+      },
+      "expected_log": 15.283357734008934,
+      "expected_mad": 4339881.074828527,
+      "expected_estimated_price_mad": 4339881,
+      "expected_location": "Riyad"
+    },
+    {
+      "id": "Current_state-1-5 ans",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Souissi",
+        "Area": 290.0,
+        "Rooms": 5.0,
+        "Bedrooms": 3.0,
+        "Bathrooms": 3.0,
+        "Current_state": "1-5 ans",
+        "Age": 3.0
+      },
+      "expected_log": 15.513357033083341,
+      "expected_mad": 5462170.793894603,
+      "expected_estimated_price_mad": 5462171,
+      "expected_location": "Souissi"
+    },
+    {
+      "id": "Current_state-70-100 ans",
+      "input": {
+        "Type": "maison",
+        "Localisation": "L'Ocean",
+        "Area": 540.0,
+        "Rooms": 10.0,
+        "Bedrooms": 7.0,
+        "Bathrooms": 7.0,
+        "Current_state": "70-100 ans",
+        "Age": 85.0
+      },
+      "expected_log": 15.718240116884298,
+      "expected_mad": 6704167.914370531,
+      "expected_estimated_price_mad": 6704168,
+      "expected_location": "L'Ocean"
+    },
+    {
+      "id": "Current_state-10-20 ans",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Hassan - Centre Ville",
+        "Area": 145.0,
+        "Rooms": 5.0,
+        "Bedrooms": 3.0,
+        "Bathrooms": 2.0,
+        "Current_state": "10-20 ans",
+        "Age": 15.0
+      },
+      "expected_log": 14.836787210611933,
+      "expected_mad": 2776736.431298836,
+      "expected_estimated_price_mad": 2776736,
+      "expected_location": "Hassan - Centre Ville"
+    },
+    {
+      "id": "Current_state-30-50 ans",
+      "input": {
+        "Type": "villa",
+        "Localisation": "Aviation - Mabella",
+        "Area": 492.0,
+        "Rooms": 5.0,
+        "Bedrooms": 3.0,
+        "Bathrooms": 4.0,
+        "Current_state": "30-50 ans",
+        "Age": 40.0
+      },
+      "expected_log": 15.788176330659008,
+      "expected_mad": 7189816.383234341,
+      "expected_estimated_price_mad": 7189816,
+      "expected_location": "Aviation - Mabella"
+    },
+    {
+      "id": "Current_state-50-70 ans",
+      "input": {
+        "Type": "maison",
+        "Localisation": "Akkari",
+        "Area": 48.0,
+        "Rooms": 5.0,
+        "Bedrooms": 3.0,
+        "Bathrooms": 1.0,
+        "Current_state": "50-70 ans",
+        "Age": 60.0
+      },
+      "expected_log": 13.382783421640422,
+      "expected_mad": 648736.4845513218,
+      "expected_estimated_price_mad": 648736,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Al Kamra",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Al Kamra",
+        "Area": 126.0,
+        "Rooms": 4.0,
+        "Bedrooms": 3.0,
+        "Bathrooms": 2.0,
+        "Current_state": "10-20 ans",
+        "Age": 15.0
+      },
+      "expected_log": 14.3801081778568,
+      "expected_mad": 1758738.958350681,
+      "expected_estimated_price_mad": 1758739,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Akkari",
+      "input": {
+        "Type": "maison",
+        "Localisation": "Akkari",
+        "Area": 105.0,
+        "Rooms": 10.0,
+        "Bedrooms": 6.0,
+        "Bathrooms": 2.0,
+        "Current_state": "10-20 ans",
+        "Age": 15.0
+      },
+      "expected_log": 14.286957197195559,
+      "expected_mad": 1602309.4826006882,
+      "expected_estimated_price_mad": 1602309,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Hay Al Amal",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Hay Al Amal",
+        "Area": 140.0,
+        "Rooms": 5.0,
+        "Bedrooms": 3.0,
+        "Bathrooms": 2.0,
+        "Current_state": "20-30 ans",
+        "Age": 25.0
+      },
+      "expected_log": 14.693864130674102,
+      "expected_mad": 2406932.601194552,
+      "expected_estimated_price_mad": 2406933,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Médina",
+      "input": {
+        "Type": "maison",
+        "Localisation": "Médina",
+        "Area": 200.0,
+        "Rooms": 6.0,
+        "Bedrooms": 4.0,
+        "Bathrooms": 1.0,
+        "Current_state": "30-50 ans",
+        "Age": 40.0
+      },
+      "expected_log": 14.78608295543905,
+      "expected_mad": 2639453.8443303183,
+      "expected_estimated_price_mad": 2639454,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Hay Bouhlal",
+      "input": {
+        "Type": "maison",
+        "Localisation": "Hay Bouhlal",
+        "Area": 76.0,
+        "Rooms": 6.0,
+        "Bedrooms": 6.0,
+        "Bathrooms": 3.0,
+        "Current_state": "30-50 ans",
+        "Age": 40.0
+      },
+      "expected_log": 14.173400137354061,
+      "expected_mad": 1430306.6763135025,
+      "expected_estimated_price_mad": 1430307,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Al Kouass",
+      "input": {
+        "Type": "maison",
+        "Localisation": "Al Kouass",
+        "Area": 220.0,
+        "Rooms": 7.0,
+        "Bedrooms": 7.0,
+        "Bathrooms": 3.0,
+        "Current_state": "10-20 ans",
+        "Age": 15.0
+      },
+      "expected_log": 14.72500898599492,
+      "expected_mad": 2483075.7792830225,
+      "expected_estimated_price_mad": 2483076,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Les Oudayas",
+      "input": {
+        "Type": "maison",
+        "Localisation": "Les Oudayas",
+        "Area": 220.0,
+        "Rooms": 5.0,
+        "Bedrooms": 7.0,
+        "Bathrooms": 3.0,
+        "Current_state": "Inconnu",
+        "Age": 15.0
+      },
+      "expected_log": 14.889864415006526,
+      "expected_mad": 2928099.3177601323,
+      "expected_estimated_price_mad": 2928099,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Hay Al Farah",
+      "input": {
+        "Type": "villa",
+        "Localisation": "Hay Al Farah",
+        "Area": 380.0,
+        "Rooms": 7.0,
+        "Bedrooms": 4.0,
+        "Bathrooms": 4.0,
+        "Current_state": "Inconnu",
+        "Age": 15.0
+      },
+      "expected_log": 15.555911233151088,
+      "expected_mad": 5699625.664200779,
+      "expected_estimated_price_mad": 5699626,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Skhirat",
+      "input": {
+        "Type": "villa",
+        "Localisation": "Skhirat",
+        "Area": 400.0,
+        "Rooms": 8.0,
+        "Bedrooms": 5.0,
+        "Bathrooms": 3.0,
+        "Current_state": "Inconnu",
+        "Age": 15.0
+      },
+      "expected_log": 15.561084451911647,
+      "expected_mad": 5729187.478726738,
+      "expected_estimated_price_mad": 5729187,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "rare-Takadoum",
+      "input": {
+        "Type": "maison",
+        "Localisation": "Takadoum",
+        "Area": 70.0,
+        "Rooms": 4.0,
+        "Bedrooms": 4.0,
+        "Bathrooms": 4.0,
+        "Current_state": "20-30 ans",
+        "Age": 25.0
+      },
+      "expected_log": 14.185508612339262,
+      "expected_mad": 1447730.7979173881,
+      "expected_estimated_price_mad": 1447731,
+      "expected_location": "Autre"
+    },
+    {
+      "id": "location-Hay-Al-Kora",
+      "input": {
+        "Type": "appartement",
+        "Localisation": "Hay Al Kora",
+        "Area": 97.0,
+        "Rooms": 5.0,
+        "Bedrooms": 4.0,
+        "Bathrooms": 2.0,
+        "Current_state": "30-50 ans",
+        "Age": 40.0
+      },
+      "expected_log": 14.05687244712096,
+      "expected_mad": 1272980.6302096844,
+      "expected_estimated_price_mad": 1272981,
+      "expected_location": "Hay Al Kora"
+    }
+  ],
+  "release_blockers": [
+    "No independent held-out evaluation for frozen artifact",
+    "Notebook export lineage contains inconsistent CatBoost fragment and no reproducible final export cell",
+    "Historical training dependency lock and training date unavailable",
+    "Public feature bounds, coverage and low-support studio/bureau policy require review",
+    "No Rabat application/API/HTTP/gateway or persistence registration; Phase 1 Python-only",
+    "No certified explanation, comparables or uncertainty calibration",
+    "No deployment runtime validation or public activation authorization"
+  ]
+}

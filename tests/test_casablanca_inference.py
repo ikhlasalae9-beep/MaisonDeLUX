@@ -152,7 +152,7 @@ def test_unsupported_city_and_property_type_are_rejected(valid_payload):
     with pytest.raises(CasablancaInferenceError):
         transform({**valid_payload, "property_type": "riad"})
     with pytest.raises(ModelRegistryError):
-        predict_for_city({**valid_payload, "city": "Rabat"})
+        predict_for_city({**valid_payload, "city": "Tanger"})
 
 
 def test_registry_publicly_enables_only_verified_casablanca_model(valid_payload):

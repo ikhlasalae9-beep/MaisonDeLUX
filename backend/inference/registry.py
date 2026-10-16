@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from . import casablanca, marrakech
+from . import casablanca, marrakech, rabat
 
 
 class ModelRegistryError(ValueError):
@@ -12,6 +12,11 @@ class ModelRegistryError(ValueError):
 
 
 MODEL_REGISTRY = {
+    "rabat": {
+        "city": "Rabat", "model_id": rabat.MODEL_ID, "version": rabat.MODEL_VERSION,
+        "status": "available", "public_enabled": True,
+        "predict": rabat.predict, "context": rabat.prediction_context,
+    },
     "casablanca": {
         "city": "Casablanca",
         "model_id": "casablanca-catboost-alae",
